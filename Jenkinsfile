@@ -7,7 +7,7 @@ pipeline {
                 // Checkout the specific branch
                 checkout([$class: 'GitSCM',
                           branches: [[name: 'master']],
-                          userRemoteConfigs: [[url: 'https://github.com/alekhyarani2812/bubblepays.git']]])
+                          userRemoteConfigs: [[url: 'git@github.com:alekhyarani2812/bubblepays.git']]])
             }
         }
         
