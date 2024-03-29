@@ -1,0 +1,107 @@
+package consumption
+
+import (
+	_ "github.com/go-sql-driver/mysql"
+	"gorm.io/gorm"
+	"log"
+	"todoproject/database"
+	"todoproject/models"
+)
+
+// Get all consumptions data
+func GetConsumptions() ([]models.Consumption, error) {
+	// get orm db connection
+	dbConnection, err := database.GetORMDbConnection()
+	if err != nil {
+		log.Printf("err %v ", err)
+		return nil, err
+	}
+	// Retrieve consumption data from the database
+	var consumption []models.Consumption
+	if err := dbConnection.Find(&consumption).Error; err != nil {
+		log.Printf("failed to retrieve consumption data: %v", err)
+		return nil, err
+	}
+	log.Printf("SIZE of consumption: size:: %v ", len(consumption))
+	return consumption, nil
+}
+
+// Get 1 consumption data by Id
+func GetConsumptionById(id int) ([]models.Consumption, error) {
+	// get orm db connection
+	dbConnection, err := database.GetORMDbConnection()
+	if err != nil {
+		log.Printf("err %v ", err)
+		return nil, err
+	}
+	// Retrieve consumption data from the database
+	var consumption []models.Consumption
+	if err := dbConnection.Where("id = ?", id).First(&consumption).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			log.Println("Employee not found")
+		} else {
+			log.Printf("Error: %v\n", err)
+		}
+		return nil, err
+	}
+	// Employee found, print details
+	log.Printf("consumption found: %+v\n", consumption)
+	log.Printf("SIZE of consumption: size:: %v ", len(consumption))
+	return consumption, nil
+}
+
+// Insert one consumption data
+func SavesConsumption(consumRecord models.Consumption) (*models.Consumption, error) {
+	log.Println("consumRecord", consumRecord)
+	// get orm db connection
+	dbConnection, err := database.GetORMDbConnection()
+	if err != nil {
+		log.Println("err in dbConnection :****")
+		return nil, err
+	}
+	log.Println("dbConnection  :")
+	//var consum models.Consumption
+	log.Println("consum from repo : ", consumRecord)
+	ormDB := dbConnection.Create(&consumRecord)
+	if ormDB.Error != nil {
+		log.Println("Error inserting employee:", ormDB.Error)
+		return nil, ormDB.Error
+	}
+	log.Println("Employee inserted successfully")
+	log.Println("ormDB  :  ", ormDB)
+	return &consumRecord, nil
+}
+
+func DeleteConsumption(pkId int) (int64, error) {
+	log.Println("pkId : ", pkId)
+	// get orm db connection
+	dbConnection, err := database.GetORMDbConnection()
+	if err != nil {
+		log.Println("err in dbConnection :****")
+		return 0, err
+	}
+	log.Println("dbConnection  :")
+	var consumption models.Consumption
+
+	result := dbConnection.Where("id = ?", pkId).Delete(&consumption)
+	if result.Error != nil {
+		log.Println("failed to delete consumption")
+	}
+	log.Println("return result from repo to Handler")
+	rowsEff := result.RowsAffected 
+	return rowsEff,nil
+
+	// if result.RowsAffected == 0 {
+	// 	log.Println("No employee found with ID:", pkId)
+	// } else {
+	// 	log.Println("Employee deleted successfully")
+	// }
+	// return result,nil
+
+	// Delete the consumption table from the database
+	// err = dbConnection.Delete(&consumption).Error
+	// if err != nil {
+	// 	panic("failed to delete Consumption")
+	// }
+	// log.Println("Consumption deleted successfully:", consumption)
+}

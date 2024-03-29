@@ -1,0 +1,78 @@
+package api
+
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"todoproject/models"
+	"todoproject/repository/service"
+	"todoproject/utils"
+)
+
+//Read services
+func GetServices(w http.ResponseWriter, r *http.Request){
+	fmt.Println("This is GetServices handler")
+	serviceData, err := service.GetServices()
+	if err != nil {
+		response := models.Response{
+			Message: utils.Fail,
+			Status:  http.StatusInternalServerError,
+			Error:   err.Error(),
+		}
+		utils.Render(w, response)
+		return
+	}
+	response := models.Response{
+		Message:     utils.Success,
+		Status:      http.StatusOK,
+		Description: "Service records successfully",
+		Data:        serviceData,
+	}
+	utils.Render(w, response)
+	fmt.Println("serviceData : ",serviceData)
+
+}
+
+//Insert services
+func SaveService(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("This is Service handler")
+	// Insert consumption data
+	var serviceRecord models.Services
+	err := json.NewDecoder(r.Body).Decode(&serviceRecord)
+	if err != nil {
+		response := models.Response{
+			Error:   err.Error(),
+			Message: utils.Fail,
+			Status:  http.StatusBadRequest,
+		}
+		utils.Render(w, response)
+		return
+	}
+	log.Println("service good************: ", serviceRecord)
+	serviceData, err := service.SaveService(serviceRecord)
+	if err != nil {
+		log.Println("you are in SaveService handler err block")
+		response := models.Response{
+			Message: utils.Fail,
+			Status:  http.StatusInternalServerError,
+			Error:   err.Error(),
+		}
+		utils.Render(w, response)
+		return
+	}
+	log.Println("you are in SaveService handler out of err block")
+	response := models.Response{
+		Message:     utils.Success,
+		Status:      http.StatusCreated,
+		Description: "Service record is inserted successfully",
+		Data:        serviceData,
+	}
+	utils.Render(w, response)
+	log.Println("ServiceList : success data ", serviceRecord)
+}
+
+//Delete service By Id 
+func DeleteServiceById(w http.ResponseWriter, r *http.Request){
+	fmt.Println("This is DeleteServiceById handler")
+}
