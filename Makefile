@@ -1,2 +1,2 @@
 build:
-  @echo "Running build target"
+	@echo "Running build target"
