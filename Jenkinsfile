@@ -1,1 +1,21 @@
-print "Hello World"
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the specific branch
+                checkout([$class: 'GitSCM',
+                          branches: [[name: 'master']],
+                          userRemoteConfigs: [[url: 'https://github.com/alekhyarani2812/bubblepays.git']]])
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                // Run make target
+                sh 'make build'
+            }
+        }
+    }
+}
