@@ -1,8 +1,8 @@
-Vendor:
+vendor:
 	@echo "Run go mod vendor"
 	go mod vendor
-Build:
+build:
 	@echo "Running build target"
 	make vendor
-RunUnitTests:
+rununittests:
 	go test ./...
