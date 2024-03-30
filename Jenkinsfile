@@ -10,7 +10,12 @@ pipeline {
                           userRemoteConfigs: [[url: 'git@github.com:alekhyarani2812/bubblepays.git']]])
             }
         }
-        
+        stage('Run tests') {
+            steps {
+                // Run go tests
+                sh 'echo "Run go tests"'
+            }
+        } 
         stage('Build') {
             steps {
                 // Run make target
