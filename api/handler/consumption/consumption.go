@@ -3,12 +3,14 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"todoproject/models"
-	"todoproject/repository/consumption"
-	"todoproject/utils"
+
+	"github.com/bubblepays/models"
+	"github.com/bubblepays/repository/consumption"
+	"github.com/bubblepays/utils"
+
+	"github.com/gorilla/mux"
 )
 
 // Get all consumptions

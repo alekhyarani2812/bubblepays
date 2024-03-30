@@ -4,11 +4,13 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
 	"net/http"
-	"todoproject/database"
-	"todoproject/models"
-	"todoproject/utils"
+
+	"github.com/bubblepays/database"
+	"github.com/bubblepays/models"
+	"github.com/bubblepays/utils"
+
+	"github.com/gorilla/mux"
 )
 
 func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {

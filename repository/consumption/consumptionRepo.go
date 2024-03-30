@@ -8,9 +8,10 @@ import (
 	"path/filepath"
 	"sync"
 	"time"
-	"todoproject/database"
-	"todoproject/models"
-	"todoproject/utils"
+
+	"github.com/bubblepays/database"
+	"github.com/bubblepays/models"
+	"github.com/bubblepays/utils"
 )
 
 const startConsumeDir = "/home/satyanarayana/Alekhya/gofilesdirectories/start_consume/"
@@ -39,7 +40,7 @@ func ReadConsumptionData(filePath string) (data [][]string) {
 }
 
 // Insert consumption data into DB
-func SaveFileConsumption(consumptionData models.Consumption, wg *sync.WaitGroup) (error){
+func SaveFileConsumption(consumptionData models.Consumption, wg *sync.WaitGroup) error {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Printf("err %v ", err.Error())
@@ -58,8 +59,9 @@ func SaveFileConsumption(consumptionData models.Consumption, wg *sync.WaitGroup)
 	log.Println("consumption inserted successfully")
 	log.Println("ormDB  :  ", ormDB)
 	fmt.Printf("Consumption '%s' created successfully\n", createdBy)
-	return nil	
+	return nil
 }
+
 // Get Consumption data from destination dirctory and process it
 func ConsumeDeviceData() {
 	var wg sync.WaitGroup
@@ -83,7 +85,7 @@ func ConsumeDeviceData() {
 		records := ReadConsumptionData(startConsumeDir + fileName)
 		fmt.Println("records :", records)
 		// Create a wait group to wait for all goroutines to finish
-	
+
 		for _, record := range records {
 			//convert cardId string to int
 			cardId, err := utils.StringToInt(record[1])
@@ -133,7 +135,7 @@ func ConsumeDeviceData() {
 	wg.Wait()
 	// Delete the files
 	for _, file1 := range files {
-		err = os.Remove(startConsumeDir+file1.Name())
+		err = os.Remove(startConsumeDir + file1.Name())
 		if err != nil {
 			fmt.Println("Error deleting file:", err)
 			continue
@@ -169,4 +171,3 @@ func PickDeviceData() {
 		}
 	}
 }
-

@@ -2,11 +2,13 @@ package api
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
 	"net/http"
-	"todoproject/database"
-	"todoproject/models"
-	"todoproject/utils"
+
+	"github.com/bubblepays/database"
+	"github.com/bubblepays/models"
+	"github.com/bubblepays/utils"
+
+	"github.com/gorilla/mux"
 )
 
 // delete employee rows
@@ -64,7 +66,7 @@ func DeleteEmpHandler(w http.ResponseWriter, r *http.Request) {
 		response := models.Response{
 			Message:     utils.Success,
 			Status:      http.StatusOK,
-			Description: fmt.Sprintf("Id = '%v' record is deleted successfully %v row is effected ", id,rowsAffected),
+			Description: fmt.Sprintf("Id = '%v' record is deleted successfully %v row is effected ", id, rowsAffected),
 		}
 		utils.Render(w, response)
 	}

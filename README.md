@@ -1,1 +1,1 @@
-# bubblepays
+# github.com/bubblepays

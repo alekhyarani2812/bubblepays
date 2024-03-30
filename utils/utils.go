@@ -8,7 +8,8 @@ import (
 	"net/http"
 	"strconv"
 	"time"
-	"todoproject/models"
+
+	"github.com/bubblepays/models"
 )
 
 func Render(w http.ResponseWriter, response models.Response) {
@@ -39,16 +40,16 @@ func StringToInt(idStr string) (int, error) {
 	}
 	return id, nil
 }
-func StringToTime(str string) (*time.Time,error){
+func StringToTime(str string) (*time.Time, error) {
 	// Parse the string into a time.Time object
 	// Define the layout of the string representing the time
 	layout := "2006-01-02 15:04:05"
 	parsedTime, err := time.Parse(layout, str)
 	if err != nil {
 		fmt.Println("Error parsing time:", err)
-		return nil,err
+		return nil, err
 	}
 	// Print the parsed time
 	fmt.Println("Parsed time:", parsedTime)
-	return &parsedTime,nil
+	return &parsedTime, nil
 }

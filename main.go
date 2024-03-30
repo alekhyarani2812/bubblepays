@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"net/http"
-	consumptionApi "todoproject/api/handler/consumption"
-	employeeApi "todoproject/api/handler/employee"
-	serviceApi "todoproject/api/handler/service"
-	"todoproject/jobs"
+
+	consumptionApi "github.com/bubblepays/api/handler/consumption"
+	employeeApi "github.com/bubblepays/api/handler/employee"
+	serviceApi "github.com/bubblepays/api/handler/service"
+	"github.com/bubblepays/jobs"
+
 	"github.com/gorilla/mux"
 )
 
@@ -63,14 +65,13 @@ func main() {
 	router.HandleFunc("/api/updateEmployee/{id}", employeeApi.UpdateEmpHandler).Methods("PUT")
 
 	//jobs.RunMachineJob()
-	
+
 	http.Handle("/", router)
 	fmt.Println("Started server on port 8080")
 	err := http.ListenAndServe(":8080", nil)
-	if(err != nil) {
+	if err != nil {
 		fmt.Printf(" ERROR ListenAndServe err: %v", err)
 	}
-
 	//mypkg.TestFunction()
 	//employee.Printempdata()
 	//api.ApiCalling()
@@ -80,7 +81,6 @@ func main() {
 	//getMessage()
 	//GoRoutine()
 }
-
 func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Handler executing")
 	w.Write([]byte("Hello, World!"))
@@ -90,4 +90,3 @@ func handler2(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Handler executing2")
 	w.Write([]byte("Hello, World2!"))
 }
-
