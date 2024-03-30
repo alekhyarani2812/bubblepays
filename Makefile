@@ -4,5 +4,5 @@ vendor:
 build:
 	@echo "Running build target"
 	make vendor
-rununittests:
+unittests:
 	go test ./...
