@@ -14,6 +14,7 @@ pipeline {
             steps {
                 // Run go tests
                 sh 'echo "Run go tests"'
+                sh 'go mod tidy'
                 sh 'make vendor'
                 sh 'make rununittests'
             }
