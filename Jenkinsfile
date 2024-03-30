@@ -14,6 +14,7 @@ pipeline {
             steps {
                 // Run go tests
                 sh 'echo "Run go tests"'
+                sh 'make rununittests'
             }
         } 
         stage('Build') {
