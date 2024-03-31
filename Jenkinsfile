@@ -10,20 +10,21 @@ pipeline {
                           userRemoteConfigs: [[url: 'git@github.com:alekhyarani2812/bubblepays.git']]])
             }
         }
-        // stage('Run tests') {
-        //     steps {
-        //         sh 'go mod vendor'
-        //         // Run go tests
-        //         sh 'echo "Run go tests"'
-        //         sh 'make unittests'
-        //     }
-        // } 
+        
         stage('Build') {
             steps {
                 // Run make target
                 sh 'make build'
             }
         }
+
+        stage('Run tests') {
+            steps {
+                // Run go tests
+                sh 'echo "Run go tests"'
+                sh 'make junit'
+            }
+        } 
     }
 
     post {
