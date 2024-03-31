@@ -4,5 +4,6 @@ vendor:
 build:
 	@echo "Running build target"
 	make vendor
-unittests:
-	go test ./...
+junit:
+	go test -v ./...
+#	go test -v 2>&1 | go-junit-report > report.xml
