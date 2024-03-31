@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"todoproject/database"
-	"todoproject/models"
-	"todoproject/utils"
+
+	"github.com/bubblepays/database"
+	"github.com/bubblepays/models"
+	"github.com/bubblepays/utils"
 )
 
 // Post request employee insert record

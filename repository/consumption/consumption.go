@@ -1,11 +1,13 @@
 package consumption
 
 import (
+	"log"
+
+	"github.com/bubblepays/database"
+	"github.com/bubblepays/models"
+
 	_ "github.com/go-sql-driver/mysql"
 	"gorm.io/gorm"
-	"log"
-	"todoproject/database"
-	"todoproject/models"
 )
 
 // Get all consumptions data
@@ -88,8 +90,8 @@ func DeleteConsumption(pkId int) (int64, error) {
 		log.Println("failed to delete consumption")
 	}
 	log.Println("return result from repo to Handler")
-	rowsEff := result.RowsAffected 
-	return rowsEff,nil
+	rowsEff := result.RowsAffected
+	return rowsEff, nil
 
 	// if result.RowsAffected == 0 {
 	// 	log.Println("No employee found with ID:", pkId)

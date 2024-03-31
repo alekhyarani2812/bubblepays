@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"todoproject/models"
-	"todoproject/repository/service"
-	"todoproject/utils"
+
+	"github.com/bubblepays/models"
+	"github.com/bubblepays/repository/service"
+	"github.com/bubblepays/utils"
 )
 
-//Read services
-func GetServices(w http.ResponseWriter, r *http.Request){
+// Read services
+func GetServices(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("This is GetServices handler")
 	serviceData, err := service.GetServices()
 	if err != nil {
@@ -30,11 +31,11 @@ func GetServices(w http.ResponseWriter, r *http.Request){
 		Data:        serviceData,
 	}
 	utils.Render(w, response)
-	fmt.Println("serviceData : ",serviceData)
+	fmt.Println("serviceData : ", serviceData)
 
 }
 
-//Insert services
+// Insert services
 func SaveService(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("This is Service handler")
 	// Insert consumption data
@@ -72,7 +73,7 @@ func SaveService(w http.ResponseWriter, r *http.Request) {
 	log.Println("ServiceList : success data ", serviceRecord)
 }
 
-//Delete service By Id 
-func DeleteServiceById(w http.ResponseWriter, r *http.Request){
+// Delete service By Id
+func DeleteServiceById(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("This is DeleteServiceById handler")
 }

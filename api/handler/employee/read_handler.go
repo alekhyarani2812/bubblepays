@@ -3,9 +3,11 @@ package api
 import (
 	"log"
 	"net/http"
-	"todoproject/database"
-	"todoproject/models"
-	"todoproject/utils"
+
+	"github.com/bubblepays/database"
+	"github.com/bubblepays/models"
+	"github.com/bubblepays/utils"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -36,6 +38,7 @@ func GetEmployees(w http.ResponseWriter) []models.Employee {
 	log.Println("***********", empArray)
 	return empArray
 }
+
 // Get employees request
 func GetEmployeesJsonData(w http.ResponseWriter, r *http.Request) {
 	empList := GetEmployees(w)
