@@ -19,13 +19,13 @@ func GetConsumptions() ([]models.Consumption, error) {
 		return nil, err
 	}
 	// Retrieve consumption data from the database
-	var consumption []models.Consumption
-	if err := dbConnection.Find(&consumption).Error; err != nil {
+	var consumptions []models.Consumption
+	if err := dbConnection.Find(&consumptions).Error; err != nil {
 		log.Printf("failed to retrieve consumption data: %v", err)
 		return nil, err
 	}
-	log.Printf("SIZE of consumption: size:: %v ", len(consumption))
-	return consumption, nil
+	log.Printf("SIZE of consumption: size:: %v ", len(consumptions))
+	return consumptions, nil
 }
 
 // Get 1 consumption data by Id

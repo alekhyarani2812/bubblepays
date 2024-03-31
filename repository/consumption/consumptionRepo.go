@@ -147,8 +147,8 @@ func ConsumeDeviceData() {
 // Move Consumption data from one directory to another
 func PickDeviceData() {
 	// Define source and destination directories
-	sourceDir := "/home/satyanarayana/Alekhya/machine_data"
-	destDir := "/home/satyanarayana/Alekhya/start_consume"
+	sourceDir := "/home/satyanarayana/Alekhya/gofilesdirectories/machine_data/"
+	destDir := "/home/satyanarayana/Alekhya/gofilesdirectories/start_consume/"
 	// Get list of files in the source directory
 	files, err := filepath.Glob(filepath.Join(sourceDir, "*"))
 	//fmt.Println("files :", files)
