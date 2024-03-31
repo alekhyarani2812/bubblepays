@@ -13,6 +13,8 @@ pipeline {
         
         stage('Build') {
             steps {
+                //update vendor
+                sh 'make vendor'
                 // Run make target
                 sh 'make build'
             }
@@ -20,8 +22,6 @@ pipeline {
 
         stage('Run tests') {
             steps {
-                //update vendor
-                sh 'make vendor'
                 // Run go tests
                 sh 'echo "Run go tests"'
                 sh 'make junit'
