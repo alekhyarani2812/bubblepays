@@ -7,4 +7,3 @@ type Employee struct {
 	Salary float64 `json:"salary"`
 	Age    int     `json:"age"`
 }
-

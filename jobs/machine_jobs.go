@@ -17,7 +17,8 @@ func RunMachineJob() {
 			//consumption.ProcessConsuptionData()
 			//consumption.ConsumeDeviceData()
 			//consumption.PickDeviceData()
-			usage()		
+			//usage()
+			UsageData()
 		}
 	}
 }

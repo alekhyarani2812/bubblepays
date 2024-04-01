@@ -3,15 +3,14 @@ package consumption
 import (
 	"encoding/csv"
 	"fmt"
+	"github.com/bubblepays/database"
+	"github.com/bubblepays/models"
+	"github.com/bubblepays/utils"
 	"log"
 	"os"
 	"path/filepath"
 	"sync"
 	"time"
-
-	"github.com/bubblepays/database"
-	"github.com/bubblepays/models"
-	"github.com/bubblepays/utils"
 )
 
 const startConsumeDir = "/home/satyanarayana/Alekhya/gofilesdirectories/start_consume/"
@@ -93,11 +92,11 @@ func ConsumeDeviceData() {
 				log.Println(err.Error())
 				continue
 			}
-			date, err := utils.StringToInt(record[2])
-			if err != nil {
-				log.Println("Got an ERROR at date: ", err.Error())
-				continue
-			}
+			// consumptionDate, err := utils.StringToInt(record[2])
+			// if err != nil {
+			// 	log.Println("Got an ERROR at consumptionDate: ", err.Error())
+			// 	continue
+			// }
 			serviceId, err := utils.StringToInt(record[5])
 			if err != nil {
 				log.Println("Got an ERROR at serviceId: ", err.Error())
@@ -116,15 +115,15 @@ func ConsumeDeviceData() {
 			}
 			createdDate := time.Now()
 			consumptionData := models.Consumption{
-				DeviceId:    record[0],
-				CardId:      cardId,
-				Date:        date,
-				StartTime:   startDate, //&time.Time{},
-				EndTime:     endDate,   //&time.Time{},
-				ServiceId:   serviceId,
-				ServiceName: record[6],
-				CreatedDate: &createdDate,
-				CreatedBy:   "Alekhya",
+				DeviceId:        record[0],
+				CardId:          cardId,
+				ConsumptionDate: record[2],
+				StartTime:       startDate, //&time.Time{},
+				EndTime:         endDate,   //&time.Time{},
+				ServiceId:       serviceId,
+				ServiceName:     record[6],
+				CreatedDate:     &createdDate,
+				CreatedBy:       "Alekhya",
 			}
 			log.Println("calling SaveFileConsumption")
 			wg.Add(1)
