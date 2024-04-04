@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	consumptionApi "github.com/bubblepays/api/handler/consumption"
 	employeeApi "github.com/bubblepays/api/handler/employee"
 	serviceApi "github.com/bubblepays/api/handler/service"
+	"github.com/bubblepays/database"
 	"github.com/bubblepays/jobs"
 
 	"github.com/gorilla/mux"
@@ -24,7 +26,12 @@ func middleware(next http.Handler) http.Handler {
 func main() {
 	fmt.Println("This is main package")
 	//create a job
-	go jobs.RunMachineJob()
+	dbConnection, dbErr := database.GetORMDbConnection()
+	if dbErr != nil {
+		log.Printf("err %v ", dbErr.Error())
+		return
+	}
+	go jobs.RunMachineJob(dbConnection)
 
 	router := mux.NewRouter()
 

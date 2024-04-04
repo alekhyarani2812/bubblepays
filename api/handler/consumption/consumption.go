@@ -5,11 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/repository/consumption"
 	"github.com/bubblepays/utils"
-
 	"github.com/gorilla/mux"
 )
 
@@ -49,7 +47,6 @@ func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.Render(w, response)
 		return
-
 	}
 	log.Println("pkId is", pkId)
 	consumptionList, err := consumption.GetConsumptionById(pkId)
@@ -155,6 +152,5 @@ func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 	}
 }
-
 //service talble
 //Id pk, serviceId alphanumeric, active boolean, location

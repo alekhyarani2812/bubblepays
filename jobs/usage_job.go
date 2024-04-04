@@ -6,13 +6,14 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
 	repository "github.com/bubblepays/repository/usages"
+	"gorm.io/gorm"
 )
 
-func usage() (map[string]float64, error) {
+// creation of usage table
+func getConsumptionsByMonthnum() (map[string]float64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Printf("err %v ", err.Error())
@@ -60,7 +61,6 @@ func usage() (map[string]float64, error) {
 			totalDuration := duration.Seconds()
 			cardIdServiceId[myKey] = totalDuration
 		}
-
 	}
 	// Iterate over the map using a for loop and range
 	for key, value := range cardIdServiceId {
@@ -69,14 +69,14 @@ func usage() (map[string]float64, error) {
 	return cardIdServiceId, nil
 }
 
-func UsageData() {
+func UsageData(dbConnection *gorm.DB) {
 	fmt.Println("UsageData is calling************")
-	usageData, err := usage()
+	usageData, err := getConsumptionsByMonthnum()
 	if err != nil {
 		log.Printf("err %v ", err.Error())
 		return
 	}
-	fmt.Println("usageData : ", usageData)
+	//fmt.Println("usageData : ", usageData)
 	for key, duration := range usageData {
 		fmt.Printf("Key: %s\n, Value: %v\n", key, duration)
 		// Split the string by _
@@ -93,6 +93,6 @@ func UsageData() {
 			Duration:  duration,
 		}
 		fmt.Println("usageData : ", usageData)
-		repository.SaveUsage(usageData)
+		repository.SaveUsage(usageData, dbConnection)
 	}
 }
