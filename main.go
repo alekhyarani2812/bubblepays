@@ -10,6 +10,7 @@ import (
 	serviceApi "github.com/bubblepays/api/handler/service"
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/jobs"
+	"github.com/bubblepays/learning"
 
 	"github.com/gorilla/mux"
 )
@@ -25,6 +26,7 @@ func middleware(next http.Handler) http.Handler {
 
 func main() {
 	fmt.Println("This is main package")
+	learning.Implimentation()
 	//create a job
 	dbConnection, dbErr := database.GetORMDbConnection()
 	if dbErr != nil {

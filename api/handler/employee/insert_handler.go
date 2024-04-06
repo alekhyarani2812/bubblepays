@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/utils"
@@ -31,7 +30,8 @@ func SaveEmployee(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(errorResponse)
 		return
 	}
-	_, err := db.Exec("INSERT INTO employee (empId, name, age, salary) VALUES (?,?,?,?)", employee.EmpId, employee.Name, employee.Age, employee.Salary)
+	_, err := db.Exec("INSERT INTO employee (empId, name, age, salary) VALUES (?,?,?,?)",
+		employee.EmpId, employee.Name, employee.Age, employee.Salary)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -75,7 +75,8 @@ func getEmployeeByEmployeeID(db *sql.DB, empId int) (*models.Employee, error) {
 	}
 
 	for rows.Next() {
-		if err := rows.Scan(&employee.Id, &employee.EmpId, &employee.Name, &employee.Age, &employee.Salary); err != nil {
+		if err := rows.Scan(&employee.Id, &employee.EmpId, &employee.Name,
+			&employee.Age, &employee.Salary); err != nil {
 			return nil, err
 		}
 		fmt.Println("employee : ", employee)

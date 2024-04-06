@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/repository/consumption"
 	"github.com/bubblepays/utils"
@@ -13,7 +15,13 @@ import (
 
 // Get all consumptions
 func GetConsumptions(w http.ResponseWriter, r *http.Request) {
-	consumptionList, err := consumption.GetConsumptions()
+	//create a job
+	dbConnection, dbErr := database.GetORMDbConnection()
+	if dbErr != nil {
+		log.Printf("err %v ", dbErr.Error())
+		return
+	}
+	consumptionList, err := consumption.GetConsumptions(dbConnection)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -147,10 +155,9 @@ func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 		response := models.Response{
 			Message:     utils.Fail,
 			Status:      http.StatusBadRequest,
-			Description: fmt.Sprintf("consumption record %v does not exist in consumption table", pkId),
+			Description: fmt.Sprintf("consumption record %v does not exist in consumption table", 
+			pkId),
 		}
 		utils.Render(w, response)
 	}
 }
-//service talble
-//Id pk, serviceId alphanumeric, active boolean, location

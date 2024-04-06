@@ -6,19 +6,14 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"github.com/bubblepays/database"
+
 	"github.com/bubblepays/models"
 	repository "github.com/bubblepays/repository/usages"
 	"gorm.io/gorm"
 )
 
 // creation of usage table
-func getConsumptionsByMonthnum() (map[string]float64, error) {
-	dbConnection, err := database.GetORMDbConnection()
-	if err != nil {
-		log.Printf("err %v ", err.Error())
-		return nil, err
-	}
+func getConsumptionsByMonthnum(dbConnection *gorm.DB) (map[string]float64, error) {
 	// Retrieve consumption data from the database
 	var consumptions []models.Consumption
 	if err := dbConnection.Find(&consumptions).Error; err != nil {
@@ -71,7 +66,7 @@ func getConsumptionsByMonthnum() (map[string]float64, error) {
 
 func UsageData(dbConnection *gorm.DB) {
 	fmt.Println("UsageData is calling************")
-	usageData, err := getConsumptionsByMonthnum()
+	usageData, err := getConsumptionsByMonthnum(dbConnection)
 	if err != nil {
 		log.Printf("err %v ", err.Error())
 		return
