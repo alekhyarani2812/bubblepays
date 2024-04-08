@@ -3,7 +3,6 @@ package jobs
 import (
 	"fmt"
 	"time"
-
 	"github.com/bubblepays/repository/consumption"
 	"gorm.io/gorm"
 )
@@ -20,7 +19,7 @@ func RunMachineJob(dbConnection *gorm.DB) {
 			consumption.ConsumeDeviceData()
 			consumption.PickDeviceData()
 			//usage()
-			UsageData(dbConnection)
+			//UsageData(dbConnection)
 		}
 	}
 }

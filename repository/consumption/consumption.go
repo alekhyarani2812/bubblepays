@@ -2,22 +2,14 @@ package consumption
 
 import (
 	"log"
-
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
-
 	_ "github.com/go-sql-driver/mysql"
 	"gorm.io/gorm"
 )
 
 // Get all consumptions data
-func GetConsumptions() ([]models.Consumption, error) {
-	// get orm db connection
-	dbConnection, err := database.GetORMDbConnection()
-	if err != nil {
-		log.Printf("err %v ", err)
-		return nil, err
-	}
+func GetConsumptions(dbConnection *gorm.DB) ([]models.Consumption, error) {
 	// Retrieve consumption data from the database
 	var consumptions []models.Consumption
 	if err := dbConnection.Find(&consumptions).Error; err != nil {
@@ -28,7 +20,7 @@ func GetConsumptions() ([]models.Consumption, error) {
 	return consumptions, nil
 }
 
-// Get 1 consumption data by Id
+// Get consumption data by Id
 func GetConsumptionById(id int) ([]models.Consumption, error) {
 	// get orm db connection
 	dbConnection, err := database.GetORMDbConnection()
@@ -62,7 +54,6 @@ func SavesConsumption(consumRecord models.Consumption) (*models.Consumption, err
 		return nil, err
 	}
 	log.Println("dbConnection  :")
-	//var consum models.Consumption
 	log.Println("consum from repo : ", consumRecord)
 	ormDB := dbConnection.Create(&consumRecord)
 	if ormDB.Error != nil {
@@ -92,18 +83,4 @@ func DeleteConsumption(pkId int) (int64, error) {
 	log.Println("return result from repo to Handler")
 	rowsEff := result.RowsAffected
 	return rowsEff, nil
-
-	// if result.RowsAffected == 0 {
-	// 	log.Println("No employee found with ID:", pkId)
-	// } else {
-	// 	log.Println("Employee deleted successfully")
-	// }
-	// return result,nil
-
-	// Delete the consumption table from the database
-	// err = dbConnection.Delete(&consumption).Error
-	// if err != nil {
-	// 	panic("failed to delete Consumption")
-	// }
-	// log.Println("Consumption deleted successfully:", consumption)
 }

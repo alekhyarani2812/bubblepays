@@ -14,7 +14,6 @@ import (
 )
 
 const startConsumeDir = "/home/satyanarayana/Alekhya/gofilesdirectories/start_consume/"
-
 // Read consumption data from file
 func ReadConsumptionData(filePath string) (data [][]string) {
 	fmt.Println("Read MachineData is called")

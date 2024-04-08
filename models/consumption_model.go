@@ -14,7 +14,7 @@ type Consumption struct {
 	CreatedDate     *time.Time `json:"created_date"`
 	CreatedBy       string     `json:"created_by"`
 
-	// Mention the table name explicitly
+	// Mention the table name explicitly  because gorm takes plural table name by default
 	//TableName string `gorm:"tableName:consumption"`
 }
 

@@ -7,12 +7,3 @@ type Services struct {
 	Location    string `json:"location"`
 	ServiceName string `json:"service_name"`
 }
-
-type Tables interface {
-	TableName() string
-}
-
-// TableName overrides the table name used by User to `profiles`
-func (Services) TableName() string {
-	return "services"
-}
