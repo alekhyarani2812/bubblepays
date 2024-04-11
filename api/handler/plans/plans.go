@@ -180,10 +180,21 @@ func DeletePlan(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	response := models.Response{
-		Message:     utils.Success,
-		Status:      http.StatusOK,
-		Description: fmt.Sprintf(" %d rows deleted ", rowsEffected),
+	if rowsEffected != 0 {
+		response := models.Response{
+			Message:     utils.Success,
+			Status:      http.StatusOK,
+			Description: fmt.Sprintf(" %d rows deleted ", rowsEffected),
+		}
+		utils.Render(w, response)
+	} else {
+		response := models.Response{
+			Error:       fmt.Sprintf(" %d Id should be in database ", rowsEffected),
+			Message:     utils.Fail,
+			Status:      http.StatusBadRequest,
+			Description: fmt.Sprintf(" %d rows deleted ", rowsEffected),
+		}
+		log.Printf("***********failed to delete plan")
+		utils.Render(w, response)
 	}
-	utils.Render(w, response)
 }

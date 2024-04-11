@@ -8,10 +8,10 @@ import (
 	consumptionApi "github.com/bubblepays/api/handler/consumption"
 	employeeApi "github.com/bubblepays/api/handler/employee"
 	planApi "github.com/bubblepays/api/handler/plans"
+	priceApi "github.com/bubblepays/api/handler/prices"
 	serviceApi "github.com/bubblepays/api/handler/service"
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/jobs"
-
 	"github.com/gorilla/mux"
 )
 
@@ -39,14 +39,16 @@ func main() {
 
 	//add middleware
 	router.Use(middleware)
-
-	router.HandleFunc("/api/hello", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello"))
-	}).Methods("GET")
-
 	// attach helloworld handler
 	// getMessageHandler := middleware(http.HandlerFunc(api.GetMessageHandler))
 	// mux.Handle("/api/message", getMessageHandler)
+
+	//prices
+	router.HandleFunc("/api/getprices", priceApi.GetPrices).Methods("GET")
+	router.HandleFunc("/api/getpricesbyid/{id}", priceApi.GetPricesById).Methods("GET")
+	router.HandleFunc("/api/saveprice", priceApi.SavePrice).Methods("POST")
+	router.HandleFunc("/api/updateprice/{id}", priceApi.UpdatePrice).Methods("PUT")
+	router.HandleFunc("/api/deleteprice/{id}", priceApi.DeletePrice).Methods("DELETE")
 
 	//Plans
 	router.HandleFunc("/api/getplans", planApi.GetPlans).Methods("GET")
@@ -80,14 +82,9 @@ func main() {
 	if err != nil {
 		fmt.Printf(" ERROR ListenAndServe err: %v", err)
 	}
-	//mypkg.TestFunction()
-	//employee.Printempdata()
-	//api.ApiCalling()
-	//api.EmployeeApiCalling()
-	//context.
-	//Start()
-	//getMessage()
-	//GoRoutine()
+	router.HandleFunc("/api/hello", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello"))
+	}).Methods("GET")
 }
 func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Handler executing")

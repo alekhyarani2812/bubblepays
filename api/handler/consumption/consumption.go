@@ -153,10 +153,10 @@ func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		response := models.Response{
-			Message:     utils.Fail,
-			Status:      http.StatusBadRequest,
-			Description: fmt.Sprintf("consumption record %v does not exist in consumption table", 
-			pkId),
+			Message: utils.Fail,
+			Status:  http.StatusBadRequest,
+			Description: fmt.Sprintf("consumption record %v does not exist in consumption table",
+				pkId),
 		}
 		utils.Render(w, response)
 	}

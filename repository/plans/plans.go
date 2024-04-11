@@ -17,7 +17,7 @@ func GetPlans() ([]models.Plans, error) {
 	}
 	var plans []models.Plans
 	if err := dbConnection.Find(&plans).Error; err != nil {
-		log.Printf("failed to retrieve consumption data: %v", err)
+		log.Printf("failed to retrieve plans data: %v", err)
 		return nil, err
 	}
 	log.Printf("SIZE of consumption: size:: %v ", len(plans))
@@ -25,13 +25,13 @@ func GetPlans() ([]models.Plans, error) {
 }
 
 // Get plans by id
-func GetPlanById(id int) ([]models.Plans, error) {
+func GetPlanById(id int) (*models.Plans, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Printf("err %v ", err)
 		return nil, err
 	}
-	var plan []models.Plans
+	var plan models.Plans
 	if err := dbConnection.Where("id = ?", id).First(&plan).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			log.Println("plan not found")
@@ -41,14 +41,12 @@ func GetPlanById(id int) ([]models.Plans, error) {
 		return nil, err
 	}
 	log.Printf("plan found: %+v\n", plan)
-	log.Printf("SIZE of plan: size:: %v ", len(plan))
-	return plan, nil
+	return &plan, nil
 }
 
 // Insert plan into db
 func SavePlan(planData models.Plans) (*models.Plans, error) {
 	log.Println("planRecord", planData)
-	// get orm db connection
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Println("err in dbConnection :****")
@@ -78,16 +76,17 @@ func UpdatePlan(pkId int, plan *models.Plans) (int64, error) {
 }
 
 // Delete the plan
-func DeletePlan(pkId int) (int64, error){
+func DeletePlan(pkId int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Println("err in dbConnection :****")
-		return 0,err
+		return 0, err
 	}
 	var plan models.Plans
 	result := dbConnection.Where("id = ?", pkId).Delete(&plan)
 	if result.Error != nil {
-		log.Println("failed to delete consumption")
+		log.Println("***********failed to delete plan")
+		return 0, result.Error
 	}
 	rowsEff := result.RowsAffected
 	return rowsEff, nil

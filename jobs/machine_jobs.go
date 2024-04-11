@@ -3,13 +3,14 @@ package jobs
 import (
 	"fmt"
 	"time"
+
 	"github.com/bubblepays/repository/consumption"
 	"gorm.io/gorm"
 )
 
 func RunMachineJob(dbConnection *gorm.DB) {
 	// Execute the HTTP request every 10 seconds //new cron job
-	ticker := time.NewTicker(2 * time.Second)
+	ticker := time.NewTicker(2 * time.Minute)
 	defer ticker.Stop()
 
 	for {
