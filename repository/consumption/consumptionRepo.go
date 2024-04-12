@@ -3,17 +3,19 @@ package consumption
 import (
 	"encoding/csv"
 	"fmt"
-	"github.com/bubblepays/database"
-	"github.com/bubblepays/models"
-	"github.com/bubblepays/utils"
 	"log"
 	"os"
 	"path/filepath"
 	"sync"
 	"time"
+
+	"github.com/bubblepays/database"
+	"github.com/bubblepays/models"
+	"github.com/bubblepays/utils"
 )
 
 const startConsumeDir = "/home/satyanarayana/Alekhya/gofilesdirectories/start_consume/"
+
 // Read consumption data from file
 func ReadConsumptionData(filePath string) (data [][]string) {
 	fmt.Println("Read MachineData is called")
@@ -86,11 +88,11 @@ func ConsumeDeviceData() {
 
 		for _, record := range records {
 			//convert cardId string to int
-			cardId, err := utils.StringToInt(record[1])
-			if err != nil {
-				log.Println(err.Error())
-				continue
-			}
+			// cardId, err := utils.StringToInt(record[1])
+			// if err != nil {
+			// 	log.Println(err.Error())
+			// 	continue
+			// }
 			// consumptionDate, err := utils.StringToInt(record[2])
 			// if err != nil {
 			// 	log.Println("Got an ERROR at consumptionDate: ", err.Error())
@@ -115,7 +117,7 @@ func ConsumeDeviceData() {
 			createdDate := time.Now()
 			consumptionData := models.Consumption{
 				DeviceId:        record[0],
-				CardId:          cardId,
+				CardId:          record[1],
 				ConsumptionDate: record[2],
 				StartTime:       startDate, //&time.Time{},
 				EndTime:         endDate,   //&time.Time{},

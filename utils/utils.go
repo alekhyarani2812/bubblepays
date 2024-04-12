@@ -24,7 +24,6 @@ func Render(w http.ResponseWriter, response models.Response) {
 	}
 }
 
-// func string to int
 // employeeIDStr :=  r.PathValue("id")
 func StringToInt(idStr string) (int, error) {
 	if idStr == "" {

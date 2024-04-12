@@ -5,7 +5,7 @@ import "time"
 type Consumption struct {
 	Id              int        `json:"id"`
 	DeviceId        string     `json:"device_id"`
-	CardId          int        `json:"card_id"`
+	CardId          string     `json:"card_id"`
 	ConsumptionDate string     `json:"consumption_date"`
 	StartTime       *time.Time `json:"start_time"`
 	EndTime         *time.Time `json:"end_time"`
