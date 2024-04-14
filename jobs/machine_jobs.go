@@ -10,7 +10,7 @@ import (
 
 func RunMachineJob(dbConnection *gorm.DB) {
 	// Execute the HTTP request every 10 seconds //new cron job
-	ticker := time.NewTicker(2 * time.Minute)
+	ticker := time.NewTicker(5 * time.Minute)
 	defer ticker.Stop()
 
 	for {

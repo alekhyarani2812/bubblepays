@@ -5,11 +5,15 @@ import (
 	"log"
 	"net/http"
 
+	cardplanApi "github.com/bubblepays/api/handler/card_plan"
 	consumptionApi "github.com/bubblepays/api/handler/consumption"
 	employeeApi "github.com/bubblepays/api/handler/employee"
+	planpriceApi "github.com/bubblepays/api/handler/plan_price"
 	planApi "github.com/bubblepays/api/handler/plans"
 	priceApi "github.com/bubblepays/api/handler/prices"
 	serviceApi "github.com/bubblepays/api/handler/service"
+	serviceenrollmentApi "github.com/bubblepays/api/handler/service_enrollment"
+
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/jobs"
 	"github.com/gorilla/mux"
@@ -42,6 +46,27 @@ func main() {
 	// attach helloworld handler
 	// getMessageHandler := middleware(http.HandlerFunc(api.GetMessageHandler))
 	// mux.Handle("/api/message", getMessageHandler)
+
+	//CardPlan
+	router.HandleFunc("/api/getcardplan", cardplanApi.GetCardPlan).Methods("GET")
+	router.HandleFunc("/api/getcardplanbyid/{id}", cardplanApi.GetCardPlanById).Methods("GET")
+	router.HandleFunc("/api/savecardplan", cardplanApi.SaveCardPlan).Methods("POST")
+	router.HandleFunc("/api/updatecardplan/{id}", cardplanApi.UpdateCardPlan).Methods("PUT")
+	router.HandleFunc("/api/deletecardplan/{id}", cardplanApi.DeleteCardPlan).Methods("DELETE")
+
+	//plan_price
+	router.HandleFunc("/api/getplanprice", planpriceApi.GetPlanPrice).Methods("GET")
+	router.HandleFunc("/api/getplanpricebyid/{id}", planpriceApi.GetPlanPriceById).Methods("GET")
+	router.HandleFunc("/api/saveplanprice", planpriceApi.SavePlanPrice).Methods("POST")
+	router.HandleFunc("/api/updateplanpricebyid/{id}", planpriceApi.UpdatePlanPrice).Methods("PUT")
+	router.HandleFunc("/api/deleteplanpricebyid/{id}", planpriceApi.DeletePlanPrice).Methods("DELETE")
+
+	//ServiceEnrollment
+	router.HandleFunc("/api/getserviceenrollment", serviceenrollmentApi.GetServiceEnrollment).Methods("GET")
+	router.HandleFunc("/api/getserviceenrollmentbyid/{id}", serviceenrollmentApi.GetServiceEnrollmentById).Methods("GET")
+	router.HandleFunc("/api/saveserviceenrollment", serviceenrollmentApi.SaveServiceEnrollment).Methods("POST")
+	router.HandleFunc("/api/updateserviceenrollment/{id}", serviceenrollmentApi.UpdateServiceEnrollment).Methods("PUT")
+	router.HandleFunc("/api/deleteserviceenrollment/{id}", serviceenrollmentApi.DeleteServiceEnrollment).Methods("DELETE")
 
 	//prices
 	router.HandleFunc("/api/getprices", priceApi.GetPrices).Methods("GET")

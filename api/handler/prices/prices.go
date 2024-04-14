@@ -21,6 +21,7 @@ func GetPrices(w http.ResponseWriter, r *http.Request) {
 			Message: utils.Fail,
 		}
 		utils.Render(w, response)
+		return
 	}
 	response := models.Response{
 		Status:  http.StatusFound,
@@ -76,6 +77,7 @@ func SavePrice(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusInternalServerError,
 		}
 		utils.Render(w, response)
+		return
 	}
 	priceRecord, err := prices.SavePrice(price)
 	if err != nil {
@@ -85,6 +87,7 @@ func SavePrice(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusInternalServerError,
 		}
 		utils.Render(w, response)
+		return
 	}
 	response := models.Response{
 		Message:     utils.Success,
@@ -106,8 +109,9 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusInternalServerError,
 			Error:   err.Error(),
 		}
-		utils.Render(w, response)
 		log.Printf("GetPlans : error %v ", err)
+		utils.Render(w, response)
+		return
 	}
 	log.Println("pkId : ", pkId)
 	var price models.Price
@@ -120,6 +124,7 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.Render(w, response)
 		log.Printf("GetPlans : error %v ", err1)
+		return
 	}
 	updatedRecord, err := prices.UpdatePrice(pkId, &price)
 	if err != nil {
@@ -130,6 +135,7 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.Render(w, response)
 		log.Printf("GetPlans : error %v ", err)
+		return
 	}
 	response := models.Response{
 		Message:     utils.Success,
@@ -153,6 +159,7 @@ func DeletePrice(w http.ResponseWriter, r *http.Request) {
 		}
 		log.Printf("GetPlans : error %v ", err)
 		utils.Render(w, response)
+		return
 	}
 	log.Println("pkId : ", pkId)
 	rowsEffected, err := prices.DeletePrice(pkId)
@@ -164,6 +171,7 @@ func DeletePrice(w http.ResponseWriter, r *http.Request) {
 		}
 		log.Printf("GetPlans : error %v ", err)
 		utils.Render(w, response)
+		return
 	}
 	response := models.Response{
 		Message:     utils.Success,

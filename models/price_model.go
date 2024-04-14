@@ -9,9 +9,6 @@ type Price struct {
 	CreatedAt *time.Time `json:"created_at"`
 	UpdatedAt *time.Time `json:"updated_at"`
 }
-type PriceTab interface {
-	TableName() string
-}
 
 // TableName overrides the table name used by User to `profiles`
 func (Price) TableName() string {

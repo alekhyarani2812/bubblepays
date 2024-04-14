@@ -46,7 +46,6 @@ func GetPlanById(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		}
 		utils.Render(w, response)
-		log.Printf("GetPlans : error %v ", err)
 		return
 	}
 	log.Println("pkId : ", pkId)
@@ -69,7 +68,6 @@ func GetPlanById(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 	log.Println("consumptionList : success data ", planRecord)
-
 }
 
 // Insert plans Handler
@@ -187,6 +185,7 @@ func DeletePlan(w http.ResponseWriter, r *http.Request) {
 			Description: fmt.Sprintf(" %d rows deleted ", rowsEffected),
 		}
 		utils.Render(w, response)
+		return
 	} else {
 		response := models.Response{
 			Error:       fmt.Sprintf(" %d Id should be in database ", rowsEffected),

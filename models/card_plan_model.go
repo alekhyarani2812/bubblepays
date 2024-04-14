@@ -1,7 +1,11 @@
 package models
 
-type Card_Plan struct {
+type CardPlan struct {
 	Id     int    `json:"id"`
 	CardId string `json:"card_id"`
 	PlanId int    `json:"plan_id"`
+}
+
+func (CardPlan) TableName() string {
+	return "card_plan"
 }

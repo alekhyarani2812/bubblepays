@@ -21,3 +21,8 @@ func TestMapInterfaceImpl(t *testing.T){
 t.Log("map interface combination impl")
 MapInterfaceImpl()
 }
+
+func TestLangestSubString(t *testing.T){
+	t.Log("Langest SubString")
+	LangestSubString()
+}

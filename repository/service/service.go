@@ -18,7 +18,8 @@ func GetServices() ([]models.Services, error) {
 	log.Println("dbConnection  :")
 	// Retrieve consumption data from the database
 	var service []models.Services
-	if err := dbConnection.Find(&service).Error; err != nil {
+	if err := dbConnection.Find(&service).Error; 
+	err != nil {
 		log.Printf("failed to retrieve consumption data: %v", err)
 		return nil, err
 	}

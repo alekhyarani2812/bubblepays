@@ -1,7 +1,17 @@
 package models
 
-type Service_Enrollment struct {
+type ServiceEnrollment struct {
 	Id        int    `json:"id"`
 	CardId    string `json:"card_id"`
 	ServiceId string `json:"service_id"`
 }
+
+// type EnrollmentInterface interface {
+// 	TableName() string
+// }
+
+func (ServiceEnrollment) TableName() string {
+	return "service_enrollment"
+}
+
+
