@@ -14,3 +14,13 @@ https://medium.com/@ninucium/go-interview-questions-part-1-pointers-channels-and
 ***Go Interview Questions (SOLVED and ANSWERED) To Crack Before Next Interview***
 
 https://www.fullstack.cafe/blog/go-interview-questions
+
+--------------------
+
+***Golang interview: 10 questions and answers***
+
+https://madappgang.com/blog/golang-interview-questions/
+
+***Understanding The Memory Model Of Golang : Part 2***
+
+https://medium.com/@edwardpie/understanding-the-memory-model-of-golang-part-2-972fe74372ba
