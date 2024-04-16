@@ -24,3 +24,9 @@ https://madappgang.com/blog/golang-interview-questions/
 ***Understanding The Memory Model Of Golang : Part 2***
 
 https://medium.com/@edwardpie/understanding-the-memory-model-of-golang-part-2-972fe74372ba
+
+--------------------
+
+***Error Handling in Golang***
+
+https://medium.com/@uzairahmed01/error-handling-in-golang-8a838e3cf99d
