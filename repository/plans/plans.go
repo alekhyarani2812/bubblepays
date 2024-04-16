@@ -2,13 +2,11 @@ package plans
 
 import (
 	"log"
-
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
 	"gorm.io/gorm"
 )
 
-// Get all the Plans
 func GetPlans() ([]models.Plans, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -20,11 +18,9 @@ func GetPlans() ([]models.Plans, error) {
 		log.Printf("failed to retrieve plans data: %v", err)
 		return nil, err
 	}
-	log.Printf("SIZE of consumption: size:: %v ", len(plans))
 	return plans, nil
 }
 
-// Get plans by id
 func GetPlanById(id int) (*models.Plans, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -40,11 +36,9 @@ func GetPlanById(id int) (*models.Plans, error) {
 		}
 		return nil, err
 	}
-	log.Printf("plan found: %+v\n", plan)
 	return &plan, nil
 }
 
-// Insert plan into db
 func SavePlan(planData models.Plans) (*models.Plans, error) {
 	log.Println("planRecord", planData)
 	dbConnection, err := database.GetORMDbConnection()
@@ -57,8 +51,6 @@ func SavePlan(planData models.Plans) (*models.Plans, error) {
 		log.Println("Error inserting plan:", ormDB.Error)
 		return nil, ormDB.Error
 	}
-	log.Println("plan inserted successfully")
-	log.Println("ormDB  :  ", planData)
 	return &planData, nil
 }
 
@@ -71,11 +63,9 @@ func UpdatePlan(pkId int, plan *models.Plans) (int64, error) {
 	}
 	gorm := dbConnection.Model(&models.Plans{}).Where("id = ?", pkId).Updates(&plan)
 	rowsEffected := gorm.RowsAffected
-	log.Printf("rowsEffected : %+v\n", rowsEffected)
 	return rowsEffected, nil
 }
 
-// Delete the plan
 func DeletePlan(pkId int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {

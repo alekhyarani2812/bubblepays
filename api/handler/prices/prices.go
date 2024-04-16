@@ -12,7 +12,6 @@ import (
 )
 
 func GetPrices(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Hello GetPrices handler:*********** ")
 	priceReords, err := prices.GetPrices()
 	if err != nil {
 		response := models.Response{
@@ -26,14 +25,12 @@ func GetPrices(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Status:  http.StatusFound,
 		Message: utils.Success,
-		//Description: fmt.Print("Succesfully you got prices data"),
 		Data: priceReords,
 	}
 	utils.Render(w, response)
 }
 
 func GetPricesById(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Hello GetPricesById handler:*********** ")
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -44,10 +41,8 @@ func GetPricesById(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		}
 		utils.Render(w, response)
-		log.Printf("GetPlans : error %v ", err)
 		return
 	}
-	log.Println("pkId : ", pkId)
 	priceReord, err := prices.GetPricesById(pkId)
 	if err != nil {
 		response := models.Response{
@@ -56,7 +51,6 @@ func GetPricesById(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		}
 		utils.Render(w, response)
-		log.Printf("GetPlans : error %v ", err)
 		return
 	}
 	response := models.Response{
@@ -99,7 +93,6 @@ func SavePrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdatePrice(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Hello UpdatePrice handler:***********")
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -109,7 +102,6 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusInternalServerError,
 			Error:   err.Error(),
 		}
-		log.Printf("GetPlans : error %v ", err)
 		utils.Render(w, response)
 		return
 	}
@@ -123,7 +115,6 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 			Error:   err1.Error(),
 		}
 		utils.Render(w, response)
-		log.Printf("GetPlans : error %v ", err1)
 		return
 	}
 	updatedRecord, err := prices.UpdatePrice(pkId, &price)
@@ -134,7 +125,6 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		}
 		utils.Render(w, response)
-		log.Printf("GetPlans : error %v ", err)
 		return
 	}
 	response := models.Response{
@@ -147,7 +137,6 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeletePrice(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Hello DeletePrice handler:***********")
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -157,7 +146,6 @@ func DeletePrice(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusInternalServerError,
 			Error:   err.Error(),
 		}
-		log.Printf("GetPlans : error %v ", err)
 		utils.Render(w, response)
 		return
 	}
@@ -169,7 +157,6 @@ func DeletePrice(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusInternalServerError,
 			Error:   err.Error(),
 		}
-		log.Printf("GetPlans : error %v ", err)
 		utils.Render(w, response)
 		return
 	}
@@ -178,6 +165,5 @@ func DeletePrice(w http.ResponseWriter, r *http.Request) {
 		Status:      http.StatusOK,
 		Description: fmt.Sprintf(" %d rows deleted from price table", rowsEffected),
 	}
-	log.Printf("GetPlans : error %v ", err)
 	utils.Render(w, response)
 }

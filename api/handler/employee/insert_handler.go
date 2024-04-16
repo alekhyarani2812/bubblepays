@@ -11,15 +11,11 @@ import (
 	"github.com/bubblepays/utils"
 )
 
-// Post request employee insert record
 func SaveEmployee(w http.ResponseWriter, r *http.Request) {
 	var employee models.Employee
-
-	//for json response
 	w.Header().Set("Content-Type", "application/json")
 	db := database.GetDbConnection()
 	defer db.Close()
-
 	// Decode request body into Employee struct
 	if err := json.NewDecoder(r.Body).Decode(&employee); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -79,7 +75,6 @@ func getEmployeeByEmployeeID(db *sql.DB, empId int) (*models.Employee, error) {
 			&employee.Age, &employee.Salary); err != nil {
 			return nil, err
 		}
-		fmt.Println("employee : ", employee)
 	}
 	fmt.Println("employee : ", employee)
 	return &employee, nil

@@ -8,8 +8,6 @@ import (
 )
 
 func SaveUsage(usageData models.Usages, dbConnection *gorm.DB) {
-	fmt.Println("usageDtata : **************", usageData)
-	//usageDtata models.Usages
 	var usages []models.Usages
 	res := dbConnection.Where("card_id = ?", usageData.CardId)
 	res.Where("service_id = ?", usageData.ServiceId)
@@ -27,9 +25,9 @@ func SaveUsage(usageData models.Usages, dbConnection *gorm.DB) {
 		fmt.Println("usage : ............", usage.Duration)
 		fmt.Println("usageData.Duration : ......", usageData.Duration)
 		dbConnection.Model(&usage).Update("duration", usageData.Duration)
+		dbConnection.Find(&usage)
 	} else {
 		//should run insert query
-		fmt.Println("**************records not found should run insert query ")
 		ormDB := dbConnection.Create(&usageData)
 		fmt.Println("**************ormDB usages table rows Inserted ", ormDB.RowsAffected)
 	}

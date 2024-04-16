@@ -29,7 +29,6 @@ func GetConsumptions(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		}
 		utils.Render(w, response)
-		log.Printf("GetConsumptions : error %v ", err)
 		return
 	}
 	response := models.Response{
@@ -38,7 +37,6 @@ func GetConsumptions(w http.ResponseWriter, r *http.Request) {
 		Data:    consumptionList,
 	}
 	utils.Render(w, response)
-	log.Println("consumptionList : success data ", consumptionList)
 }
 
 // Get 1 employee data by Id primarykey
@@ -56,7 +54,6 @@ func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("pkId is", pkId)
 	consumptionList, err := consumption.GetConsumptionById(pkId)
 	if err != nil {
 		response := models.Response{
@@ -65,7 +62,6 @@ func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		}
 		utils.Render(w, response)
-		log.Printf("GetConsumptions : error %v ", err)
 		return
 	}
 	response := models.Response{
@@ -74,7 +70,6 @@ func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
 		Data:    consumptionList,
 	}
 	utils.Render(w, response)
-	log.Println("consumptionList : success data ", consumptionList)
 }
 
 // Insert consumption data
@@ -90,12 +85,9 @@ func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("consum : ", consum)
 	consumData := consum
 	consumptionRecord, err := consumption.SavesConsumption(consumData)
-	log.Println("you are in handler after consumption.SavesConsumption()")
 	if err != nil {
-		log.Println("you are in SavesConsumption handler err block")
 		response := models.Response{
 			Message: utils.Fail,
 			Status:  http.StatusInternalServerError,
@@ -104,7 +96,6 @@ func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("you are in SavesConsumption handler out of err block")
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusOK,
@@ -112,11 +103,9 @@ func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 		Data:        consumptionRecord,
 	}
 	utils.Render(w, response)
-	log.Println("consumptionList : success data ", consumptionRecord)
 }
 
 func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
-	log.Println("this is DeleteConsumption Handler")
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	//idStr := r.PathValue("id")
@@ -130,7 +119,6 @@ func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("pkId is", pkId)
 	rowsEffected, err := consumption.DeleteConsumption(pkId)
 	if err != nil {
 		response := models.Response{
@@ -141,7 +129,6 @@ func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("rows effected : ", rowsEffected)
 	if rowsEffected != 0 {
 		response := models.Response{
 			Message:     utils.Success,
@@ -149,14 +136,12 @@ func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 			Description: fmt.Sprintf("consumption record %v is deleted", pkId),
 		}
 		utils.Render(w, response)
-		fmt.Println("consumption with deleted successfully", pkId)
 		return
 	} else {
 		response := models.Response{
 			Message: utils.Fail,
 			Status:  http.StatusBadRequest,
-			Description: fmt.Sprintf("consumption record %v does not exist in consumption table",
-				pkId),
+			Description: fmt.Sprintf("consumption record %v does not exist in consumption table",pkId),
 		}
 		utils.Render(w, response)
 	}

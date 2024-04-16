@@ -15,7 +15,6 @@ type Consumption struct {
 	CreatedBy       string     `json:"created_by"`
 
 	// Mention the table name explicitly  because gorm takes plural table name by default
-	//TableName string `gorm:"tableName:consumption"`
 }
 
 type Tabler interface {

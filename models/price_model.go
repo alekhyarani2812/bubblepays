@@ -10,7 +10,6 @@ type Price struct {
 	UpdatedAt *time.Time `json:"updated_at"`
 }
 
-// TableName overrides the table name used by User to `profiles`
 func (Price) TableName() string {
 	return "price"
 }

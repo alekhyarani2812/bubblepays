@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/bubblepays/models"
@@ -13,9 +12,6 @@ import (
 )
 
 func GetServiceEnrollment(w http.ResponseWriter, r *http.Request) {
-	//var serviceEnrollment models.Service_Enrollments
-	//serviceEnrollRecords :=
-	fmt.Println("GetServiceEnrollment handler")
 	serviceEnrollRecords, err := serviceenrollment.GetServiceEnrollment()
 	if err != nil {
 		response := models.Response{
@@ -35,7 +31,6 @@ func GetServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetServiceEnrollmentById(w http.ResponseWriter, r *http.Request) {
-	log.Printf("GetServiceEnrollmentById handler ")
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -45,11 +40,9 @@ func GetServiceEnrollmentById(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusInternalServerError,
 			Error:   err.Error(),
 		}
-		log.Printf("GetPlans : error %v ", err)
 		utils.Render(w, response)
 		return
 	}
-	fmt.Println("pkId : ", pkId)
 	serviceEnrollmentRecord, err := serviceenrollment.GetServiceEnrollmentById(pkId)
 	if err != nil {
 		response := models.Response{
@@ -57,7 +50,6 @@ func GetServiceEnrollmentById(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusBadRequest,
 			Error:   err.Error(),
 		}
-		log.Printf("GetPlans : error %v ", err)
 		utils.Render(w, response)
 		return
 	}
@@ -81,7 +73,6 @@ func SaveServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	fmt.Println("serviceEnrollment record from handler: ", &serviceEnrollment)
 	serviceEnrollmentRecord, err := serviceenrollment.SaveServiceEnrollment(serviceEnrollment)
 	if err != nil {
 		response := models.Response{
@@ -111,7 +102,6 @@ func UpdateServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusInternalServerError,
 			Error:   err.Error(),
 		}
-		log.Printf("GetPlans : error %v ", err)
 		utils.Render(w, response)
 		return
 	}
@@ -126,7 +116,6 @@ func UpdateServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	fmt.Println("serviceEnrollment from Handler sending payload : ", serviceEnrollment)
 	serviceEnrollmentRecord, err := serviceenrollment.UpdateServiceEnrollment(pkId, serviceEnrollment)
 	if err != nil {
 		response := models.Response{

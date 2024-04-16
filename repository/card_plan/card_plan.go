@@ -71,7 +71,6 @@ func UpdateCardPlan(pkId int, cardPlanRecord *models.CardPlan) (*models.CardPlan
 		return nil, err
 	}
 	gorm.Find(&cardPlanRecord)
-	fmt.Println("cardPlanRecord : ",cardPlanRecord)
 	return cardPlanRecord, nil
 }
 
@@ -92,6 +91,5 @@ func DeleteCardPlan(pkId int) (int64, error){
 		fmt.Println("error in deleting cardPlan Record")
 		return 0, err
 	}
-	fmt.Println(" rows effected : ", rows)
 	return rows, nil
 }

@@ -10,7 +10,6 @@ import (
 )
 
 func GetPrices() ([]models.Price, error) {
-	fmt.Println("This is GetPrices Repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Printf("err %v ", err)
@@ -46,7 +45,6 @@ func GetPricesById(pkId int) (*models.Price, error) {
 }
 
 func SavePrice(price models.Price) (*models.Price, error) {
-	fmt.Println("This is GetPricesById Repo price record : ", price)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in db connecton  ")
@@ -63,8 +61,6 @@ func SavePrice(price models.Price) (*models.Price, error) {
 }
 
 func UpdatePrice(pkId int, prices *models.Price) (*models.Price, error) {
-	//var prices models.Price
-	fmt.Println("This is SavePrice Repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in db connecton  ")
@@ -76,9 +72,6 @@ func UpdatePrice(pkId int, prices *models.Price) (*models.Price, error) {
 		return nil, err
 	}
 	gorm.Find(&prices)
-	rowsEffected := gorm.RowsAffected
-	fmt.Printf(" %d rows are Effected ", rowsEffected)
-	prices.Id = pkId
 	return prices, nil
 }
 

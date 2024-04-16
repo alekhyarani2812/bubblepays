@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
 	"github.com/bubblepays/models"
 	cardplan "github.com/bubblepays/repository/card_plan"
 	"github.com/bubblepays/utils"
@@ -43,7 +42,6 @@ func GetCardPlanById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	fmt.Println("GetCardPlanById Handler ******pkId: ******", pkId)
 	cardPlanRecord, err := cardplan.GetCardPlanById(pkId)
 	if err != nil {
 		response := models.Response{
@@ -148,9 +146,9 @@ func DeleteCardPlan(w http.ResponseWriter, r *http.Request) {
 	rowsEffected, err := cardplan.DeleteCardPlan(pkId)
 	if err != nil {
 		response := models.Response{
-			Error:   err.Error(),
-			Message: utils.Fail,
-			Status:  http.StatusBadRequest,
+			Error:       err.Error(),
+			Message:     utils.Fail,
+			Status:      http.StatusBadRequest,
 			Description: fmt.Sprintf("you should err.Error()%d", pkId),
 		}
 		utils.Render(w, response)
@@ -165,7 +163,7 @@ func DeleteCardPlan(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	if rowsEffected != 0{
+	if rowsEffected != 0 {
 		response := models.Response{
 			Message:     utils.Fail,
 			Status:      http.StatusBadRequest,

@@ -9,6 +9,7 @@ import (
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/repository/service"
 	"github.com/bubblepays/utils"
+	"github.com/gorilla/mux"
 )
 
 // Read services
@@ -73,7 +74,35 @@ func SaveService(w http.ResponseWriter, r *http.Request) {
 	log.Println("ServiceList : success data ", serviceRecord)
 }
 
-// Delete service By Id
 func DeleteServiceById(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("This is DeleteServiceById handler")
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	pkId, err := utils.StringToInt(idStr)
+	if err != nil {
+		response := models.Response{
+			Message: utils.Fail,
+			Status:  http.StatusInternalServerError,
+			Error:   err.Error(),
+		}
+		utils.Render(w, response)
+		return
+	}
+	log.Println("pkId : ", pkId)
+	rowsEffected, err := service.DeleteServiceById(pkId)
+	if err != nil {
+		response := models.Response{
+			Message: utils.Fail,
+			Status:  http.StatusInternalServerError,
+			Error:   err.Error(),
+		}
+		utils.Render(w, response)
+		return
+	}
+	response := models.Response{
+		Message:     utils.Success,
+		Status:      http.StatusOK,
+		Description: fmt.Sprintf(" %d rows deleted from Services table", rowsEffected),
+	}
+	log.Printf("GetServices : error %v ", err)
+	utils.Render(w, response)
 }

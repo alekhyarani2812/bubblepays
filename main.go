@@ -21,7 +21,6 @@ import (
 
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Perform middleware tasks here, e.g., logging
 		fmt.Println("Middleware executing")
 		// Call the next handler
 		next.ServeHTTP(w, r)
@@ -30,8 +29,6 @@ func middleware(next http.Handler) http.Handler {
 
 func main() {
 	fmt.Println("This is main package")
-	//learning.Implimentation()
-	//create a job
 	dbConnection, dbErr := database.GetORMDbConnection()
 	if dbErr != nil {
 		log.Printf("err %v ", dbErr.Error())

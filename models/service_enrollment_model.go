@@ -6,10 +6,6 @@ type ServiceEnrollment struct {
 	ServiceId string `json:"service_id"`
 }
 
-// type EnrollmentInterface interface {
-// 	TableName() string
-// }
-
 func (ServiceEnrollment) TableName() string {
 	return "service_enrollment"
 }

@@ -19,7 +19,6 @@ func GetServiceEnrollment() ([]models.ServiceEnrollment, error) {
 		log.Printf("failed to retrieve consumption data: %v", err)
 		return nil, err
 	}
-	fmt.Println("serviceEnrollRecords : ", serviceEnrollRecords)
 	return serviceEnrollRecords, nil
 }
 
@@ -38,18 +37,15 @@ func GetServiceEnrollmentById(pkId int) (*models.ServiceEnrollment, error) {
 		}
 		return nil, err
 	}
-	fmt.Println("serviceenroll : ", serviceenroll)
 	return &serviceenroll, nil
 }
 
 func SaveServiceEnrollment(serviceEnrollment models.ServiceEnrollment) (*models.ServiceEnrollment, error) {
-	fmt.Println("SaveServiceEnrollment repo :", serviceEnrollment)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil, err
 	}
-	//var serviceenroll models.ServiceEnrollment
 	gorm := dbConnection.Create(&serviceEnrollment)
 	if gorm.Error != nil {
 		fmt.Println("gorm.Error :   error in inserting service enrollment")
@@ -65,12 +61,11 @@ func UpdateServiceEnrollment(pkId int, seviceEnrRecord models.ServiceEnrollment)
 	}
 	gorm := dbConnection.Model(&models.ServiceEnrollment{}).Where("id = ?", pkId).Updates(&seviceEnrRecord)
 	if gorm != nil && gorm.Error != nil {
-		fmt.Println("error in updating data", err.Error())
+		fmt.Println("error in updating data")
 		return nil, err
 	}
-	//rowsEffected := gorm.RowsAffected
 	gorm.Find(&seviceEnrRecord)
-	fmt.Println("seviceEnrRecord from repo : ", seviceEnrRecord)
+	fmt.Println("seviceEnrRecord :", seviceEnrRecord)
 	return &seviceEnrRecord, nil
 }
 

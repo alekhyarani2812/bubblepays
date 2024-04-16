@@ -9,14 +9,11 @@ import (
 
 // Read services
 func GetServices() ([]models.Services, error) {
-	log.Println("This is GetServices repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Println("err in dbConnection :****")
 		return nil, err
 	}
-	log.Println("dbConnection  :")
-	// Retrieve consumption data from the database
 	var service []models.Services
 	if err := dbConnection.Find(&service).Error; 
 	err != nil {
@@ -27,29 +24,30 @@ func GetServices() ([]models.Services, error) {
 	return service, nil
 }
 
-// Insert services
 func SaveService(service models.Services) (*models.Services, error) {
 	log.Println("serviceData in service repo", service)
-	// get orm db connection
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Println("err in dbConnection :****")
 		return nil, err
 	}
-	log.Println("dbConnection  :")
-	//var serve models.Service
-	log.Println("serviceRecord from repo : ", service)
 	ormDB := dbConnection.Create(&service)
 	if ormDB.Error != nil {
 		log.Println("Error inserting service:", ormDB.Error)
 		return nil, ormDB.Error
 	}
 	log.Println("Employee inserted successfully")
-	log.Println("ormDB  :  ", ormDB)
 	return &service, nil
 }
 
-// Delete service By Id
-func DeleteServiceById() {
-	log.Println("This is DeleteServiceById handler")
+func DeleteServiceById(pkId int) (int64, error) {
+	dbConnection, err := database.GetORMDbConnection()
+	if err != nil {
+		log.Println("error in db connecton  ")
+		return 0, err
+	}
+	var service models.Services
+	ormDb := dbConnection.Where("id=?", pkId).Delete(&service)
+	rowsEffected := ormDb.RowsAffected
+	return rowsEffected, nil
 }

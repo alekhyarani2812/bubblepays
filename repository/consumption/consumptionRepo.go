@@ -85,19 +85,7 @@ func ConsumeDeviceData() {
 		records := ReadConsumptionData(startConsumeDir + fileName)
 		fmt.Println("records :", records)
 		// Create a wait group to wait for all goroutines to finish
-
 		for _, record := range records {
-			//convert cardId string to int
-			// cardId, err := utils.StringToInt(record[1])
-			// if err != nil {
-			// 	log.Println(err.Error())
-			// 	continue
-			// }
-			// consumptionDate, err := utils.StringToInt(record[2])
-			// if err != nil {
-			// 	log.Println("Got an ERROR at consumptionDate: ", err.Error())
-			// 	continue
-			// }
 			serviceId, err := utils.StringToInt(record[5])
 			if err != nil {
 				log.Println("Got an ERROR at serviceId: ", err.Error())
@@ -151,7 +139,6 @@ func PickDeviceData() {
 	destDir := "/home/satyanarayana/Alekhya/gofilesdirectories/start_consume/"
 	// Get list of files in the source directory
 	files, err := filepath.Glob(filepath.Join(sourceDir, "*"))
-	//fmt.Println("files :", files)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return

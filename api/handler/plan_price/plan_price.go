@@ -12,7 +12,6 @@ import (
 )
 
 func GetPlanPrice(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("this is GetPlanPrice handler")
 	planpriceRecords, err := planprice.GetPlanPrice()
 	if err != nil {
 		response := models.Response{
@@ -33,7 +32,6 @@ func GetPlanPrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPlanPriceById(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("this is GetPlanPriceById handler")
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -66,7 +64,6 @@ func GetPlanPriceById(w http.ResponseWriter, r *http.Request) {
 }
 
 func SavePlanPrice(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("this is SavePlanPrice handler")
 	var planPrice models.PlanPrice
 	err := json.NewDecoder(r.Body).Decode(&planPrice)
 	if err != nil {
@@ -98,7 +95,6 @@ func SavePlanPrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdatePlanPrice(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("this is UpdatePlanPrice handler")
 	vars := mux.Vars(r)
 	strId := vars["id"]
 	pkId, err := utils.StringToInt(strId)
@@ -123,7 +119,6 @@ func UpdatePlanPrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	fmt.Println("planPrice from handler : ", planPrice)
 	planPriceRecord, err := planprice.UpdatePlanPrice(pkId, &planPrice)
 	if err != nil {
 		response := models.Response{
@@ -143,7 +138,6 @@ func UpdatePlanPrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeletePlanPrice(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("this is DeletePlanPrice handler")
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
 	pkId, err := utils.StringToInt(idStr)

@@ -14,11 +14,9 @@ import (
 )
 
 func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {
-	//idStr := r.URL.Query().Get("id")
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	//idStr := r.PathValue("id")
-
 	pkId, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
@@ -32,7 +30,6 @@ func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("pkId is", pkId)
 
 	var employee models.Employee
-	//get db connection
 	db := database.GetDbConnection()
 	defer db.Close()
 
@@ -45,7 +42,6 @@ func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	//update employee records
 	result, err := db.Exec("UPDATE employee SET empId = ?, name = ?, age = ?, salary = ? WHERE id = ?", employee.EmpId, employee.Name, employee.Age, employee.Salary, pkId)
 	if err != nil {
 		response := models.Response{
@@ -56,7 +52,6 @@ func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("update Handler  result, err")
 		return
 	}
-	// Check if any rows were affected
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
 		response := models.Response{
@@ -99,7 +94,6 @@ func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {
 func getEmployeeByID(db *sql.DB, id int) (*models.Employee, error) {
 
 	var employee models.Employee
-	//var empArray []models.Employee
 	rows, err := db.Query("select * from employee where id = ?", id)
 	if err != nil {
 		fmt.Println("err : ", err)
@@ -110,7 +104,6 @@ func getEmployeeByID(db *sql.DB, id int) (*models.Employee, error) {
 		if err := rows.Scan(&employee.Id, &employee.EmpId, &employee.Name, &employee.Age, &employee.Salary); err != nil {
 			return nil, err
 		}
-		fmt.Println("employee : ", employee)
 	}
 	fmt.Println("employee : ", employee)
 	if employee.Id == 0 {

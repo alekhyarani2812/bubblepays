@@ -15,7 +15,6 @@ func GetEmployees(w http.ResponseWriter) []models.Employee {
 	var empArray []models.Employee
 	db := database.GetDbConnection()
 	defer db.Close()
-	//Perform a SELECT query
 	rows, err := db.Query("SELECT * FROM employee")
 	if err != nil {
 		response := models.Response{
@@ -27,7 +26,6 @@ func GetEmployees(w http.ResponseWriter) []models.Employee {
 	}
 	defer rows.Close()
 	log.Println("select query compiled")
-	// Iterate over the result set
 	for rows.Next() {
 		var employee models.Employee
 		if err := rows.Scan(&employee.Id, &employee.EmpId, &employee.Name, &employee.Age, &employee.Salary); err != nil {
@@ -39,7 +37,6 @@ func GetEmployees(w http.ResponseWriter) []models.Employee {
 	return empArray
 }
 
-// Get employees request
 func GetEmployeesJsonData(w http.ResponseWriter, r *http.Request) {
 	empList := GetEmployees(w)
 	response := models.Response{

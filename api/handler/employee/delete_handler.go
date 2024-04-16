@@ -13,13 +13,8 @@ import (
 
 // delete employee rows
 func DeleteEmpHandler(w http.ResponseWriter, r *http.Request) {
-	// Parse ID from query parameter
-	//employeeIDStr := r.URL.Query().Get("id")
-
-	//Parse ID from path param
-	vars := mux.Vars(r)
+		vars := mux.Vars(r)
 	idStr := vars["id"]
-	//get db connection
 	db := database.GetDbConnection()
 	defer db.Close()
 
@@ -33,7 +28,6 @@ func DeleteEmpHandler(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	//Delete rows
 	result, err := db.Exec("DELETE FROM employee WHERE id=?", id)
 	if err != nil {
 		response := models.Response{

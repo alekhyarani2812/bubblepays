@@ -40,13 +40,10 @@ func GetPlanPriceById(pkId int) (*models.PlanPrice, error) {
 		}
 		return nil, err
 	}
-	log.Printf("plan found: %+v\n", planPrice)
 	return &planPrice, nil
-
 }
 
 func SavePlanPrice(planPriceData *models.PlanPrice) (*models.PlanPrice, error) {
-	fmt.Println("this is SavePlanPrice repo  planPriceData : ", planPriceData)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in db connection ", err.Error())
@@ -57,12 +54,10 @@ func SavePlanPrice(planPriceData *models.PlanPrice) (*models.PlanPrice, error) {
 		fmt.Println("error in insertion of records", gorm.Error)
 		return nil, err
 	}
-	fmt.Println("planPriceData : ", planPriceData)
 	return planPriceData, nil
 }
 
 func UpdatePlanPrice(pkId int, planPriceRecord *models.PlanPrice) (*models.PlanPrice, error) {
-	fmt.Println("planPrice from repo :  pkid : ", planPriceRecord, pkId)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in db connection ", err.Error())
@@ -73,9 +68,7 @@ func UpdatePlanPrice(pkId int, planPriceRecord *models.PlanPrice) (*models.PlanP
 		fmt.Println("error in updating data", err.Error())
 		return nil, err
 	}
-	//rowsEffected := gorm.RowsAffected
 	gorm.Find(&planPriceRecord)
-	fmt.Println("planPriceRecord : ", planPriceRecord)
 	return planPriceRecord, nil
 }
 
@@ -89,7 +82,7 @@ func DeletePlanPrice(pkId int) (int64, error) {
 	var planPrice models.PlanPrice
 	gorm := dbConnection.Where("id = ?", pkId).Delete(&planPrice)
 	if gorm.Error != nil && gorm != nil {
-		fmt.Println("error in deleting PlanPrice data *****gorm.Error != nil*****")
+		fmt.Println("error in deleting PlanPrice data")
 		return 0, err
 	}
 	rows := gorm.RowsAffected
@@ -97,6 +90,5 @@ func DeletePlanPrice(pkId int) (int64, error) {
 		fmt.Println("error in deleting PlanPrice data ")
 		return 0, err
 	}
-	fmt.Println(" rows effected : ", rows)
 	return rows, nil
 }
