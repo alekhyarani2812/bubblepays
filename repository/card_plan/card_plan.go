@@ -1,13 +1,16 @@
 package cardplan
 
 import (
+	"context"
 	"fmt"
+	"log"
 
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
 )
 
-func GetCardPlan() ([]models.CardPlan, error) {
+func GetCardPlan(ctx context.Context) ([]models.CardPlan, error) {
+
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in db connection ", err.Error())
@@ -24,7 +27,7 @@ func GetCardPlan() ([]models.CardPlan, error) {
 	return cardplan, nil
 }
 
-func GetCardPlanById(pkId int) (*models.CardPlan, error){
+func GetCardPlanById(ctx context.Context, pkId int) (*models.CardPlan, error) {
 	fmt.Println("GetCardPlanById repo ************")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -32,7 +35,7 @@ func GetCardPlanById(pkId int) (*models.CardPlan, error){
 		return nil, err
 	}
 	var cardPlanRecord models.CardPlan
-	gorm := dbConnection.Where("id = ?",pkId).Find(&cardPlanRecord)
+	gorm := dbConnection.Where("id = ?", pkId).Find(&cardPlanRecord)
 	if gorm != nil && gorm.Error != nil {
 		fmt.Println("error in getting CardPlan data")
 		return nil, err
@@ -41,7 +44,7 @@ func GetCardPlanById(pkId int) (*models.CardPlan, error){
 	return &cardPlanRecord, nil
 }
 
-func SaveCardPlan(cardPlanData *models.CardPlan) (*models.CardPlan, error) {
+func SaveCardPlan(ctx context.Context, cardPlanData *models.CardPlan) (*models.CardPlan, error) {
 	fmt.Println("this is CardPlan repo  CardPlan : ", cardPlanData)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -57,7 +60,7 @@ func SaveCardPlan(cardPlanData *models.CardPlan) (*models.CardPlan, error) {
 	return cardPlanData, nil
 }
 
-func UpdateCardPlan(pkId int, cardPlanRecord *models.CardPlan) (*models.CardPlan, error){
+func UpdateCardPlan(ctx context.Context, pkId int, cardPlanRecord *models.CardPlan) (*models.CardPlan, error) {
 	fmt.Println("this is cardplan repo cardPlanRecord :  ,pkId", cardPlanRecord, pkId)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -71,10 +74,11 @@ func UpdateCardPlan(pkId int, cardPlanRecord *models.CardPlan) (*models.CardPlan
 		return nil, err
 	}
 	gorm.Find(&cardPlanRecord)
+	log.Println("cardPlanRecord :", cardPlanRecord)
 	return cardPlanRecord, nil
 }
 
-func DeleteCardPlan(pkId int) (int64, error){
+func DeleteCardPlan(ctx context.Context, pkId int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in db connection ")
@@ -91,5 +95,6 @@ func DeleteCardPlan(pkId int) (int64, error){
 		fmt.Println("error in deleting cardPlan Record")
 		return 0, err
 	}
+	log.Println("rows :", rows)
 	return rows, nil
 }

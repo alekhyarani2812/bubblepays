@@ -3,10 +3,8 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
-	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/repository/consumption"
 	"github.com/bubblepays/utils"
@@ -15,13 +13,14 @@ import (
 
 // Get all consumptions
 func GetConsumptions(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	//create a job
-	dbConnection, dbErr := database.GetORMDbConnection()
-	if dbErr != nil {
-		log.Printf("err %v ", dbErr.Error())
-		return
-	}
-	consumptionList, err := consumption.GetConsumptions(dbConnection)
+	//dbConnection, dbErr := database.GetORMDbConnection()
+	// if dbErr != nil {
+	// 	log.Printf("err %v ", dbErr.Error())
+	// 	return
+	// }
+	consumptionList, err := consumption.GetConsumptions(ctx)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -41,6 +40,7 @@ func GetConsumptions(w http.ResponseWriter, r *http.Request) {
 
 // Get 1 employee data by Id primarykey
 func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	//idStr := r.PathValue("id")
@@ -54,7 +54,7 @@ func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	consumptionList, err := consumption.GetConsumptionById(pkId)
+	consumptionList, err := consumption.GetConsumptionById(ctx, pkId)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -74,6 +74,7 @@ func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
 
 // Insert consumption data
 func SavesConsumption(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	var consum models.Consumption
 	err := json.NewDecoder(r.Body).Decode(&consum)
 	if err != nil {
@@ -86,7 +87,7 @@ func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	consumData := consum
-	consumptionRecord, err := consumption.SavesConsumption(consumData)
+	consumptionRecord, err := consumption.SavesConsumption(ctx, consumData)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -106,6 +107,7 @@ func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	//idStr := r.PathValue("id")
@@ -119,7 +121,7 @@ func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	rowsEffected, err := consumption.DeleteConsumption(pkId)
+	rowsEffected, err := consumption.DeleteConsumption(ctx, pkId)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -139,9 +141,9 @@ func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		response := models.Response{
-			Message: utils.Fail,
-			Status:  http.StatusBadRequest,
-			Description: fmt.Sprintf("consumption record %v does not exist in consumption table",pkId),
+			Message:     utils.Fail,
+			Status:      http.StatusBadRequest,
+			Description: fmt.Sprintf("consumption record %v does not exist in consumption table", pkId),
 		}
 		utils.Render(w, response)
 	}

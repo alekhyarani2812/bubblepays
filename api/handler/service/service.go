@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/repository/service"
 	"github.com/bubblepays/utils"
@@ -14,8 +13,9 @@ import (
 
 // Read services
 func GetServices(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	fmt.Println("This is GetServices handler")
-	serviceData, err := service.GetServices()
+	serviceData, err := service.GetServices(ctx)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -38,6 +38,7 @@ func GetServices(w http.ResponseWriter, r *http.Request) {
 
 // Insert services
 func SaveService(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	fmt.Println("This is Service handler")
 	// Insert consumption data
 	var serviceRecord models.Services
@@ -52,7 +53,7 @@ func SaveService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println("service good************: ", serviceRecord)
-	serviceData, err := service.SaveService(serviceRecord)
+	serviceData, err := service.SaveService(ctx, serviceRecord)
 	if err != nil {
 		log.Println("you are in SaveService handler err block")
 		response := models.Response{
@@ -75,6 +76,7 @@ func SaveService(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteServiceById(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -88,7 +90,7 @@ func DeleteServiceById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println("pkId : ", pkId)
-	rowsEffected, err := service.DeleteServiceById(pkId)
+	rowsEffected, err := service.DeleteServiceById(ctx, pkId)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,

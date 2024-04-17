@@ -12,7 +12,8 @@ import (
 )
 
 func GetPrices(w http.ResponseWriter, r *http.Request) {
-	priceReords, err := prices.GetPrices()
+	ctx := utils.WithTransactionID(r.Context())
+	priceReords, err := prices.GetPrices(ctx)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -31,6 +32,7 @@ func GetPrices(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPricesById(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -43,7 +45,7 @@ func GetPricesById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	priceReord, err := prices.GetPricesById(pkId)
+	priceReord, err := prices.GetPricesById(ctx, pkId)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -62,6 +64,7 @@ func GetPricesById(w http.ResponseWriter, r *http.Request) {
 }
 
 func SavePrice(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	var price models.Price
 	err := json.NewDecoder(r.Body).Decode(&price)
 	if err != nil {
@@ -73,7 +76,7 @@ func SavePrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	priceRecord, err := prices.SavePrice(price)
+	priceRecord, err := prices.SavePrice(ctx, price)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -93,6 +96,7 @@ func SavePrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdatePrice(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -117,7 +121,7 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	updatedRecord, err := prices.UpdatePrice(pkId, &price)
+	updatedRecord, err := prices.UpdatePrice(ctx, pkId, &price)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -137,6 +141,7 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeletePrice(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -150,7 +155,7 @@ func DeletePrice(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println("pkId : ", pkId)
-	rowsEffected, err := prices.DeletePrice(pkId)
+	rowsEffected, err := prices.DeletePrice(ctx, pkId)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,

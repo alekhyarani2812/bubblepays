@@ -1,6 +1,7 @@
 package prices
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -9,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetPrices() ([]models.Price, error) {
+func GetPrices(ctx context.Context) ([]models.Price, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Printf("err %v ", err)
@@ -24,7 +25,7 @@ func GetPrices() ([]models.Price, error) {
 	return prices, nil
 }
 
-func GetPricesById(pkId int) (*models.Price, error) {
+func GetPricesById(ctx context.Context, pkId int) (*models.Price, error) {
 	fmt.Println("This is GetPricesById Repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -44,7 +45,7 @@ func GetPricesById(pkId int) (*models.Price, error) {
 	return &price, nil
 }
 
-func SavePrice(price models.Price) (*models.Price, error) {
+func SavePrice(ctx context.Context, price models.Price) (*models.Price, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in db connecton  ")
@@ -60,7 +61,7 @@ func SavePrice(price models.Price) (*models.Price, error) {
 	return &price, nil
 }
 
-func UpdatePrice(pkId int, prices *models.Price) (*models.Price, error) {
+func UpdatePrice(ctx context.Context, pkId int, prices *models.Price) (*models.Price, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in db connecton  ")
@@ -75,7 +76,7 @@ func UpdatePrice(pkId int, prices *models.Price) (*models.Price, error) {
 	return prices, nil
 }
 
-func DeletePrice(pkId int) (int64, error) {
+func DeletePrice(ctx context.Context, pkId int) (int64, error) {
 	fmt.Println("This is DeletePrice Repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {

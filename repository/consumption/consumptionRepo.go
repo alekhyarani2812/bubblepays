@@ -1,6 +1,7 @@
 package consumption
 
 import (
+	"context"
 	"encoding/csv"
 	"fmt"
 	"log"
@@ -36,11 +37,12 @@ func ReadConsumptionData(filePath string) (data [][]string) {
 		fmt.Println("Error:", err)
 		return
 	}
+	log.Println("records :", records)
 	return records
 }
 
 // Insert consumption data into DB
-func SaveFileConsumption(consumptionData models.Consumption, wg *sync.WaitGroup) error {
+func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption, wg *sync.WaitGroup) error {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Printf("err %v ", err.Error())
@@ -63,7 +65,7 @@ func SaveFileConsumption(consumptionData models.Consumption, wg *sync.WaitGroup)
 }
 
 // Get Consumption data from destination dirctory and process it
-func ConsumeDeviceData() {
+func ConsumeDeviceData(ctx context.Context) {
 	var wg sync.WaitGroup
 	// Open the directory
 	f, err := os.Open(startConsumeDir)
@@ -116,7 +118,7 @@ func ConsumeDeviceData() {
 			}
 			log.Println("calling SaveFileConsumption")
 			wg.Add(1)
-			go SaveFileConsumption(consumptionData, &wg)
+			go SaveFileConsumption(ctx, consumptionData, &wg)
 		}
 	}
 

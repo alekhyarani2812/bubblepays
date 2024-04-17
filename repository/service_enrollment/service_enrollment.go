@@ -1,14 +1,17 @@
 package service_enrollment
 
 import (
+	"context"
 	"fmt"
 	"log"
+
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
+	"github.com/bubblepays/utils"
 	"gorm.io/gorm"
 )
 
-func GetServiceEnrollment() ([]models.ServiceEnrollment, error) {
+func GetServiceEnrollment(ctx context.Context) ([]models.ServiceEnrollment, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -16,13 +19,13 @@ func GetServiceEnrollment() ([]models.ServiceEnrollment, error) {
 	}
 	var serviceEnrollRecords []models.ServiceEnrollment
 	if err := dbConnection.Find(&serviceEnrollRecords).Error; err != nil {
-		log.Printf("failed to retrieve consumption data: %v", err)
+		log.Printf("TransactionId: %v. Failed to retrieve consumption data: %v", err, utils.GetTransactionID(ctx))
 		return nil, err
 	}
 	return serviceEnrollRecords, nil
 }
 
-func GetServiceEnrollmentById(pkId int) (*models.ServiceEnrollment, error) {
+func GetServiceEnrollmentById(ctx context.Context, pkId int) (*models.ServiceEnrollment, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -40,7 +43,7 @@ func GetServiceEnrollmentById(pkId int) (*models.ServiceEnrollment, error) {
 	return &serviceenroll, nil
 }
 
-func SaveServiceEnrollment(serviceEnrollment models.ServiceEnrollment) (*models.ServiceEnrollment, error) {
+func SaveServiceEnrollment(ctx context.Context, serviceEnrollment models.ServiceEnrollment) (*models.ServiceEnrollment, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -53,7 +56,7 @@ func SaveServiceEnrollment(serviceEnrollment models.ServiceEnrollment) (*models.
 	return &serviceEnrollment, nil
 }
 
-func UpdateServiceEnrollment(pkId int, seviceEnrRecord models.ServiceEnrollment) (*models.ServiceEnrollment, error) {
+func UpdateServiceEnrollment(ctx context.Context, pkId int, seviceEnrRecord models.ServiceEnrollment) (*models.ServiceEnrollment, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error to connect database", err.Error())
@@ -69,7 +72,7 @@ func UpdateServiceEnrollment(pkId int, seviceEnrRecord models.ServiceEnrollment)
 	return &seviceEnrRecord, nil
 }
 
-func DeleteServiceEnrollment(pkId int) (int64, error) {
+func DeleteServiceEnrollment(ctx context.Context, pkId int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in getting DB connection ", err.Error())

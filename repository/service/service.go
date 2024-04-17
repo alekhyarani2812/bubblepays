@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"log"
 
 	"github.com/bubblepays/database"
@@ -8,15 +9,14 @@ import (
 )
 
 // Read services
-func GetServices() ([]models.Services, error) {
+func GetServices(ctx context.Context) ([]models.Services, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Println("err in dbConnection :****")
 		return nil, err
 	}
 	var service []models.Services
-	if err := dbConnection.Find(&service).Error; 
-	err != nil {
+	if err := dbConnection.Find(&service).Error; err != nil {
 		log.Printf("failed to retrieve consumption data: %v", err)
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func GetServices() ([]models.Services, error) {
 	return service, nil
 }
 
-func SaveService(service models.Services) (*models.Services, error) {
+func SaveService(ctx context.Context, service models.Services) (*models.Services, error) {
 	log.Println("serviceData in service repo", service)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -40,7 +40,7 @@ func SaveService(service models.Services) (*models.Services, error) {
 	return &service, nil
 }
 
-func DeleteServiceById(pkId int) (int64, error) {
+func DeleteServiceById(ctx context.Context, pkId int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Println("error in db connecton  ")

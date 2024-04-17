@@ -1,7 +1,9 @@
 package consumption
 
 import (
+	"context"
 	"log"
+
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
 	_ "github.com/go-sql-driver/mysql"
@@ -9,16 +11,22 @@ import (
 )
 
 // Get all consumptions data
-func GetConsumptions(dbConnection *gorm.DB) ([]models.Consumption, error) {
+func GetConsumptions(ctx context.Context) ([]models.Consumption, error) {
+	dbConnection, err := database.GetORMDbConnection()
+	if err != nil {
+		log.Printf("err %v ", err)
+		return nil, err
+	}
 	var consumptions []models.Consumption
 	if err := dbConnection.Find(&consumptions).Error; err != nil {
 		log.Printf("failed to retrieve consumption data: %v", err)
 		return nil, err
 	}
+	log.Println("consumptions : ", consumptions)
 	return consumptions, nil
 }
 
-func GetConsumptionById(id int) ([]models.Consumption, error) {
+func GetConsumptionById(ctx context.Context, id int) ([]models.Consumption, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Printf("err %v ", err)
@@ -33,10 +41,11 @@ func GetConsumptionById(id int) ([]models.Consumption, error) {
 		}
 		return nil, err
 	}
+	log.Println("consumption : ", consumption)
 	return consumption, nil
 }
 
-func SavesConsumption(consumRecord models.Consumption) (*models.Consumption, error) {
+func SavesConsumption(ctx context.Context, consumRecord models.Consumption) (*models.Consumption, error) {
 	log.Println("consumRecord", consumRecord)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -51,7 +60,7 @@ func SavesConsumption(consumRecord models.Consumption) (*models.Consumption, err
 	return &consumRecord, nil
 }
 
-func DeleteConsumption(pkId int) (int64, error) {
+func DeleteConsumption(ctx context.Context, pkId int) (int64, error) {
 	log.Println("pkId : ", pkId)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {

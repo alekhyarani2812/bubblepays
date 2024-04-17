@@ -15,6 +15,8 @@ import (
 func Render(w http.ResponseWriter, response models.Response) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(response.Status)
+	// ctx := r.Context
+	// w.Write([]byte(GetTransactionID(ctx)))
 	err := json.NewEncoder(w).Encode(response)
 	if err != nil {
 		log.Fatal(err)

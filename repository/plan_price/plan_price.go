@@ -1,6 +1,7 @@
 package plan_price
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -9,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetPlanPrice() ([]models.PlanPrice, error) {
+func GetPlanPrice(ctx context.Context) ([]models.PlanPrice, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in db connection ", err.Error())
@@ -21,10 +22,11 @@ func GetPlanPrice() ([]models.PlanPrice, error) {
 		fmt.Println("error in getting records from planPrice ", err.Error())
 		return nil, err
 	}
+	log.Println("planPrice :", planPrice)
 	return planPrice, nil
 }
 
-func GetPlanPriceById(pkId int) (*models.PlanPrice, error) {
+func GetPlanPriceById(ctx context.Context, pkId int) (*models.PlanPrice, error) {
 	fmt.Println("this is GetPlanPriceById repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -40,10 +42,11 @@ func GetPlanPriceById(pkId int) (*models.PlanPrice, error) {
 		}
 		return nil, err
 	}
+	log.Println("planPrice :", planPrice)
 	return &planPrice, nil
 }
 
-func SavePlanPrice(planPriceData *models.PlanPrice) (*models.PlanPrice, error) {
+func SavePlanPrice(ctx context.Context, planPriceData *models.PlanPrice) (*models.PlanPrice, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in db connection ", err.Error())
@@ -54,10 +57,11 @@ func SavePlanPrice(planPriceData *models.PlanPrice) (*models.PlanPrice, error) {
 		fmt.Println("error in insertion of records", gorm.Error)
 		return nil, err
 	}
+	fmt.Println("planPriceData :", planPriceData)
 	return planPriceData, nil
 }
 
-func UpdatePlanPrice(pkId int, planPriceRecord *models.PlanPrice) (*models.PlanPrice, error) {
+func UpdatePlanPrice(ctx context.Context, pkId int, planPriceRecord *models.PlanPrice) (*models.PlanPrice, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		fmt.Println("error in db connection ", err.Error())
@@ -69,10 +73,11 @@ func UpdatePlanPrice(pkId int, planPriceRecord *models.PlanPrice) (*models.PlanP
 		return nil, err
 	}
 	gorm.Find(&planPriceRecord)
+	log.Println("planPriceRecord : ", planPriceRecord)
 	return planPriceRecord, nil
 }
 
-func DeletePlanPrice(pkId int) (int64, error) {
+func DeletePlanPrice(ctx context.Context, pkId int) (int64, error) {
 	fmt.Println("this is DeletePlanPrice repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -90,5 +95,6 @@ func DeletePlanPrice(pkId int) (int64, error) {
 		fmt.Println("error in deleting PlanPrice data ")
 		return 0, err
 	}
+	fmt.Println("rows :", rows)
 	return rows, nil
 }

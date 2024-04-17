@@ -1,13 +1,15 @@
 package plans
 
 import (
+	"context"
 	"log"
+
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
 	"gorm.io/gorm"
 )
 
-func GetPlans() ([]models.Plans, error) {
+func GetPlans(ctx context.Context) ([]models.Plans, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Printf("err %v ", err)
@@ -18,10 +20,11 @@ func GetPlans() ([]models.Plans, error) {
 		log.Printf("failed to retrieve plans data: %v", err)
 		return nil, err
 	}
+	log.Println("plans : ", plans)
 	return plans, nil
 }
 
-func GetPlanById(id int) (*models.Plans, error) {
+func GetPlanById(ctx context.Context, id int) (*models.Plans, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Printf("err %v ", err)
@@ -36,10 +39,11 @@ func GetPlanById(id int) (*models.Plans, error) {
 		}
 		return nil, err
 	}
+	log.Println("plan : ", plan)
 	return &plan, nil
 }
 
-func SavePlan(planData models.Plans) (*models.Plans, error) {
+func SavePlan(ctx context.Context, planData models.Plans) (*models.Plans, error) {
 	log.Println("planRecord", planData)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -51,11 +55,12 @@ func SavePlan(planData models.Plans) (*models.Plans, error) {
 		log.Println("Error inserting plan:", ormDB.Error)
 		return nil, ormDB.Error
 	}
+	log.Println("planData : ", planData)
 	return &planData, nil
 }
 
 // Update the plan
-func UpdatePlan(pkId int, plan *models.Plans) (int64, error) {
+func UpdatePlan(ctx context.Context, pkId int, plan *models.Plans) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Println("err in dbConnection :****")
@@ -63,10 +68,11 @@ func UpdatePlan(pkId int, plan *models.Plans) (int64, error) {
 	}
 	gorm := dbConnection.Model(&models.Plans{}).Where("id = ?", pkId).Updates(&plan)
 	rowsEffected := gorm.RowsAffected
+	log.Println("rowsEffected : ", rowsEffected)
 	return rowsEffected, nil
 }
 
-func DeletePlan(pkId int) (int64, error) {
+func DeletePlan(ctx context.Context, pkId int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Println("err in dbConnection :****")
@@ -79,5 +85,6 @@ func DeletePlan(pkId int) (int64, error) {
 		return 0, result.Error
 	}
 	rowsEff := result.RowsAffected
+	log.Println("rowsEff : ", rowsEff)
 	return rowsEff, nil
 }

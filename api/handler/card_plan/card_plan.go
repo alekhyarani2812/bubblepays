@@ -11,7 +11,8 @@ import (
 )
 
 func GetCardPlan(w http.ResponseWriter, r *http.Request) {
-	cardPlanRecords, err := cardplan.GetCardPlan()
+	ctx := utils.WithTransactionID(r.Context())
+	cardPlanRecords, err := cardplan.GetCardPlan(ctx)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -30,6 +31,7 @@ func GetCardPlan(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetCardPlanById(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -42,7 +44,7 @@ func GetCardPlanById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	cardPlanRecord, err := cardplan.GetCardPlanById(pkId)
+	cardPlanRecord, err := cardplan.GetCardPlanById(ctx, pkId)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -61,6 +63,7 @@ func GetCardPlanById(w http.ResponseWriter, r *http.Request) {
 }
 
 func SaveCardPlan(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	var cardPlan models.CardPlan
 	err := json.NewDecoder(r.Body).Decode(&cardPlan)
 	if err != nil {
@@ -72,7 +75,7 @@ func SaveCardPlan(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	cardPlanRecord, err := cardplan.SaveCardPlan(&cardPlan)
+	cardPlanRecord, err := cardplan.SaveCardPlan(ctx, &cardPlan)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -91,6 +94,7 @@ func SaveCardPlan(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateCardPlan(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -112,7 +116,7 @@ func UpdateCardPlan(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.Render(w, response)
 	}
-	cardPlanRecordData, err := cardplan.UpdateCardPlan(pkId, &cardPlanRecord)
+	cardPlanRecordData, err := cardplan.UpdateCardPlan(ctx, pkId, &cardPlanRecord)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -132,6 +136,7 @@ func UpdateCardPlan(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteCardPlan(w http.ResponseWriter, r *http.Request) {
+	ctx := utils.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -143,7 +148,7 @@ func DeleteCardPlan(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.Render(w, response)
 	}
-	rowsEffected, err := cardplan.DeleteCardPlan(pkId)
+	rowsEffected, err := cardplan.DeleteCardPlan(ctx, pkId)
 	if err != nil {
 		response := models.Response{
 			Error:       err.Error(),

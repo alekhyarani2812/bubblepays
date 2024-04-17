@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -13,6 +14,7 @@ import (
 	priceApi "github.com/bubblepays/api/handler/prices"
 	serviceApi "github.com/bubblepays/api/handler/service"
 	serviceenrollmentApi "github.com/bubblepays/api/handler/service_enrollment"
+	"github.com/bubblepays/utils"
 
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/jobs"
@@ -22,13 +24,22 @@ import (
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Middleware executing")
+		transactionID := utils.GenerateTransactionID()
+		TransactionsIDKey := utils.TransactionIDKey
+		// Create a new context with the transaction ID
+        ctx := context.WithValue(r.Context(), TransactionsIDKey, transactionID)
+
+        // Serve the request with the new context
+        next.ServeHTTP(w, r.WithContext(ctx))
+
 		// Call the next handler
-		next.ServeHTTP(w, r)
+		//next.ServeHTTP(w, r)
 	})
 }
 
 func main() {
 	fmt.Println("This is main package")
+
 	dbConnection, dbErr := database.GetORMDbConnection()
 	if dbErr != nil {
 		log.Printf("err %v ", dbErr.Error())
@@ -40,10 +51,7 @@ func main() {
 
 	//add middleware
 	router.Use(middleware)
-	// attach helloworld handler
-	// getMessageHandler := middleware(http.HandlerFunc(api.GetMessageHandler))
-	// mux.Handle("/api/message", getMessageHandler)
-
+	
 	//CardPlan
 	router.HandleFunc("/api/getcardplan", cardplanApi.GetCardPlan).Methods("GET")
 	router.HandleFunc("/api/getcardplanbyid/{id}", cardplanApi.GetCardPlanById).Methods("GET")
@@ -97,16 +105,19 @@ func main() {
 	router.HandleFunc("/api/updateEmployee/{id}", employeeApi.UpdateEmpHandler).Methods("PUT")
 
 	//jobs.RunMachineJob()
+	router.HandleFunc( "/api/hello", func(w http.ResponseWriter, r *http.Request) {
+		// Get the context from the request
+		ctx := r.Context()
+		w.Write([]byte("Hello transactionId: "+utils.GetTransactionID(ctx)))
+	}).Methods("GET")
 
+	//To start the port with 8080
 	http.Handle("/", router)
 	fmt.Println("Started server on port 8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		fmt.Printf(" ERROR ListenAndServe err: %v", err)
 	}
-	router.HandleFunc("/api/hello", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello"))
-	}).Methods("GET")
 }
 func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Handler executing")
