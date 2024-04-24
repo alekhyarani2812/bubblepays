@@ -129,7 +129,6 @@ func main() {
 	}
 }
 func handler(w http.ResponseWriter, r *http.Request) {
-	//jdbnjfblh vn
 	fmt.Println("Handler executing")
 	w.Write([]byte("Hello, World!"))
 }
