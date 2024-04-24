@@ -2,17 +2,19 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
+	"github.com/bubblepays/utils"
 )
 
 // Read services
 func GetServices(ctx context.Context) ([]models.Services, error) {
-	dbConnection, err := database.GetORMDbConnection()
+	dbConnection, err :=  utils.GetDBConnection(ctx)
 	if err != nil {
-		log.Println("err in dbConnection :****")
+		fmt.Println("error in db connection ", err.Error())
 		return nil, err
 	}
 	var service []models.Services

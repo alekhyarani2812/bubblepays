@@ -13,15 +13,6 @@ func NewNode(val int) *Node {
 		next: nil,
 	}
 }
-func (n *Node) LoopLinkedListMethod() {
-	fmt.Println("********* LoopLinkedListMethod ")
-	current := n
-	for current != nil {
-		fmt.Printf(" %d :", current.data)
-		current = current.next
-	}
-	fmt.Println()
-}
 func PrintLinkedList(head *Node) {
 	current := head
 	for current != nil {
@@ -48,7 +39,33 @@ func InsertNodeAtIndexImpl(head *Node, index, data int) *Node {
 	current.next = newNode
 	return head
 }
+func InsertNodeAtIndex() {
+	var head *Node
+	head = NewNode(1)
+	head.next = NewNode(2)
+	head.next.next = NewNode(3)
+	fmt.Println("Linked List before insertion")
+	PrintLinkedList(head)
+	head = InsertNodeAtIndexImpl(head, 3, 12)
+	fmt.Println("Linked list after insertion of 12 at position 3:")
+	PrintLinkedList(head)
+}
 
+func InsertLinkedList() {
+	//var head *Node
+	head := NewNode(15)
+	head.next = NewNode(25)
+	head.next.next = NewNode(33)
+	head.next.next.next = NewNode(43)
+	head.next.next.next.next = NewNode(56)
+	fmt.Println("Linked List before reverse")
+	PrintLinkedList(head)
+	//head.LoopLinkedListMethod()
+	fmt.Println("Linked List after reverse")
+	reverseHead := ReverseLinkedList(head)
+	PrintLinkedList(reverseHead)
+	//reverseHead.LoopLinkedListMethod()
+}
 func ReverseLinkedList(head *Node) *Node {
 	var prev, next *Node
 	current := head
@@ -60,37 +77,14 @@ func ReverseLinkedList(head *Node) *Node {
 	}
 	return prev
 }
-
-func InsertLinkedList() {
-	//var head *Node
-	head := NewNode(15)
-	head.next = NewNode(25)
-	head.next.next = NewNode(33)
-	head.next.next.next = NewNode(43)
-	head.next.next.next.next = NewNode(56)
-	fmt.Println("Linked List before reverse")
-	//PrintLinkedList(head)
-	head.LoopLinkedListMethod()
-	 fmt.Println("Linked List after reverse")
-	reverseHead := ReverseLinkedList(head)
-	// PrintLinkedList(reverseHead)
-	reverseHead.LoopLinkedListMethod()
-
-	
-
-}
-
-func InsertNodeAtIndex() {
-	var head *Node
-	head = NewNode(1)
-	head.next = NewNode(2)
-	head.next.next = NewNode(3)
-	fmt.Println("Linked List before insertion")
-	PrintLinkedList(head)
-
-	head = InsertNodeAtIndexImpl(head, 3, 12)
-	fmt.Println("Linked list after insertion of 12 at position 3:")
-	PrintLinkedList(head)
+func (n *Node) LoopLinkedListMethod() {
+	fmt.Println("********* LoopLinkedListMethod ")
+	current := n
+	for current != nil {
+		fmt.Printf(" %d :", current.data)
+		current = current.next
+	}
+	fmt.Println()
 }
 
 //initialize the nodes

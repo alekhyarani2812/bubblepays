@@ -9,8 +9,6 @@ import (
 	"path/filepath"
 	"sync"
 	"time"
-
-	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/utils"
 )
@@ -43,9 +41,10 @@ func ReadConsumptionData(filePath string) (data [][]string) {
 
 // Insert consumption data into DB
 func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption, wg *sync.WaitGroup) error {
-	dbConnection, err := database.GetORMDbConnection()
+	//get dbconnection from contex 
+	dbConnection, err :=  utils.GetDBConnection(ctx)
 	if err != nil {
-		log.Printf("err %v ", err.Error())
+		fmt.Println("error in db connection ", err.Error())
 		return err
 	}
 	defer wg.Done()

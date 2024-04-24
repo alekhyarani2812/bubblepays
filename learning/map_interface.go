@@ -1,6 +1,9 @@
 package learning
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // Addition of 2 numbers & strings using interfaces
 type Caliculations interface {
@@ -33,7 +36,7 @@ func Implimentation() {
 }
 
 // Shape interface Recatangle struct using interfaces
-type Shape interface {
+type Shapes interface {
 	area() float32
 }
 type Rectanle struct {
@@ -43,7 +46,7 @@ type Rectanle struct {
 func (srtu Rectanle) area() float32 {
 	return 2 * srtu.length * srtu.breadth
 }
-func ShapeCal(s Shape) {
+func ShapeCal(s Shapes) {
 	fmt.Println("area is : ", s.area())
 }
 func ShapeImpl() {
@@ -80,4 +83,33 @@ func MapInterfaceImpl() {
 	sMap["rectangle"] = Rectanle1{length: 10, breadth: 20}
 	rect := sMap["rectangle"]
 	fmt.Println("area of rectangle is : ", rect.area())
+}
+
+//Map inteface combination
+type ShapeIn interface{
+	Area() float32
+}
+type Circle struct{
+	radius float32
+}
+type Rectangle struct{
+	length, height float32
+}
+func (c Circle) Area() float32{
+	return math.Pi * c.radius * c.radius
+}
+func (r Rectangle) Area() float32{
+	return r.length * r.height
+}
+func MapInterfaceEx(){
+	shapes := make(map[string]ShapeIn)
+	circle := Circle{radius: 4}
+	//circle.
+	rectangle := Rectangle{length: 5, height: 5}
+	shapes["rectangle"] = rectangle
+	shapes["circle"] = circle	
+	for shapeName, shape := range shapes{
+		area := shape.Area()
+		fmt.Println("key, value", shapeName,area)
+	}
 }

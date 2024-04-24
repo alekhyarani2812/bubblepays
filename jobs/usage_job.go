@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
 	"github.com/bubblepays/models"
 	repository "github.com/bubblepays/repository/usages"
 	"gorm.io/gorm"
@@ -22,7 +21,6 @@ func getConsumptionsByMonthnum(dbConnection *gorm.DB) (map[string]float64, error
 	}
 	log.Printf("SIZE of consumption: size:: %v ", len(consumptions))
 	cardIdServiceId := make(map[string]float64)
-
 	for _, consum := range consumptions {
 		layout := "2006-01-02T15:04:05-07:00"
 		// Parse the time string into a time.Time object
@@ -80,7 +78,6 @@ func UsageData(dbConnection *gorm.DB) {
 		serviceId := keyStr[1]
 		monthNum := keyStr[2]
 		fmt.Println(cardId, serviceId, monthNum)
-
 		usageData := models.Usages{
 			CardId:    cardId,
 			ServiceId: serviceId,

@@ -29,6 +29,7 @@ func TestSortStringArrayBubbleSort(t *testing.T) {
 
 func TestUniqueString(t *testing.T) {
 	t.Log("this is TestUniqueString using map")
+	InsertNodeAtIndex()
 	//UniqueString()
-	UniqueStringUsingMap()
+	//UniqueStringUsingMap()
 }

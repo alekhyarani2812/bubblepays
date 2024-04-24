@@ -7,13 +7,15 @@ import (
 
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
+	"github.com/bubblepays/utils"
 	"gorm.io/gorm"
 )
 
 func GetPrices(ctx context.Context) ([]models.Price, error) {
-	dbConnection, err := database.GetORMDbConnection()
+	//get dbconnection from contex 
+	dbConnection, err :=  utils.GetDBConnection(ctx)
 	if err != nil {
-		log.Printf("err %v ", err)
+		fmt.Println("error in db connection ", err.Error())
 		return nil, err
 	}
 	var prices []models.Price

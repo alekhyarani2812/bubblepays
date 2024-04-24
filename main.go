@@ -1,5 +1,10 @@
 package main
 
+// @title My Go API
+// @version 1.0
+// @description This is a sample Go API with Swagger documentation.
+// @BasePath /api/v1
+
 import (
 	"context"
 	"fmt"
@@ -14,31 +19,37 @@ import (
 	priceApi "github.com/bubblepays/api/handler/prices"
 	serviceApi "github.com/bubblepays/api/handler/service"
 	serviceenrollmentApi "github.com/bubblepays/api/handler/service_enrollment"
-	"github.com/bubblepays/utils"
-
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/jobs"
+	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
 )
 
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		dbConnection, dbErr := database.GetORMDbConnection()
+		if dbErr != nil {
+			log.Printf("err %v ", dbErr.Error())
+			return
+		}
 		fmt.Println("Middleware executing")
 		transactionID := utils.GenerateTransactionID()
 		TransactionsIDKey := utils.TransactionIDKey
+		//var myConnection string
 		// Create a new context with the transaction ID
-        ctx := context.WithValue(r.Context(), TransactionsIDKey, transactionID)
-
-        // Serve the request with the new context
-        next.ServeHTTP(w, r.WithContext(ctx))
-
-		// Call the next handler
-		//next.ServeHTTP(w, r)
+		ctx := context.WithValue(r.Context(), TransactionsIDKey, transactionID)
+		//ctx.Value(dbConnection)
+		ctx = context.WithValue(r.Context(), utils.DBconnectionKey, dbConnection)
+		
+		// Serve the request with the new context
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
 func main() {
 	fmt.Println("This is main package")
+	//fmt.Println(os.Args)
 
 	dbConnection, dbErr := database.GetORMDbConnection()
 	if dbErr != nil {
@@ -46,12 +57,10 @@ func main() {
 		return
 	}
 	go jobs.RunMachineJob(dbConnection)
-
 	router := mux.NewRouter()
-
 	//add middleware
 	router.Use(middleware)
-	
+
 	//CardPlan
 	router.HandleFunc("/api/getcardplan", cardplanApi.GetCardPlan).Methods("GET")
 	router.HandleFunc("/api/getcardplanbyid/{id}", cardplanApi.GetCardPlanById).Methods("GET")
@@ -105,10 +114,10 @@ func main() {
 	router.HandleFunc("/api/updateEmployee/{id}", employeeApi.UpdateEmpHandler).Methods("PUT")
 
 	//jobs.RunMachineJob()
-	router.HandleFunc( "/api/hello", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/api/hello", func(w http.ResponseWriter, r *http.Request) {
 		// Get the context from the request
 		ctx := r.Context()
-		w.Write([]byte("Hello transactionId: "+utils.GetTransactionID(ctx)))
+		w.Write([]byte("Hello transactionId: " + utils.GetTransactionID(ctx)))
 	}).Methods("GET")
 
 	//To start the port with 8080

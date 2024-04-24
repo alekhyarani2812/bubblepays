@@ -73,3 +73,21 @@ func TestClimbStairs(t *testing.T) {
 	//result := RecClimbStairs(n)
 	fmt.Printf("result : %d is number of ways to climb to the top ", result)
 }
+
+func TestProducerConsumer(t *testing.T){
+	ProducerConsumerChGoRoutines()
+}
+
+func TestShapeImpls(t *testing.T){
+	ShapeImpls()
+}
+
+func TestChanneleLinks(t *testing.T){
+	//ChanneleLinks()
+	//ChanneleLinksGo()
+	//ChanneleLinksGor()
+	//ChanneleLinksGoRepeat()
+	StrLteral()
+}
+
+

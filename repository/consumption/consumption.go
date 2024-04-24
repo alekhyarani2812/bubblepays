@@ -2,19 +2,22 @@ package consumption
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
+	"github.com/bubblepays/utils"
 	_ "github.com/go-sql-driver/mysql"
 	"gorm.io/gorm"
 )
 
 // Get all consumptions data
 func GetConsumptions(ctx context.Context) ([]models.Consumption, error) {
-	dbConnection, err := database.GetORMDbConnection()
+	//get dbconnection from contex 
+	dbConnection, err :=  utils.GetDBConnection(ctx)
 	if err != nil {
-		log.Printf("err %v ", err)
+		fmt.Println("error in db connection ", err.Error())
 		return nil, err
 	}
 	var consumptions []models.Consumption

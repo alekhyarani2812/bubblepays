@@ -26,3 +26,7 @@ func TestLangestSubString(t *testing.T){
 	t.Log("Langest SubString")
 	LangestSubString()
 }
+
+func TestMapInterfaceEx(t *testing.T){
+	MapInterfaceEx()
+}

@@ -2,13 +2,19 @@ package utils
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
-
 type ContextKey string
 const (
 	TransactionIDKey ContextKey = "transaction_id"
+)
+
+type DBconnection string
+const (
+	DBconnectionKey DBconnection = "DBconnection"
 )
 func GenerateTransactionID() string {
 	// Generate a UUID for the transaction ID
@@ -26,4 +32,12 @@ func GetTransactionID(ctx context.Context) string {
 		return id
 	}
 	return ""
+}
+
+func GetDBConnection(ctx context.Context) (*gorm.DB, error) {
+	// Retrieve the transaction ID from the context
+	if db, ok := ctx.Value(DBconnectionKey).(*gorm.DB); ok {
+		return db, nil
+	}
+	return nil, errors.New("DB connection does not exist in context.")
 }

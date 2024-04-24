@@ -12,9 +12,9 @@ import (
 )
 
 func GetServiceEnrollment(ctx context.Context) ([]models.ServiceEnrollment, error) {
-	dbConnection, err := database.GetORMDbConnection()
+	dbConnection, err :=  utils.GetDBConnection(ctx)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("error in db connection ", err.Error())
 		return nil, err
 	}
 	var serviceEnrollRecords []models.ServiceEnrollment
