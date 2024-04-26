@@ -2,7 +2,6 @@ package repository
 
 import (
 	"fmt"
-
 	"github.com/bubblepays/models"
 	"gorm.io/gorm"
 )

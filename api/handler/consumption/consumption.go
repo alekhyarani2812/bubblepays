@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/bubblepays/models"
@@ -14,12 +15,6 @@ import (
 // Get all consumptions
 func GetConsumptions(w http.ResponseWriter, r *http.Request) {
 	ctx := utils.WithTransactionID(r.Context())
-	//create a job
-	//dbConnection, dbErr := database.GetORMDbConnection()
-	// if dbErr != nil {
-	// 	log.Printf("err %v ", dbErr.Error())
-	// 	return
-	// }
 	consumptionList, err := consumption.GetConsumptions(ctx)
 	if err != nil {
 		response := models.Response{
@@ -38,7 +33,7 @@ func GetConsumptions(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 }
 
-// Get 1 employee data by Id primarykey
+// Get 1 consumption data by Id primarykey
 func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
 	ctx := utils.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
@@ -84,6 +79,7 @@ func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusBadRequest,
 		}
 		utils.Render(w, response)
+		log.Println("error StatusBadRequest in json.NewDecoder(r.Body).Decode(&consum)")
 		return
 	}
 	consumData := consum
@@ -95,6 +91,7 @@ func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		}
 		utils.Render(w, response)
+		log.Println("error StatusBadRequest in consumptionRecord")
 		return
 	}
 	response := models.Response{

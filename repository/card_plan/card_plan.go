@@ -4,16 +4,14 @@ import (
 	"context"
 	"fmt"
 	"log"
-
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/utils"
 )
 
 func GetCardPlan(ctx context.Context) ([]models.CardPlan, error) {
-	//dbConnection, err := database.GetORMDbConnection()
-	//get dbconnection from contex 
-	dbConnection, err :=  utils.GetDBConnection(ctx)
+	//get dbconnection from contex
+	dbConnection, err := utils.GetDBConnection(ctx)
 	if err != nil {
 		fmt.Println("error in db connection ", err.Error())
 		return nil, err

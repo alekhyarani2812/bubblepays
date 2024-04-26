@@ -1,16 +1,11 @@
 package main
 
-// @title My Go API
-// @version 1.0
-// @description This is a sample Go API with Swagger documentation.
-// @BasePath /api/v1
-
 import (
 	"context"
 	"fmt"
 	"log"
 	"net/http"
-
+	_"github.com/gofiber/swagger"
 	cardplanApi "github.com/bubblepays/api/handler/card_plan"
 	consumptionApi "github.com/bubblepays/api/handler/consumption"
 	employeeApi "github.com/bubblepays/api/handler/employee"
@@ -19,6 +14,7 @@ import (
 	priceApi "github.com/bubblepays/api/handler/prices"
 	serviceApi "github.com/bubblepays/api/handler/service"
 	serviceenrollmentApi "github.com/bubblepays/api/handler/service_enrollment"
+	monthlyinvoiceApi "github.com/bubblepays/api/handler/monthly_invoice"
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/jobs"
 	"github.com/bubblepays/utils"
@@ -36,12 +32,10 @@ func middleware(next http.Handler) http.Handler {
 		fmt.Println("Middleware executing")
 		transactionID := utils.GenerateTransactionID()
 		TransactionsIDKey := utils.TransactionIDKey
-		//var myConnection string
 		// Create a new context with the transaction ID
 		ctx := context.WithValue(r.Context(), TransactionsIDKey, transactionID)
 		//ctx.Value(dbConnection)
 		ctx = context.WithValue(r.Context(), utils.DBconnectionKey, dbConnection)
-		
 		// Serve the request with the new context
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
@@ -50,7 +44,6 @@ func middleware(next http.Handler) http.Handler {
 func main() {
 	fmt.Println("This is main package")
 	//fmt.Println(os.Args)
-
 	dbConnection, dbErr := database.GetORMDbConnection()
 	if dbErr != nil {
 		log.Printf("err %v ", dbErr.Error())
@@ -60,6 +53,9 @@ func main() {
 	router := mux.NewRouter()
 	//add middleware
 	router.Use(middleware)
+
+	//monthly invoice
+	router.HandleFunc("/api/getmonthlyinvoice", monthlyinvoiceApi.GetMonthlyInvoice).Methods("GET")
 
 	//CardPlan
 	router.HandleFunc("/api/getcardplan", cardplanApi.GetCardPlan).Methods("GET")

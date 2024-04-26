@@ -21,9 +21,6 @@ func AddTwoIntTarget(nums []int, target int) []int {
 	return nil
 }
 
-// nums := []int{2,3,4,8,6,5}
-// 	target := 10
-
 func AddTwoIntegersArray(nums []int, target int) (int, int) {
 	var i int
 	for i, num := range nums {

@@ -36,7 +36,6 @@ func GetServices(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// Insert services
 func SaveService(w http.ResponseWriter, r *http.Request) {
 	ctx := utils.WithTransactionID(r.Context())
 	fmt.Println("This is Service handler")
