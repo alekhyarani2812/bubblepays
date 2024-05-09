@@ -19,10 +19,10 @@ func SaveUsage(usageData models.Usages, dbConnection *gorm.DB) {
 	}
 	if len(usages) > 0 {
 		//should run update query
-		fmt.Println("******update query********records found len(usages) : ", len(usages))
+		//fmt.Println("******update query********records found len(usages) : ", len(usages))
 		usage := usages[0]
-		fmt.Println("usage : ............", usage.Duration)
-		fmt.Println("usageData.Duration : ......", usageData.Duration)
+		// fmt.Println("usage : ............", usage.Duration)
+		// fmt.Println("usageData.Duration : ......", usageData.Duration)
 		dbConnection.Model(&usage).Update("duration", usageData.Duration)
 		dbConnection.Find(&usage)
 	} else {

@@ -11,7 +11,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// creation of usage table
 func getConsumptionsByMonthnum(dbConnection *gorm.DB) (map[string]float64, error) {
 	// Retrieve consumption data from the database
 	var consumptions []models.Consumption
@@ -44,12 +43,10 @@ func getConsumptionsByMonthnum(dbConnection *gorm.DB) (map[string]float64, error
 		duration := consum.EndTime.Sub(*consum.StartTime)
 
 		if dur, ok := cardIdServiceId[myKey]; ok {
-			fmt.Println("myKey ::::::::::: : ", myKey)
-			fmt.Println("dur is ********** :", dur)
-			fmt.Println("previous duration is : ", duration.Seconds())
+			// fmt.Println("previous duration is : ", duration.Seconds())
 			totalDuration := dur + duration.Seconds()
 			cardIdServiceId[myKey] = totalDuration
-			fmt.Println("totalDuration is : ", totalDuration)
+			//fmt.Println("totalDuration is : ", totalDuration)
 		} else {
 			totalDuration := duration.Seconds()
 			cardIdServiceId[myKey] = totalDuration
@@ -63,15 +60,13 @@ func getConsumptionsByMonthnum(dbConnection *gorm.DB) (map[string]float64, error
 }
 
 func UsageData(dbConnection *gorm.DB) {
-	fmt.Println("UsageData is calling************")
 	usageData, err := getConsumptionsByMonthnum(dbConnection)
 	if err != nil {
 		log.Printf("err %v ", err.Error())
 		return
 	}
-	//fmt.Println("usageData : ", usageData)
 	for key, duration := range usageData {
-		fmt.Printf("Key: %s\n, Value: %v\n", key, duration)
+		//fmt.Printf("Key: %s , Value: %v ", key, duration)
 		// Split the string by _
 		keyStr := strings.Split(key, "_")
 		cardId := keyStr[0]
@@ -84,7 +79,6 @@ func UsageData(dbConnection *gorm.DB) {
 			Monthnum:  monthNum,
 			Duration:  duration,
 		}
-		fmt.Println("usageData : ", usageData)
 		repository.SaveUsage(usageData, dbConnection)
 	}
 }

@@ -3,7 +3,9 @@ package utils
 import (
 	"context"
 	"errors"
+	"log"
 
+	"github.com/bubblepays/database"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -26,6 +28,17 @@ func WithTransactionID(ctx context.Context) context.Context {
 	transactionID := GenerateTransactionID()
 	return context.WithValue(ctx, TransactionIDKey, transactionID)
 }
+
+func WithDBConnection(ctx context.Context) context.Context {
+	dbConnection, dbErr := database.GetORMDbConnection()
+	if dbErr != nil {
+		log.Printf(" WithDBConnection err %v ", dbErr.Error())
+		return nil
+	}
+	ctx = context.WithValue(ctx, DBconnectionKey, dbConnection)
+	return ctx
+}
+
 func GetTransactionID(ctx context.Context) string {
 	// Retrieve the transaction ID from the context
 	if id, ok := ctx.Value(TransactionIDKey).(string); ok {

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/utils"

@@ -30,6 +30,5 @@ func GetORMDbConnection() (*gorm.DB, error) {
 		log.Printf("database connection error")
 		return nil, err
 	}
-	fmt.Println(db)
 	return db, nil
 }

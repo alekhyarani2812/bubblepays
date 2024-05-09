@@ -40,7 +40,8 @@ func ReadConsumptionData(filePath string) (data [][]string) {
 }
 
 // Insert consumption data into DB
-func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption, wg *sync.WaitGroup) error {
+func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption, 
+	wg *sync.WaitGroup) error {
 	//get dbconnection from contex 
 	dbConnection, err :=  utils.GetDBConnection(ctx)
 	if err != nil {

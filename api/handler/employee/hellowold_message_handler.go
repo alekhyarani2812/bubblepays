@@ -11,7 +11,7 @@ type Message struct {
 }
 
 func GetMessageHandler(w http.ResponseWriter, r *http.Request) {
-	message := Message{Text: "Hello, World!"}
+	message := Message{Text: "***********Hello, World!**************"}
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(message)
 	if err != nil {

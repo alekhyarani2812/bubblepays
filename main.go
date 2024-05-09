@@ -5,21 +5,30 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	_"github.com/gofiber/swagger"
+
 	cardplanApi "github.com/bubblepays/api/handler/card_plan"
 	consumptionApi "github.com/bubblepays/api/handler/consumption"
 	employeeApi "github.com/bubblepays/api/handler/employee"
+	monthlyinvoiceApi "github.com/bubblepays/api/handler/monthly_invoice"
 	planpriceApi "github.com/bubblepays/api/handler/plan_price"
 	planApi "github.com/bubblepays/api/handler/plans"
 	priceApi "github.com/bubblepays/api/handler/prices"
 	serviceApi "github.com/bubblepays/api/handler/service"
 	serviceenrollmentApi "github.com/bubblepays/api/handler/service_enrollment"
-	monthlyinvoiceApi "github.com/bubblepays/api/handler/monthly_invoice"
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/jobs"
 	"github.com/bubblepays/utils"
+	_ "github.com/gofiber/swagger"
 	"github.com/gorilla/mux"
 )
+
+// @Summary Get user by ID
+// @Description Get a user by its ID
+// @ID get-user
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} UserResponse
+// @Router /user/{id} [get]
 
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -53,9 +62,11 @@ func main() {
 	router := mux.NewRouter()
 	//add middleware
 	router.Use(middleware)
+	router.HandleFunc("/api/hellomessage", employeeApi.GetMessageHandler).Methods("GET")
 
 	//monthly invoice
 	router.HandleFunc("/api/getmonthlyinvoice", monthlyinvoiceApi.GetMonthlyInvoice).Methods("GET")
+	router.HandleFunc("/api/getmonthlyinvoice/{id}", monthlyinvoiceApi.GetMonthlyInvoiceById).Methods("GET")
 
 	//CardPlan
 	router.HandleFunc("/api/getcardplan", cardplanApi.GetCardPlan).Methods("GET")
@@ -104,7 +115,8 @@ func main() {
 	router.HandleFunc("/api/deleteconsumption/{id}", consumptionApi.DeleteConsumption).Methods("DELETE")
 
 	//Employee api's
-	router.HandleFunc("/api/employees", employeeApi.GetEmployeesJsonData).Methods("GET")
+	router.HandleFunc("/api/getemployees", employeeApi.GetEmployeesJsonData).Methods("GET")
+	router.HandleFunc("/api/getemployeebyid/{id}", employeeApi.GetEmployeeByID).Methods("GET")
 	router.HandleFunc("/api/employee", employeeApi.SaveEmployee).Methods("POST")
 	router.HandleFunc("/api/deleteEmployee/{id}", employeeApi.DeleteEmpHandler).Methods("DELETE")
 	router.HandleFunc("/api/updateEmployee/{id}", employeeApi.UpdateEmpHandler).Methods("PUT")
