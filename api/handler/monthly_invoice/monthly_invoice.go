@@ -9,6 +9,17 @@ import (
 	"github.com/bubblepays/utils"
 )
 
+// GetMonthlyInvoice godoc
+// @Summary Get a list of MonthlyInvoices
+// @Description Get a list of all MonthlyInvoice
+// @Accept  json
+// @Produce json
+// @Param monthnum query string true "monthnum"
+// @Success 200 {object} []models.MonthlyInvoice
+// @Failure 400 {object} models.Response "Bad Request!"
+// @Failure 404 {object} models.Response "Can not found monthnum"
+// @Failure 401 {object} models.Response "Unauthorized Authentication is required"
+// @Router /api/getmonthlyinvoice [get]
 func GetMonthlyInvoice(w http.ResponseWriter, r *http.Request) {
 	ctx := utils.WithTransactionID(r.Context())
 	queryParams := r.URL.Query()
@@ -19,7 +30,7 @@ func GetMonthlyInvoice(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusBadRequest,
 		}
 		utils.Render(w, response)
-		return	
+		return
 	}
 	monthlyInvoiceData, err := monthlyinvoice.GetMonthlyInvoice(ctx, monthNumQparam)
 	if err != nil {
@@ -41,7 +52,7 @@ func GetMonthlyInvoice(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 }
 
-func GetMonthlyInvoiceById(w http.ResponseWriter, r *http.Request){
+func GetMonthlyInvoiceById(w http.ResponseWriter, r *http.Request) {
 	ctx := utils.WithTransactionID(r.Context())
 	fmt.Println("this is GetMonthlyInvoiceById handler")
 	monthlyinvoice.GetMonthlyInvoiceById(ctx)

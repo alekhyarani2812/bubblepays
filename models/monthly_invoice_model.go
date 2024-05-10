@@ -1,5 +1,6 @@
 package models
 
+// swagger:response MonthlyInvoice
 type MonthlyInvoice struct {
 	Id          int     `json:"-"`
 	CardId      string  `json:"card_id"`

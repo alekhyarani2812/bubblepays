@@ -34,6 +34,7 @@ func GetMonthlyInvoice(ctx context.Context, monthNumQparam string) ([]*models.Mo
 		monthlyInvoice.MonthlyBill =  monthlyInvoice.Duration * monthlyInvoice.Price
 		fmt.Println("monthlyInvoice.MonthlyBill ",monthlyInvoice.MonthlyBill)
 	}
+	fmt.Println("monthlyInvoices : ", monthlyInvoices)
 	return monthlyInvoices, nil
 }
 

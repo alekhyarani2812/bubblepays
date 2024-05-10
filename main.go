@@ -18,17 +18,10 @@ import (
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/jobs"
 	"github.com/bubblepays/utils"
-	_ "github.com/gofiber/swagger"
 	"github.com/gorilla/mux"
+	_ "github.com/bubblepays/docs" // This is where Swagger comments are located
+    "github.com/swaggo/http-swagger"
 )
-
-// @Summary Get user by ID
-// @Description Get a user by its ID
-// @ID get-user
-// @Produce json
-// @Param id path int true "User ID"
-// @Success 200 {object} UserResponse
-// @Router /user/{id} [get]
 
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +43,11 @@ func middleware(next http.Handler) http.Handler {
 	})
 }
 
+// @title Bubblepays API
+// @version 1.0
+// @description This is a sample API
+// @host localhost:8080
+// @BasePath /
 func main() {
 	fmt.Println("This is main package")
 	//fmt.Println(os.Args)
@@ -66,8 +64,7 @@ func main() {
 
 	//monthly invoice
 	router.HandleFunc("/api/getmonthlyinvoice", monthlyinvoiceApi.GetMonthlyInvoice).Methods("GET")
-	router.HandleFunc("/api/getmonthlyinvoice/{id}", monthlyinvoiceApi.GetMonthlyInvoiceById).Methods("GET")
-
+	
 	//CardPlan
 	router.HandleFunc("/api/getcardplan", cardplanApi.GetCardPlan).Methods("GET")
 	router.HandleFunc("/api/getcardplanbyid/{id}", cardplanApi.GetCardPlanById).Methods("GET")
@@ -128,6 +125,10 @@ func main() {
 		w.Write([]byte("Hello transactionId: " + utils.GetTransactionID(ctx)))
 	}).Methods("GET")
 
+	// Swagger UI route
+    router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
+        httpSwagger.URL("http://localhost:8080/swagger/doc.json"), // The Swagger JSON endpoint
+    ))
 	//To start the port with 8080
 	http.Handle("/", router)
 	fmt.Println("Started server on port 8080")
