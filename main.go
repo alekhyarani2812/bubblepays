@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
+	
 	cardplanApi "github.com/bubblepays/api/handler/card_plan"
 	consumptionApi "github.com/bubblepays/api/handler/consumption"
 	employeeApi "github.com/bubblepays/api/handler/employee"
@@ -16,11 +16,11 @@ import (
 	serviceApi "github.com/bubblepays/api/handler/service"
 	serviceenrollmentApi "github.com/bubblepays/api/handler/service_enrollment"
 	"github.com/bubblepays/database"
+	_ "github.com/bubblepays/docs" // This is where Swagger comments are located
 	"github.com/bubblepays/jobs"
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
-	_ "github.com/bubblepays/docs" // This is where Swagger comments are located
-    "github.com/swaggo/http-swagger"
+	"github.com/swaggo/http-swagger"
 )
 
 func middleware(next http.Handler) http.Handler {
@@ -49,8 +49,7 @@ func middleware(next http.Handler) http.Handler {
 // @host localhost:8080
 // @BasePath /
 func main() {
-	fmt.Println("This is main package")
-	//fmt.Println(os.Args)
+  	//fmt.Println(os.Args)
 	dbConnection, dbErr := database.GetORMDbConnection()
 	if dbErr != nil {
 		log.Printf("err %v ", dbErr.Error())
@@ -124,6 +123,7 @@ func main() {
 		ctx := r.Context()
 		w.Write([]byte("Hello transactionId: " + utils.GetTransactionID(ctx)))
 	}).Methods("GET")
+
 
 	// Swagger UI route
     router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(

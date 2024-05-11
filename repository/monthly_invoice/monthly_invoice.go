@@ -3,16 +3,20 @@ package monthlyinvoice
 import (
 	"context"
 	"fmt"
-
+	"log/slog"
+	"os"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/utils"
 )
 
 func GetMonthlyInvoice(ctx context.Context, monthNumQparam string) ([]*models.MonthlyInvoice, error) {
-	fmt.Println("This is GetMonthlyInvoice monthlyBillQparam: ",monthNumQparam)
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelDebug,
+	}))
+	logger.Info("This is GetMonthlyInvoice monthlyBillQparam: ",monthNumQparam,"")
 	dbConnection, err := utils.GetDBConnection(ctx)
 	if err != nil {
-		fmt.Println("error in db connection ", err.Error())
+		logger.Error("error in db connection ", err.Error(),"")
 		return nil, err
 	}
 	var usages []models.Usages
@@ -26,15 +30,15 @@ func GetMonthlyInvoice(ctx context.Context, monthNumQparam string) ([]*models.Mo
 		Find(&usages).Find(&monthlyInvoices)
 	if gorm.Error != nil && gorm != nil {
 		errors := gorm.Error
-		fmt.Println("error in getting records from usages ", errors)
+		logger.Error("error in getting records from usages ", errors)
 		return nil, errors
 	} 
 	fmt.Println("usages : ", usages)
 	for _, monthlyInvoice := range monthlyInvoices{
 		monthlyInvoice.MonthlyBill =  monthlyInvoice.Duration * monthlyInvoice.Price
-		fmt.Println("monthlyInvoice.MonthlyBill ",monthlyInvoice.MonthlyBill)
+		logger.Warn("monthlyInvoice.MonthlyBill ","",monthlyInvoice.MonthlyBill)
 	}
-	fmt.Println("monthlyInvoices : ", monthlyInvoices)
+	logger.Warn("monthlyInvoices : ", "",monthlyInvoices)
 	return monthlyInvoices, nil
 }
 

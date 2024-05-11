@@ -5,9 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
+
 	"github.com/bubblepays/models"
 )
 
@@ -47,4 +50,14 @@ func StringToTime(str string) (*time.Time, error) {
 	}
 	fmt.Println("Parsed time:", parsedTime)
 	return &parsedTime, nil
+}
+
+func LoggerMsg() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelDebug,
+	}))
+	logger.Debug("This is debug message")
+	logger.Info("This is info message")
+	logger.Warn("This is warning message")
+	logger.Error("This is error message")
 }
