@@ -1,9 +1,12 @@
 vendor:
 	@echo "Run go mod vendor"
-	go mod vendor -mod=mod
+	go mod tidy
+	go mod vendor
 build:
 	@echo "Running build target"
-	make vendor
+	go get ./...
+	go mod tidy
+	go build
 junit:
 	go test -v ./...
 #	go test -v 2>&1 | go-junit-report > report.xml
