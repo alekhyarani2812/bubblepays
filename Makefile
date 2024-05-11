@@ -1,11 +1,11 @@
-vendor:
-	@echo "Run go mod vendor"
+exevendor:
+	@echo "Run go mod tidy"
 	go mod tidy
+	@echo "Run go mod vendor"
 	go mod vendor
 build:
 	@echo "Running build target"
-	go get ./...
-	go mod tidy
+#	make exevendor
 	go build
 junit:
 	go test -v ./...

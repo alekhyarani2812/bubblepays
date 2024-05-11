@@ -2,6 +2,12 @@ pipeline {
     agent any
     
     stages {
+        
+        stage('Cleanup Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
         stage('Checkout') {
             steps {
                 // Checkout the specific branch
