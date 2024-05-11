@@ -14,7 +14,7 @@ pipeline {
         stage('Build') {
             steps {
                 //update vendor
-                sh 'make vendor'
+                //sh 'make vendor'
                 // Run make target
                 sh 'make build'
             }
