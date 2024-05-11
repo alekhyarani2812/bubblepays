@@ -1,6 +1,6 @@
 vendor:
 	@echo "Run go mod vendor"
-	go mod vendor
+	go mod vendor -mod=mod
 build:
 	@echo "Running build target"
 	make vendor
