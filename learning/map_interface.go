@@ -1,8 +1,9 @@
 package learning
 
 import (
-	"fmt"
 	"math"
+
+	"github.com/bubblepays/log"
 )
 
 // Addition of 2 numbers & strings using interfaces
@@ -22,8 +23,8 @@ func (ad Addition) add() int {
 	return ad.p + ad.q
 }
 func AddTwoVal(cal Caliculations) {
-	fmt.Println("addition of 2 integers is : ", cal.add())
-	fmt.Println("addition of 2 strings is : ", cal.addStrings())
+	log.Infof("addition of 2 integers is : %v ", cal.add())
+	log.Infof("addition of 2 strings is : %v ", cal.addStrings())
 }
 func Implimentation() {
 	sum := Addition{
@@ -47,7 +48,7 @@ func (srtu Rectanle) area() float32 {
 	return 2 * srtu.length * srtu.breadth
 }
 func ShapeCal(s Shapes) {
-	fmt.Println("area is : ", s.area())
+	log.Infof("area is : %v ", s.area())
 }
 func ShapeImpl() {
 	rect := Rectanle{length: 8, breadth: 9}
@@ -62,9 +63,9 @@ func MapFunc() {
 		"Python": 81,
 	}
 	// Access values using keys
-	fmt.Println("Golang marks:", subjectMarks["Golang"])
-	fmt.Println("Java marks:", subjectMarks["Java"])
-	fmt.Println("Python marks:", subjectMarks["Python"])
+	log.Infof("Golang marks: %v ", subjectMarks["Golang"])
+	log.Infof("Java marks: %v ", subjectMarks["Java"])
+	log.Infof("Python marks: %v ", subjectMarks["Python"])
 }
 
 // map interface combination
@@ -82,34 +83,35 @@ func MapInterfaceImpl() {
 	sMap := make(map[string]Shape1)
 	sMap["rectangle"] = Rectanle1{length: 10, breadth: 20}
 	rect := sMap["rectangle"]
-	fmt.Println("area of rectangle is : ", rect.area())
+	log.Infof("area of rectangle is : %v ", rect.area())
 }
 
-//Map inteface combination
-type ShapeIn interface{
+// Map inteface combination
+type ShapeIn interface {
 	Area() float32
 }
-type Circle struct{
+type Circle struct {
 	radius float32
 }
-type Rectangle struct{
+type Rectangle struct {
 	length, height float32
 }
-func (c Circle) Area() float32{
+
+func (c Circle) Area() float32 {
 	return math.Pi * c.radius * c.radius
 }
-func (r Rectangle) Area() float32{
+func (r Rectangle) Area() float32 {
 	return r.length * r.height
 }
-func MapInterfaceEx(){
+func MapInterfaceEx() {
 	shapes := make(map[string]ShapeIn)
 	circle := Circle{radius: 4}
 	//circle.
 	rectangle := Rectangle{length: 5, height: 5}
 	shapes["rectangle"] = rectangle
-	shapes["circle"] = circle	
-	for shapeName, shape := range shapes{
+	shapes["circle"] = circle
+	for shapeName, shape := range shapes {
 		area := shape.Area()
-		fmt.Println("key, value", shapeName,area)
+		log.Infof("key : %v , value : %v ", shapeName, area)
 	}
 }

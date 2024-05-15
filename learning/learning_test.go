@@ -1,8 +1,9 @@
 package learning
 
 import (
-	"fmt"
 	"testing"
+
+	"github.com/bubblepays/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -71,23 +72,21 @@ func TestClimbStairs(t *testing.T) {
 	n := 4
 	result := ClimbStairs(n)
 	//result := RecClimbStairs(n)
-	fmt.Printf("result : %d is number of ways to climb to the top ", result)
+	log.Infof("result : %d is number of ways to climb to the top ", result)
 }
 
-func TestProducerConsumer(t *testing.T){
+func TestProducerConsumer(t *testing.T) {
 	ProducerConsumerChGoRoutines()
 }
 
-func TestShapeImpls(t *testing.T){
+func TestShapeImpls(t *testing.T) {
 	ShapeImpls()
 }
 
-func TestChanneleLinks(t *testing.T){
+func TestChanneleLinks(t *testing.T) {
 	//ChanneleLinks()
 	//ChanneleLinksGo()
 	//ChanneleLinksGor()
 	//ChanneleLinksGoRepeat()
 	StrLteral()
 }
-
-

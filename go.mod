@@ -5,8 +5,10 @@ go 1.22.1
 require (
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/gorilla/mux v1.8.1
+	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.9.0
 	github.com/swaggo/http-swagger v1.3.4
+	github.com/swaggo/swag v1.8.1
 	gorm.io/driver/mysql v1.5.6
 	gorm.io/gorm v1.25.9
 )
@@ -21,8 +23,8 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/swaggo/files v0.0.0-20220610200504-28940afbdbfe // indirect
-	github.com/swaggo/swag v1.8.1 // indirect
 	golang.org/x/net v0.25.0 // indirect
+	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/tools v0.21.0 // indirect
 )
 

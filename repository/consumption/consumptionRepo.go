@@ -3,12 +3,14 @@ package consumption
 import (
 	"context"
 	"encoding/csv"
-	"fmt"
-	"log"
+
 	"os"
 	"path/filepath"
 	"sync"
 	"time"
+
+	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/utils"
 )
@@ -17,12 +19,12 @@ const startConsumeDir = "/home/satyanarayana/Alekhya/gofilesdirectories/start_co
 
 // Read consumption data from file
 func ReadConsumptionData(filePath string) (data [][]string) {
-	fmt.Println("Read MachineData is called")
+	log.Infof("Read MachineData is called")
 	// Open the CSV file
 	file, err := os.Open(filePath)
 	if err != nil {
-		fmt.Println("Error: *****************")
-		fmt.Println("Error:", err)
+		log.Infof("Error: *****************")
+		log.Infof("Error:", err)
 		return
 	}
 	defer file.Close()
@@ -31,36 +33,36 @@ func ReadConsumptionData(filePath string) (data [][]string) {
 	// Read all the records from the CSV file
 	records, err := reader.ReadAll()
 	if err != nil {
-		fmt.Println("Error: &&&&&&&&&&")
-		fmt.Println("Error:", err)
+		log.Infof("Error: &&&&&&&&&&")
+		log.Infof("Error:", err)
 		return
 	}
-	log.Println("records :", records)
+	log.Infof("records : %v ", records)
 	return records
 }
 
 // Insert consumption data into DB
-func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption, 
+func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption,
 	wg *sync.WaitGroup) error {
-	//get dbconnection from contex 
-	dbConnection, err :=  utils.GetDBConnection(ctx)
+	//get dbconnection from contex
+	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
-		fmt.Println("error in db connection ", err.Error())
+		log.Errorft(ctx, "error in db connection %v ", err)
 		return err
 	}
 	defer wg.Done()
 	createdBy := "Alekhya"
 	currentTime := time.Now()
 
-	fmt.Printf("**************** Save consumption currentTime: %v", currentTime)
+	log.Infof("**************** Save consumption currentTime: %v", currentTime)
 	ormDB := dbConnection.Create(&consumptionData)
 	if ormDB.Error != nil {
-		log.Println("Error inserting consumption:", ormDB.Error)
+		log.Infof("Error inserting consumption: %v ", ormDB.Error)
 		return ormDB.Error
 	}
-	log.Println("consumption inserted successfully")
-	log.Println("ormDB  :  ", ormDB)
-	fmt.Printf("Consumption '%s' created successfully\n", createdBy)
+	log.Info("consumption inserted successfully")
+	log.Infof("ormDB  :  %v ", ormDB)
+	log.Infof("Consumption '%s' created successfully\n", createdBy)
 	return nil
 }
 
@@ -70,38 +72,38 @@ func ConsumeDeviceData(ctx context.Context) {
 	// Open the directory
 	f, err := os.Open(startConsumeDir)
 	if err != nil {
-		fmt.Println("Error opening directory:", err)
+		log.Infof("Error opening directory:", err)
 		return
 	}
 	defer f.Close()
 	// Read the directory contents
 	files, err := f.Readdir(-1)
 	if err != nil {
-		fmt.Println("Error reading directory contents:", err)
+		log.Infof("Error reading directory contents:", err)
 		return
 	}
 	// Iterate over the files and print their names
 	for _, file := range files {
-		fmt.Println("fileName : ", file.Name())
+		log.Infof("fileName : %v ", file.Name())
 		fileName := file.Name()
 		records := ReadConsumptionData(startConsumeDir + fileName)
-		fmt.Println("records :", records)
+		log.Infof("records : %v ", records)
 		// Create a wait group to wait for all goroutines to finish
 		for _, record := range records {
 			serviceId, err := utils.StringToInt(record[5])
 			if err != nil {
-				log.Println("Got an ERROR at serviceId: ", err.Error())
+				log.Infof("Got an ERROR at serviceId: %v ", err.Error())
 				continue
 			}
 			//convert startdate string to int
 			startDate, err := utils.StringToTime(record[3])
 			if err != nil {
-				log.Println("Got an ERROR at startdate: ", err.Error())
+				log.Infof("Got an ERROR at startdate: %v ", err.Error())
 				continue
 			}
 			endDate, err := utils.StringToTime(record[4])
 			if err != nil {
-				log.Println("Got an ERROR at enddate: ", err.Error())
+				log.Infof("Got an ERROR at enddate: %v ", err.Error())
 				continue
 			}
 			createdDate := time.Now()
@@ -116,7 +118,7 @@ func ConsumeDeviceData(ctx context.Context) {
 				CreatedDate:     &createdDate,
 				CreatedBy:       "Alekhya",
 			}
-			log.Println("calling SaveFileConsumption")
+			log.Info("calling SaveFileConsumption")
 			wg.Add(1)
 			go SaveFileConsumption(ctx, consumptionData, &wg)
 		}
@@ -127,10 +129,10 @@ func ConsumeDeviceData(ctx context.Context) {
 	for _, file1 := range files {
 		err = os.Remove(startConsumeDir + file1.Name())
 		if err != nil {
-			fmt.Println("Error deleting file:", err)
+			log.Infof("Error deleting file:", err)
 			continue
 		}
-		fmt.Println("Deleted file:", file1)
+		log.Infof("Deleted file:", file1)
 	}
 }
 
@@ -142,7 +144,7 @@ func PickDeviceData() {
 	// Get list of files in the source directory
 	files, err := filepath.Glob(filepath.Join(sourceDir, "*"))
 	if err != nil {
-		fmt.Println("Error:", err)
+		log.Infof("Error:", err)
 		return
 	}
 	// Move each file to the destination directory
@@ -154,9 +156,9 @@ func PickDeviceData() {
 		// Move the file
 		err := os.Rename(file, destPath)
 		if err != nil {
-			fmt.Println("Error moving file:", err)
+			log.Infof("Error moving file:", err)
 		} else {
-			fmt.Println("Moved file:", file, "to", destPath)
+			log.Infof("Moved file:", file, "to", destPath)
 		}
 	}
 }

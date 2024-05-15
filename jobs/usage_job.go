@@ -1,24 +1,27 @@
 package jobs
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	repository "github.com/bubblepays/repository/usages"
 	"gorm.io/gorm"
 )
 
-func getConsumptionsByMonthnum(dbConnection *gorm.DB) (map[string]float64, error) {
+func getConsumptionsByMonthnum(ctx context.Context, dbConnection *gorm.DB) (map[string]float64, error) {
 	// Retrieve consumption data from the database
 	var consumptions []models.Consumption
 	if err := dbConnection.Find(&consumptions).Error; err != nil {
-		log.Printf("failed to retrieve consumption data: %v", err)
+		log.Infof("failed to retrieve consumption data: %v", err)
 		return nil, err
 	}
-	log.Printf("SIZE of consumption: size:: %v ", len(consumptions))
+
+	log.Infoft(ctx, "SIZE of consumption: size:: %v ", len(consumptions))
 	cardIdServiceId := make(map[string]float64)
 	for _, consum := range consumptions {
 		layout := "2006-01-02T15:04:05-07:00"
@@ -26,7 +29,7 @@ func getConsumptionsByMonthnum(dbConnection *gorm.DB) (map[string]float64, error
 		var monthNumStr string
 		t, err := time.Parse(layout, consum.ConsumptionDate)
 		if err != nil {
-			fmt.Println("Error parsing time:", err)
+			log.Infof("Error parsing time: %v ", err)
 		}
 		year := t.Year()
 		monthNumber := int(t.Month())
@@ -43,10 +46,10 @@ func getConsumptionsByMonthnum(dbConnection *gorm.DB) (map[string]float64, error
 		duration := consum.EndTime.Sub(*consum.StartTime)
 
 		if dur, ok := cardIdServiceId[myKey]; ok {
-			// fmt.Println("previous duration is : ", duration.Seconds())
+			// log.Info( "previous duration is : ", duration.Seconds())
 			totalDuration := dur + duration.Seconds()
 			cardIdServiceId[myKey] = totalDuration
-			//fmt.Println("totalDuration is : ", totalDuration)
+			//log.Info( "totalDuration is : ", totalDuration)
 		} else {
 			totalDuration := duration.Seconds()
 			cardIdServiceId[myKey] = totalDuration
@@ -54,15 +57,15 @@ func getConsumptionsByMonthnum(dbConnection *gorm.DB) (map[string]float64, error
 	}
 	// Iterate over the map using a for loop and range
 	for key, value := range cardIdServiceId {
-		fmt.Printf("Key: %s, Value: %v\n", key, value)
+		log.Infoft(ctx, "Key: %s, Value: %v\n", key, value)
 	}
 	return cardIdServiceId, nil
 }
 
-func UsageData(dbConnection *gorm.DB) {
-	usageData, err := getConsumptionsByMonthnum(dbConnection)
+func UsageData(ctx context.Context, dbConnection *gorm.DB) {
+	usageData, err := getConsumptionsByMonthnum(ctx, dbConnection)
 	if err != nil {
-		log.Printf("err %v ", err.Error())
+		log.Infof("err %v ", err.Error())
 		return
 	}
 	for key, duration := range usageData {
@@ -72,7 +75,7 @@ func UsageData(dbConnection *gorm.DB) {
 		cardId := keyStr[0]
 		serviceId := keyStr[1]
 		monthNum := keyStr[2]
-		fmt.Println(cardId, serviceId, monthNum)
+		log.Infoft(ctx, "cardId : %v, serviceId : %v, monthNum : %v ",cardId, serviceId, monthNum)
 		usageData := models.Usages{
 			CardId:    cardId,
 			ServiceId: serviceId,

@@ -1,26 +1,28 @@
 package learning
 
 import (
-	"fmt"
 	"time"
+
+	"github.com/bubblepays/log"
 )
-func ProducerConsumerChGoRoutines(){
+
+func ProducerConsumerChGoRoutines() {
 	ch := make(chan int)
 	go ProducerCode(ch)
 	go ConsumerCode(ch)
-	time.Sleep(time.Second*10)
+	time.Sleep(time.Second * 10)
 }
-func ProducerCode(ch chan int){
-	for i:=0; i<10; i++ {
+func ProducerCode(ch chan int) {
+	for i := 0; i < 10; i++ {
 		time.Sleep(time.Second)
-		fmt.Println("producer : sendimg ",i)
+		log.Infof("producer : sendimg %v ", i)
 		ch <- i
 	}
-	close(ch)	
+	close(ch)
 }
-func ConsumerCode(ch <- chan int){
+func ConsumerCode(ch <-chan int) {
 	for i := range ch {
 		time.Sleep(time.Second)
-		fmt.Println("consumer : receiving ",i)
+		log.Infof("consumer : receiving %v ", i)
 	}
 }

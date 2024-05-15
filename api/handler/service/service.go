@@ -3,8 +3,10 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
+
+	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/repository/service"
 	"github.com/bubblepays/utils"
@@ -13,8 +15,8 @@ import (
 
 // Read services
 func GetServices(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
-	fmt.Println("This is GetServices handler")
+	ctx := bcontext.WithTransactionID(r.Context())
+	log.Info("This is GetServices handler")
 	serviceData, err := service.GetServices(ctx)
 	if err != nil {
 		response := models.Response{
@@ -32,13 +34,13 @@ func GetServices(w http.ResponseWriter, r *http.Request) {
 		Data:        serviceData,
 	}
 	utils.Render(w, response)
-	fmt.Println("serviceData : ", serviceData)
+	log.Infof("serviceData : %v ", serviceData)
 
 }
 
 func SaveService(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
-	fmt.Println("This is Service handler")
+	ctx := bcontext.WithTransactionID(r.Context())
+	log.Info("This is Service handler")
 	// Insert consumption data
 	var serviceRecord models.Services
 	err := json.NewDecoder(r.Body).Decode(&serviceRecord)
@@ -51,10 +53,10 @@ func SaveService(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("service good************: ", serviceRecord)
+	log.Infof("service good************: %v ", serviceRecord)
 	serviceData, err := service.SaveService(ctx, serviceRecord)
 	if err != nil {
-		log.Println("you are in SaveService handler err block")
+		log.Info("you are in SaveService handler err block")
 		response := models.Response{
 			Message: utils.Fail,
 			Status:  http.StatusInternalServerError,
@@ -63,7 +65,7 @@ func SaveService(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("you are in SaveService handler out of err block")
+	log.Info("you are in SaveService handler out of err block")
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusCreated,
@@ -71,11 +73,11 @@ func SaveService(w http.ResponseWriter, r *http.Request) {
 		Data:        serviceData,
 	}
 	utils.Render(w, response)
-	log.Println("ServiceList : success data ", serviceRecord)
+	log.Infof("ServiceList : success data %v ", serviceRecord)
 }
 
 func DeleteServiceById(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -88,7 +90,7 @@ func DeleteServiceById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("pkId : ", pkId)
+	log.Infof("pkId : %v ", pkId)
 	rowsEffected, err := service.DeleteServiceById(ctx, pkId)
 	if err != nil {
 		response := models.Response{
@@ -104,6 +106,6 @@ func DeleteServiceById(w http.ResponseWriter, r *http.Request) {
 		Status:      http.StatusOK,
 		Description: fmt.Sprintf(" %d rows deleted from Services table", rowsEffected),
 	}
-	log.Printf("GetServices : error %v ", err)
+	log.Infof("GetServices : error %v ", err)
 	utils.Render(w, response)
 }

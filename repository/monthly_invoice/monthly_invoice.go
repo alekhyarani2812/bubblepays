@@ -2,21 +2,19 @@ package monthlyinvoice
 
 import (
 	"context"
-	"fmt"
-	"log/slog"
-	"os"
+
+	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
-	"github.com/bubblepays/utils"
 )
 
 func GetMonthlyInvoice(ctx context.Context, monthNumQparam string) ([]*models.MonthlyInvoice, error) {
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-		Level: slog.LevelDebug,
-	}))
-	logger.Info("This is GetMonthlyInvoice monthlyBillQparam: ",monthNumQparam,"")
-	dbConnection, err := utils.GetDBConnection(ctx)
+
+	log.Infoft(ctx, "This is GetMonthlyInvoice monthlyBillQparam: %v", monthNumQparam)
+	log.Infof("*************** hello world")
+	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
-		logger.Error("error in db connection ", err.Error(),"")
+		log.Errort(ctx, "this is error")
 		return nil, err
 	}
 	var usages []models.Usages
@@ -30,18 +28,15 @@ func GetMonthlyInvoice(ctx context.Context, monthNumQparam string) ([]*models.Mo
 		Find(&usages).Find(&monthlyInvoices)
 	if gorm.Error != nil && gorm != nil {
 		errors := gorm.Error
-		logger.Error("error in getting records from usages ", errors)
+		log.Errorft(ctx, "error in getting records from usages %v", errors)
 		return nil, errors
-	} 
-	fmt.Println("usages : ", usages)
-	for _, monthlyInvoice := range monthlyInvoices{
-		monthlyInvoice.MonthlyBill =  monthlyInvoice.Duration * monthlyInvoice.Price
-		logger.Warn("monthlyInvoice.MonthlyBill ","",monthlyInvoice.MonthlyBill)
 	}
-	logger.Warn("monthlyInvoices : ", "",monthlyInvoices)
-	return monthlyInvoices, nil
-}
+	log.Infoft(ctx, "usages : %v ", usages)
+	for _, monthlyInvoice := range monthlyInvoices {
 
-func GetMonthlyInvoiceById(ctx context.Context){
-	fmt.Println("this is GetMonthlyInvoiceById repo")
+		monthlyInvoice.MonthlyBill = monthlyInvoice.Duration * monthlyInvoice.Price
+		log.Infoft(ctx, "monthlyInvoice.MonthlyBill %v", monthlyInvoice.MonthlyBill)
+	}
+	log.Infoft(ctx, "monthlyInvoices : %v", monthlyInvoices)
+	return monthlyInvoices, nil
 }

@@ -1,6 +1,6 @@
 package learning
 
-import "fmt"
+import "github.com/bubblepays/log"
 
 // nums = [10, 1, 11, -1], target = 10
 func AddTwoIntTarget(nums []int, target int) []int {
@@ -8,12 +8,12 @@ func AddTwoIntTarget(nums []int, target int) []int {
 	for i, num := range nums {
 		// Calculate the complement needed to reach the target
 		complement := target - num
-		fmt.Println("num  :, complement: ", num, complement)
+		log.Infof("num  : %v, complement: %v", num, complement)
 		// Check if the complement exists in the map
 		if index, ok := numIndices[complement]; ok {
 			// Found a pair that adds up to the target
-			fmt.Println("numIndices[complement] after: ", numIndices[complement])
-			fmt.Println("numIndices[complement] ", numIndices[complement])
+			log.Infof("numIndices[complement] after: %v ", numIndices[complement])
+			log.Infof("numIndices[complement] %v ", numIndices[complement])
 			return []int{index, i}
 		}
 		numIndices[num] = i
@@ -26,9 +26,9 @@ func AddTwoIntegersArray(nums []int, target int) (int, int) {
 	for i, num := range nums {
 		// Calculate the complement needed to reach the target
 		complement := target - num
-		fmt.Println("num  :, complement: ", num, complement)
+		log.Infof("num  : %v, complement: %v ", num, complement)
 		if complement == nums[i] {
-			
+
 		}
 	}
 	return i, i + 1

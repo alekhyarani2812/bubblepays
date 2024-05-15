@@ -5,14 +5,16 @@ import (
 	"fmt"
 	"net/http"
 
+	bcontext "github.com/bubblepays/context"
 	"github.com/bubblepays/models"
 	planprice "github.com/bubblepays/repository/plan_price"
 	"github.com/bubblepays/utils"
+	"github.com/bubblepays/log"
 	"github.com/gorilla/mux"
 )
 
 func GetPlanPrice(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	planpriceRecords, err := planprice.GetPlanPrice(ctx)
 	if err != nil {
 		response := models.Response{
@@ -33,7 +35,7 @@ func GetPlanPrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPlanPriceById(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -66,7 +68,7 @@ func GetPlanPriceById(w http.ResponseWriter, r *http.Request) {
 }
 
 func SavePlanPrice(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	var planPrice models.PlanPrice
 	err := json.NewDecoder(r.Body).Decode(&planPrice)
 	if err != nil {
@@ -98,7 +100,7 @@ func SavePlanPrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdatePlanPrice(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	strId := vars["id"]
 	pkId, err := utils.StringToInt(strId)
@@ -111,7 +113,7 @@ func UpdatePlanPrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	fmt.Println("pkId : ", pkId)
+	log.Infof("pkId : %v ", pkId)
 	var planPrice models.PlanPrice
 	erro := json.NewDecoder(r.Body).Decode(&planPrice)
 	if erro != nil {
@@ -142,7 +144,7 @@ func UpdatePlanPrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeletePlanPrice(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -155,7 +157,7 @@ func DeletePlanPrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	fmt.Println("pkId : ", pkId)
+	log.Infof("pkId : %v ", pkId)
 	rowsEffected, err := planprice.DeletePlanPrice(ctx, pkId)
 	if err != nil {
 		response := models.Response{

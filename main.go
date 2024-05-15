@@ -2,10 +2,8 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"net/http"
-	
+
 	cardplanApi "github.com/bubblepays/api/handler/card_plan"
 	consumptionApi "github.com/bubblepays/api/handler/consumption"
 	employeeApi "github.com/bubblepays/api/handler/employee"
@@ -15,29 +13,29 @@ import (
 	priceApi "github.com/bubblepays/api/handler/prices"
 	serviceApi "github.com/bubblepays/api/handler/service"
 	serviceenrollmentApi "github.com/bubblepays/api/handler/service_enrollment"
+	bcontext "github.com/bubblepays/context"
 	"github.com/bubblepays/database"
 	_ "github.com/bubblepays/docs" // This is where Swagger comments are located
 	"github.com/bubblepays/jobs"
-	"github.com/bubblepays/utils"
+	"github.com/bubblepays/log"
 	"github.com/gorilla/mux"
-	"github.com/swaggo/http-swagger"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		dbConnection, dbErr := database.GetORMDbConnection()
 		if dbErr != nil {
-			log.Printf("err %v ", dbErr.Error())
+			log.Infof("err %v ", dbErr.Error())
 			return
 		}
-		fmt.Println("Middleware executing")
-		transactionID := utils.GenerateTransactionID()
-		TransactionsIDKey := utils.TransactionIDKey
+		log.Info("Middleware executing")
+		transactionID := bcontext.GenerateTransactionID()
+		TransactionsIDKey := bcontext.TransactionIDKey
 		// Create a new context with the transaction ID
 		ctx := context.WithValue(r.Context(), TransactionsIDKey, transactionID)
 		//ctx.Value(dbConnection)
-		ctx = context.WithValue(r.Context(), utils.DBconnectionKey, dbConnection)
+		ctx = context.WithValue(r.Context(), bcontext.DBconnectionKey, dbConnection)
 		// Serve the request with the new context
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
@@ -49,10 +47,10 @@ func middleware(next http.Handler) http.Handler {
 // @host localhost:8080
 // @BasePath /
 func main() {
-  	//fmt.Println(os.Args)
+	//utils.LoggerMessages()
 	dbConnection, dbErr := database.GetORMDbConnection()
 	if dbErr != nil {
-		log.Printf("err %v ", dbErr.Error())
+		log.Errorf("err %v ", dbErr.Error())
 		return
 	}
 	go jobs.RunMachineJob(dbConnection)
@@ -63,7 +61,7 @@ func main() {
 
 	//monthly invoice
 	router.HandleFunc("/api/getmonthlyinvoice", monthlyinvoiceApi.GetMonthlyInvoice).Methods("GET")
-	
+
 	//CardPlan
 	router.HandleFunc("/api/getcardplan", cardplanApi.GetCardPlan).Methods("GET")
 	router.HandleFunc("/api/getcardplanbyid/{id}", cardplanApi.GetCardPlanById).Methods("GET")
@@ -121,28 +119,27 @@ func main() {
 	router.HandleFunc("/api/hello", func(w http.ResponseWriter, r *http.Request) {
 		// Get the context from the request
 		ctx := r.Context()
-		w.Write([]byte("Hello transactionId: " + utils.GetTransactionID(ctx)))
+		w.Write([]byte("Hello transactionId: " + bcontext.GetTransactionID(ctx)))
 	}).Methods("GET")
 
-
 	// Swagger UI route
-    router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
-        httpSwagger.URL("http://localhost:8080/swagger/doc.json"), // The Swagger JSON endpoint
-    ))
+	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:8080/swagger/doc.json"), // The Swagger JSON endpoint
+	))
 	//To start the port with 8080
 	http.Handle("/", router)
-	fmt.Println("Started server on port 8080")
+	log.Info("Started server on port 8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
-		fmt.Printf(" ERROR ListenAndServe err: %v", err)
+		log.Errorf(" ERROR ListenAndServe err: %v", err)
 	}
 }
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Handler executing")
+	log.Info("Handler executing")
 	w.Write([]byte("Hello, World!"))
 }
 
 func handler2(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Handler executing2")
+	log.Info("Handler executing2")
 	w.Write([]byte("Hello, World2!"))
 }

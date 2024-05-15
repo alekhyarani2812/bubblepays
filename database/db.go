@@ -14,10 +14,10 @@ import (
 func GetDbConnection() *sql.DB {
 	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/todo")
 	if err != nil {
-		log.Fatal(err)
-		fmt.Println("Error db connection : ", err.Error())
+		log.Fatal(err.Error())
+		fmt.Printf("Error db connection : %v ", err.Error())
 	} else {
-		fmt.Println("Success db connection ")
+		log.Printf("Success db connection ")
 	}
 	return db
 }
@@ -27,7 +27,7 @@ func GetORMDbConnection() (*gorm.DB, error) {
 	dsn := "root:root@tcp(127.0.0.1:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Printf("database connection error")
+		fmt.Println("database connection error")
 		return nil, err
 	}
 	return db, nil

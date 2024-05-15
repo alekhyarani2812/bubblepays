@@ -4,14 +4,21 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	cardplan "github.com/bubblepays/repository/card_plan"
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
 )
 
+func TestMethod() {
+	log.Info("************Hello test method*************")
+}
+
 func GetCardPlan(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	cardPlanRecords, err := cardplan.GetCardPlan(ctx)
 	if err != nil {
 		response := models.Response{
@@ -31,7 +38,7 @@ func GetCardPlan(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetCardPlanById(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -63,7 +70,7 @@ func GetCardPlanById(w http.ResponseWriter, r *http.Request) {
 }
 
 func SaveCardPlan(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	var cardPlan models.CardPlan
 	err := json.NewDecoder(r.Body).Decode(&cardPlan)
 	if err != nil {
@@ -94,7 +101,7 @@ func SaveCardPlan(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateCardPlan(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -136,7 +143,7 @@ func UpdateCardPlan(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteCardPlan(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
 	pkId, err := utils.StringToInt(idStr)

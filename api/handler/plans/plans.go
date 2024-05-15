@@ -3,9 +3,10 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
+	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/repository/plans"
 	"github.com/bubblepays/utils"
@@ -13,7 +14,7 @@ import (
 )
 
 func GetPlans(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	plansList, err := plans.GetPlans(ctx)
 	if err != nil {
 		response := models.Response{
@@ -22,7 +23,7 @@ func GetPlans(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		}
 		utils.Render(w, response)
-		log.Printf("GetPlans : error %v ", err)
+		log.Infoft(ctx,"GetPlans : error %v ", err)
 		return
 	}
 	response := models.Response{
@@ -34,7 +35,7 @@ func GetPlans(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPlanById(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -47,7 +48,7 @@ func GetPlanById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("pkId : ", pkId)
+	log.Infoft(ctx, "pkId : %v ", pkId)
 	planRecord, err := plans.GetPlanById(ctx, pkId)
 	if err != nil {
 		response := models.Response{
@@ -67,7 +68,7 @@ func GetPlanById(w http.ResponseWriter, r *http.Request) {
 }
 
 func SavePlan(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	var plan models.Plans
 	err := json.NewDecoder(r.Body).Decode(&plan)
 	if err != nil {
@@ -79,7 +80,7 @@ func SavePlan(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("plan : ", plan)
+	log.Infoft(ctx, "plan : %v ", plan)
 	planData := plan
 	planRecord, err := plans.SavePlan(ctx, planData)
 	if err != nil {
@@ -101,7 +102,7 @@ func SavePlan(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdatePlan(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -114,7 +115,7 @@ func UpdatePlan(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("pkId : ", pkId)
+	log.Infoft(ctx, "pkId : %v ", pkId)
 	var plan models.Plans
 	if err := json.NewDecoder(r.Body).Decode(&plan); err != nil {
 		response := models.Response{
@@ -145,7 +146,7 @@ func UpdatePlan(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeletePlan(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -156,7 +157,7 @@ func DeletePlan(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		}
 		utils.Render(w, response)
-		log.Printf("GetPlans : error %v ", err)
+		log.Infoft(ctx, "GetPlans : error %v ", err)
 		return
 	}
 	rowsEffected, err := plans.DeletePlan(ctx, pkId)

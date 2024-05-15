@@ -26,7 +26,6 @@ func CheckLink(link string) {
 	fmt.Println(link, " is up")
 }
 
-
 // with go routines
 func ChanneleLinksGo() {
 	links := []string{
@@ -57,7 +56,6 @@ func CheckLinkGo(link string, c chan string) {
 	c <- "yeh its up"
 }
 
-
 func ChanneleLinksGor() {
 	links := []string{
 		"http://google.com",
@@ -87,7 +85,7 @@ func CheckLinkGor(link string, c chan string) {
 	c <- "yeh its up"
 }
 
-//repeating go routines
+// repeating go routines
 func ChanneleLinksGoRepeat() {
 	links := []string{
 		"http://google.com",
@@ -106,13 +104,13 @@ func ChanneleLinksGoRepeat() {
 	// 	go CheckLinkGoRepeat(<-c , c)
 	// }
 
-	//alternate for loop of go repeat 
+	//alternate for loop of go repeat
 	// for l := range c {
 	// 	go CheckLinkGoRepeat(l , c)
 	// }
 	//function literal
 	for l := range c {
-		go func(link string){
+		go func(link string) {
 			time.Sleep(5 * time.Second)
 			CheckLinkGoRepeat(link, c)
 		}(l)
@@ -130,10 +128,10 @@ func CheckLinkGoRepeat(link string, c chan string) {
 	c <- link
 }
 
-func StrLteral(){
+func StrLteral() {
 	//greetings := "Hi there"
 	// (func (){
-	// 	fmt.Println("greetings ",greetings)
+	// 	log.Info( "greetings ",greetings)
 	// })()
 
 	// c := make(chan string)

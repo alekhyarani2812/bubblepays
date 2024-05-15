@@ -1,9 +1,10 @@
 package learning
 
 import (
-	"fmt"
 	"sort"
 	"strings"
+
+	"github.com/bubblepays/log"
 )
 
 // Longest subString
@@ -17,8 +18,8 @@ func LangestSubString() {
 			appendStrg = appendStrg + s
 			longestSubStr[appendStrg] = appendStrg
 		} else {
-			appendStrg = s	
-			//longestSubStr[appendStrg] = appendStrg		
+			appendStrg = s
+			//longestSubStr[appendStrg] = appendStrg
 		}
 	}
 	uniqueStrLength := 0
@@ -29,8 +30,8 @@ func LangestSubString() {
 			uniqueStrLength = len(k)
 		}
 	}
-	fmt.Println("***Longest substring is :", result)                      //, " \n******map******:", longestSubStr)
-	fmt.Println("***The length of Longest substring is : ", uniqueStrLength)
+	log.Infof("***Longest substring is : %v ", result) //, " \n******map******:", longestSubStr)
+	log.Infof("***The length of Longest substring is :  %v ", uniqueStrLength)
 }
 
 type Employee struct {
@@ -51,7 +52,7 @@ func SortEmployeeStructByName() {
 			return employees[i].EmployeeName < employees[j].EmployeeName
 		})
 	for _, emp := range employees {
-		fmt.Printf("empName : %v   salary : %v\n", emp.EmployeeName, emp.Salary)
+		log.Infof("empName : %v   salary : %v\n", emp.EmployeeName, emp.Salary)
 	}
 }
 
@@ -67,7 +68,7 @@ func SortEmployeeStructById() {
 			return employees[i].Id < employees[j].Id
 		})
 	for _, emp := range employees {
-		fmt.Printf("employee Id : %v  ,employee name : %v, salary : %v\n", emp.Id, emp.EmployeeName, emp.Salary)
+		log.Infof("employee Id : %v  ,employee name : %v, salary : %v\n", emp.Id, emp.EmployeeName, emp.Salary)
 	}
 }
 
@@ -75,7 +76,7 @@ func SortEmployeeStructById() {
 func SortStringArray() {
 	strArray := []string{"Satya", "Sindhu", "Alekhya", "Loukya", "Adhvith"}
 	sort.Strings(strArray)
-	fmt.Println("sorted name (ascending) : ", strArray)
+	log.Infof("sorted name (ascending) : %v ", strArray)
 }
 
 // sort string array without predefined methods using bubble sort
@@ -97,52 +98,52 @@ func SortStringArrayBubbleSort() {
 		}
 	}
 	for i, arrVal := range arr {
-		fmt.Println("Sorted names", i, "th index :\t", arrVal)
+		log.Infof("Sorted names %v ", i, "th index : %v \t", arrVal)
 	}
 }
 
 // Unique string
 func UniqueStringArray() {
-	strArray := []string{"hi","how","are","doing","i","am","doing","good","how","are","i","good","are","am"}
+	strArray := []string{"hi", "how", "are", "doing", "i", "am", "doing", "good", "how", "are", "i", "good", "are", "am"}
 	mapStr := make(map[string]int)
-	fmt.Println("string array strings : ", strArray)
+	log.Infof("string array strings : %v ", strArray)
 	for _, str := range strArray {
 		mapStr[str]++
 	}
 	for str, count := range mapStr {
 		if count < 2 {
-			fmt.Println("******unique string******:", str,",******count",count)
-		}else{
-		fmt.Println("dublicate string :",str,",count : ",count)
+			log.Infof("******unique string******: %v ", str, ",******count %v ", count)
+		} else {
+			log.Infof("dublicate string : %v ", str, ",count : %v ", count)
 		}
 	}
 }
 
-//Remove dublicate characters from string
-func UniqueString(){
+// Remove dublicate characters from string
+func UniqueString() {
 	str := "alekhyanmufghbfgalekhya"
 	var result string
 	mapStr := make(map[rune]bool)
-	for _,char := range str{
+	for _, char := range str {
 		if !mapStr[char] {
 			result += string(char)
 			mapStr[char] = true
 		}
 	}
-	fmt.Println("result :",result)
+	log.Infof("result : %v ", result)
 }
 
-func UniqueStringUsingMap(){
+func UniqueStringUsingMap() {
 	str := "abca"
 	var result string
 	mapStr := make(map[string]string)
-	for _,ch := range str{
+	for _, ch := range str {
 		s := string(ch)
 		if _, isValueExists := mapStr[s]; !isValueExists {
 			result += s
 			mapStr[s] = s
-			fmt.Println("Value does not exist :: ", s)
+			log.Infof("Value does not exist :: %v ", s)
 		}
 	}
-	fmt.Println("result :",result)
+	log.Infof("result : %v ", result)
 }

@@ -1,4 +1,4 @@
-package utils
+package context
 
 import (
 	"context"
@@ -52,5 +52,5 @@ func GetDBConnection(ctx context.Context) (*gorm.DB, error) {
 	if db, ok := ctx.Value(DBconnectionKey).(*gorm.DB); ok {
 		return db, nil
 	}
-	return nil, errors.New("DB connection does not exist in context.")
+	return nil, errors.New("DB connection does not exist in context")
 }

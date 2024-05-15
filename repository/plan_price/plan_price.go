@@ -2,101 +2,100 @@ package plan_price
 
 import (
 	"context"
-	"fmt"
-	"log"
 
+	bcontext "github.com/bubblepays/context"
 	"github.com/bubblepays/database"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
-	"github.com/bubblepays/utils"
 	"gorm.io/gorm"
 )
 
 func GetPlanPrice(ctx context.Context) ([]models.PlanPrice, error) {
-	//get dbconnection from contex 
-	dbConnection, err :=  utils.GetDBConnection(ctx)
+	//get dbconnection from contex
+	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
-		fmt.Println("error in db connection ", err.Error())
+		log.Errorft(ctx, "error in db connection %v ", err)
 		return nil, err
 	}
 	var planPrice []models.PlanPrice
 	gorm := dbConnection.Find(&planPrice)
 	if gorm.Error != nil {
-		fmt.Println("error in getting records from planPrice ", err.Error())
+		log.Infof("error in getting records from planPrice %v ", err.Error())
 		return nil, err
 	}
-	log.Println("planPrice :", planPrice)
+	log.Infof("planPrice :", planPrice)
 	return planPrice, nil
 }
 
 func GetPlanPriceById(ctx context.Context, pkId int) (*models.PlanPrice, error) {
-	fmt.Println("this is GetPlanPriceById repo")
+	log.Infof("this is GetPlanPriceById repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
-		fmt.Println("error in db connection ", err.Error())
+		log.Errorft(ctx, "error in db connection %v ", err)
 		return nil, err
 	}
 	var planPrice models.PlanPrice
 	if err := dbConnection.Where("id = ?", pkId).First(&planPrice).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			log.Println("plan not found")
+			log.Info("plan not found")
 		} else {
-			log.Printf("Error: %v\n", err)
+			log.Infof("Error: %v\n", err)
 		}
 		return nil, err
 	}
-	log.Println("planPrice :", planPrice)
+	log.Infof("planPrice :", planPrice)
 	return &planPrice, nil
 }
 
 func SavePlanPrice(ctx context.Context, planPriceData *models.PlanPrice) (*models.PlanPrice, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
-		fmt.Println("error in db connection ", err.Error())
+		log.Errorft(ctx, "error in db connection %v ", err)
 		return nil, err
 	}
 	gorm := dbConnection.Create(&planPriceData)
 	if gorm.Error != nil && gorm != nil {
-		fmt.Println("error in insertion of records", gorm.Error)
+		log.Infof("error in insertion of records %v ", gorm.Error)
 		return nil, err
 	}
-	fmt.Println("planPriceData :", planPriceData)
+	log.Infof("planPriceData :", planPriceData)
 	return planPriceData, nil
 }
 
 func UpdatePlanPrice(ctx context.Context, pkId int, planPriceRecord *models.PlanPrice) (*models.PlanPrice, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
-		fmt.Println("error in db connection ", err.Error())
+		log.Errorft(ctx, "error in db connection %v ", err)
 		return nil, err
 	}
 	gorm := dbConnection.Model(&models.PlanPrice{}).Where("id = ?", pkId).Updates(&planPriceRecord)
 	if gorm != nil && gorm.Error != nil {
-		fmt.Println("error in updating data", err.Error())
+		log.Infof("error in updating data %v ", err.Error())
 		return nil, err
 	}
 	gorm.Find(&planPriceRecord)
-	log.Println("planPriceRecord : ", planPriceRecord)
+	log.Infof("planPriceRecord : %v ", planPriceRecord)
 	return planPriceRecord, nil
 }
 
 func DeletePlanPrice(ctx context.Context, pkId int) (int64, error) {
-	fmt.Println("this is DeletePlanPrice repo")
+	log.Infof("this is DeletePlanPrice repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
-		fmt.Println("error in db connection ", err.Error())
+		log.Errorft(ctx, "error in db connection %v ", err)
 		return 0, err
 	}
 	var planPrice models.PlanPrice
 	gorm := dbConnection.Where("id = ?", pkId).Delete(&planPrice)
 	if gorm.Error != nil && gorm != nil {
-		fmt.Println("error in deleting PlanPrice data")
+		log.Infof("error in deleting PlanPrice data")
 		return 0, err
 	}
 	rows := gorm.RowsAffected
 	if rows == 0 {
-		fmt.Println("error in deleting PlanPrice data ")
+		log.Infof("error in deleting PlanPrice data ")
 		return 0, err
 	}
-	fmt.Println("rows :", rows)
+	log.Infof("rows : %v  ", rows)
 	return rows, nil
 }

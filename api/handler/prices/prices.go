@@ -3,16 +3,18 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
+
+	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/repository/prices"
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
-	"log"
-	"net/http"
 )
 
 func GetPrices(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	priceReords, err := prices.GetPrices(ctx)
 	if err != nil {
 		response := models.Response{
@@ -26,13 +28,13 @@ func GetPrices(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Status:  http.StatusFound,
 		Message: utils.Success,
-		Data: priceReords,
+		Data:    priceReords,
 	}
 	utils.Render(w, response)
 }
 
 func GetPricesById(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -64,7 +66,7 @@ func GetPricesById(w http.ResponseWriter, r *http.Request) {
 }
 
 func SavePrice(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	var price models.Price
 	err := json.NewDecoder(r.Body).Decode(&price)
 	if err != nil {
@@ -96,7 +98,7 @@ func SavePrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdatePrice(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -109,7 +111,7 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("pkId : ", pkId)
+	log.Infoft(ctx, "pkId : %v ", pkId)
 	var price models.Price
 	err1 := json.NewDecoder(r.Body).Decode(&price)
 	if err1 != nil {
@@ -141,7 +143,7 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeletePrice(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -154,7 +156,7 @@ func DeletePrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Println("pkId : ", pkId)
+	log.Infoft(ctx, "pkId : %v ", pkId)
 	rowsEffected, err := prices.DeletePrice(ctx, pkId)
 	if err != nil {
 		response := models.Response{

@@ -3,9 +3,10 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
+	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	"github.com/bubblepays/repository/consumption"
 	"github.com/bubblepays/utils"
@@ -14,7 +15,7 @@ import (
 
 // Get all consumptions
 func GetConsumptions(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	consumptionList, err := consumption.GetConsumptions(ctx)
 	if err != nil {
 		response := models.Response{
@@ -35,7 +36,7 @@ func GetConsumptions(w http.ResponseWriter, r *http.Request) {
 
 // Get 1 consumption data by Id primarykey
 func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	//idStr := r.PathValue("id")
@@ -69,7 +70,7 @@ func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
 
 // Insert consumption data
 func SavesConsumption(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	var consum models.Consumption
 	err := json.NewDecoder(r.Body).Decode(&consum)
 	if err != nil {
@@ -79,7 +80,7 @@ func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusBadRequest,
 		}
 		utils.Render(w, response)
-		log.Println("error StatusBadRequest in json.NewDecoder(r.Body).Decode(&consum)")
+		log.Infot(ctx, "error StatusBadRequest in json.NewDecoder(r.Body).Decode(&consum)")
 		return
 	}
 	consumData := consum
@@ -91,7 +92,7 @@ func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		}
 		utils.Render(w, response)
-		log.Println("error StatusBadRequest in consumptionRecord")
+		log.Infot(ctx, "error StatusBadRequest in consumptionRecord")
 		return
 	}
 	response := models.Response{
@@ -104,7 +105,7 @@ func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	//idStr := r.PathValue("id")

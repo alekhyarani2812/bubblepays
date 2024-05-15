@@ -4,13 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
-	"log/slog"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 )
 
@@ -21,7 +19,7 @@ func Render(w http.ResponseWriter, response models.Response) {
 	// w.Write([]byte(GetTransactionID(ctx)))
 	err := json.NewEncoder(w).Encode(response)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -34,7 +32,7 @@ func StringToInt(idStr string) (int, error) {
 	}
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		log.Println("getting error while strconv err:", err)
+		log.Infof("getting error while strconv err: %v ", err)
 		return 0, fmt.Errorf("given id (%v) is not a number", idStr)
 	}
 	return id, nil
@@ -45,19 +43,9 @@ func StringToTime(str string) (*time.Time, error) {
 	layout := "2006-01-02 15:04:05"
 	parsedTime, err := time.Parse(layout, str)
 	if err != nil {
-		fmt.Println("Error parsing time:", err)
+		log.Infof("Error parsing time:", err)
 		return nil, err
 	}
-	fmt.Println("Parsed time:", parsedTime)
+	log.Infof("Parsed time:", parsedTime)
 	return &parsedTime, nil
-}
-
-func LoggerMsg() {
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-		Level: slog.LevelDebug,
-	}))
-	logger.Debug("This is debug message")
-	logger.Info("This is info message")
-	logger.Warn("This is warning message")
-	logger.Error("This is error message")
 }

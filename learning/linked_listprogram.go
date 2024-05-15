@@ -1,11 +1,17 @@
 package learning
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/bubblepays/log"
+)
+
 // Insert a node at given index
 type Node struct {
 	data int
 	next *Node
 }
+
 // function to create new node
 func NewNode(val int) *Node {
 	return &Node{
@@ -16,14 +22,14 @@ func NewNode(val int) *Node {
 func PrintLinkedList(head *Node) {
 	current := head
 	for current != nil {
-		fmt.Printf(" %d :", current.data)
+		log.Infof(" %d :", current.data)
 		current = current.next
 	}
 	fmt.Println()
 }
 func InsertNodeAtIndexImpl(head *Node, index, data int) *Node {
 	if index < 0 {
-		fmt.Println("invalid index")
+		log.Info("invalid index")
 		return head
 	}
 	newNode := NewNode(data)
@@ -44,10 +50,10 @@ func InsertNodeAtIndex() {
 	head = NewNode(1)
 	head.next = NewNode(2)
 	head.next.next = NewNode(3)
-	fmt.Println("Linked List before insertion")
+	log.Info("Linked List before insertion")
 	PrintLinkedList(head)
 	head = InsertNodeAtIndexImpl(head, 3, 12)
-	fmt.Println("Linked list after insertion of 12 at position 3:")
+	log.Info("Linked list after insertion of 12 at position 3:")
 	PrintLinkedList(head)
 }
 
@@ -58,10 +64,10 @@ func InsertLinkedList() {
 	head.next.next = NewNode(33)
 	head.next.next.next = NewNode(43)
 	head.next.next.next.next = NewNode(56)
-	fmt.Println("Linked List before reverse")
+	log.Info("Linked List before reverse")
 	PrintLinkedList(head)
 	//head.LoopLinkedListMethod()
-	fmt.Println("Linked List after reverse")
+	log.Info("Linked List after reverse")
 	reverseHead := ReverseLinkedList(head)
 	PrintLinkedList(reverseHead)
 	//reverseHead.LoopLinkedListMethod()
@@ -78,10 +84,10 @@ func ReverseLinkedList(head *Node) *Node {
 	return prev
 }
 func (n *Node) LoopLinkedListMethod() {
-	fmt.Println("********* LoopLinkedListMethod ")
+	log.Info("********* LoopLinkedListMethod ")
 	current := n
 	for current != nil {
-		fmt.Printf(" %d :", current.data)
+		log.Infof(" %d :", current.data)
 		current = current.next
 	}
 	fmt.Println()

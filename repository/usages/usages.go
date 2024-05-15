@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"fmt"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	"gorm.io/gorm"
 )
@@ -14,20 +14,20 @@ func SaveUsage(usageData models.Usages, dbConnection *gorm.DB) {
 	res.Find(&usages)
 
 	if res.Error != nil {
-		fmt.Println("error in this block............", res.Error)
+		log.Infof("error in this block............", res.Error)
 		return
 	}
 	if len(usages) > 0 {
 		//should run update query
-		//fmt.Println("******update query********records found len(usages) : ", len(usages))
+		//log.Info( "******update query********records found len(usages) : %v ", len(usages))
 		usage := usages[0]
-		// fmt.Println("usage : ............", usage.Duration)
-		// fmt.Println("usageData.Duration : ......", usageData.Duration)
+		// log.Info( "usage : ............", usage.Duration)
+		// log.Info( "usageData.Duration : ......", usageData.Duration)
 		dbConnection.Model(&usage).Update("duration", usageData.Duration)
 		dbConnection.Find(&usage)
 	} else {
 		//should run insert query
 		ormDB := dbConnection.Create(&usageData)
-		fmt.Println("**************ormDB usages table rows Inserted ", ormDB.RowsAffected)
+		log.Infof("**************ormDB usages table rows Inserted %v ", ormDB.RowsAffected)
 	}
 }

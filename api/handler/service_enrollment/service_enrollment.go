@@ -5,14 +5,16 @@ import (
 	"fmt"
 	"net/http"
 
+	bcontext "github.com/bubblepays/context"
 	"github.com/bubblepays/models"
 	serviceenrollment "github.com/bubblepays/repository/service_enrollment"
 	"github.com/bubblepays/utils"
+	"github.com/bubblepays/log"
 	"github.com/gorilla/mux"
 )
 
 func GetServiceEnrollment(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	serviceEnrollRecords, err := serviceenrollment.GetServiceEnrollment(ctx)
 	if err != nil {
 		response := models.Response{
@@ -32,7 +34,7 @@ func GetServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetServiceEnrollmentById(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -64,7 +66,7 @@ func GetServiceEnrollmentById(w http.ResponseWriter, r *http.Request) {
 }
 
 func SaveServiceEnrollment(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	var serviceEnrollment models.ServiceEnrollment
 	err := json.NewDecoder(r.Body).Decode(&serviceEnrollment)
 	if err != nil {
@@ -96,7 +98,7 @@ func SaveServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateServiceEnrollment(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -109,7 +111,7 @@ func UpdateServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	fmt.Println("pkId : ", pkId)
+	log.Infof("pkId : %v ", pkId)
 	var serviceEnrollment models.ServiceEnrollment
 	if err := json.NewDecoder(r.Body).Decode(&serviceEnrollment); err != nil {
 		response := models.Response{
@@ -139,7 +141,7 @@ func UpdateServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteServiceEnrollment(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
+	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	pkId, err := utils.StringToInt(idStr)
@@ -152,7 +154,7 @@ func DeleteServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	fmt.Println("pkId : ", pkId)
+	log.Infof("pkId : %v ", pkId)
 	rowsEffected, err := serviceenrollment.DeleteServiceEnrollment(ctx, pkId)
 	if err != nil {
 		response := models.Response{

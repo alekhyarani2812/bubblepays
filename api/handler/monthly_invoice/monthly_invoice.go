@@ -1,9 +1,10 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
+	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	monthlyinvoice "github.com/bubblepays/repository/monthly_invoice"
 	"github.com/bubblepays/utils"
@@ -21,8 +22,8 @@ import (
 // @Failure 401 {object} models.Response "Unauthorized Authentication is required"
 // @Router /api/getmonthlyinvoice [get]
 func GetMonthlyInvoice(w http.ResponseWriter, r *http.Request) {
-	
-	ctx := utils.WithTransactionID(r.Context())
+
+	ctx := bcontext.WithTransactionID(r.Context())
 	queryParams := r.URL.Query()
 	monthNumQparam := queryParams.Get("monthnum")
 	if monthNumQparam == "" {
@@ -46,15 +47,9 @@ func GetMonthlyInvoice(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusOK,
-		Description: fmt.Sprintln("monthlyinvoice records are fetched successfully "),
+		Description: "monthlyinvoice records are fetched successfully ",
 		Data:        monthlyInvoiceData,
 	}
-	fmt.Println("from GetMonthlyInvoice handler")
+	log.Info("from GetMonthlyInvoice handler")
 	utils.Render(w, response)
-}
-
-func GetMonthlyInvoiceById(w http.ResponseWriter, r *http.Request) {
-	ctx := utils.WithTransactionID(r.Context())
-	fmt.Println("this is GetMonthlyInvoiceById handler")
-	monthlyinvoice.GetMonthlyInvoiceById(ctx)
 }
