@@ -6,7 +6,7 @@ import (
 	"github.com/bubblepays/log"
 )
 
-// Addition of 2 numbers & strings using interfaces
+//Caliculations Addition of 2 numbers & strings using interfaces
 type Caliculations interface {
 	addStrings() string
 	add() int
@@ -16,8 +16,8 @@ type Addition struct {
 	str1, str2 string
 }
 
-func (stu Addition) addStrings() string {
-	return stu.str1 + stu.str2
+func (ad Addition) addStrings() string {
+	return ad.str1 + ad.str2
 }
 func (ad Addition) add() int {
 	return ad.p + ad.q
@@ -36,7 +36,7 @@ func Implimentation() {
 	AddTwoVal(sum)
 }
 
-// Shape interface Recatangle struct using interfaces
+//Shapes interface Recatangle struct using interfaces
 type Shapes interface {
 	area() float32
 }
@@ -55,7 +55,7 @@ func ShapeImpl() {
 	ShapeCal(rect)
 }
 
-// Map example program
+//MapFunc Map example program
 func MapFunc() {
 	subjectMarks := map[string]float32{
 		"Golang": 85,
@@ -68,7 +68,7 @@ func MapFunc() {
 	log.Infof("Python marks: %v ", subjectMarks["Python"])
 }
 
-// map interface combination
+//Shape1 map interface combination
 type Shape1 interface {
 	area() float32
 }
@@ -86,7 +86,7 @@ func MapInterfaceImpl() {
 	log.Infof("area of rectangle is : %v ", rect.area())
 }
 
-// Map inteface combination
+//ShapeIn Map inteface combination
 type ShapeIn interface {
 	Area() float32
 }

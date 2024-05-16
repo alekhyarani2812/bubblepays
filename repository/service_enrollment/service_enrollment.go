@@ -1,4 +1,4 @@
-package service_enrollment
+package serviceenrollment
 
 import (
 	"context"
@@ -24,14 +24,14 @@ func GetServiceEnrollment(ctx context.Context) ([]models.ServiceEnrollment, erro
 	return serviceEnrollRecords, nil
 }
 
-func GetServiceEnrollmentById(ctx context.Context, pkId int) (*models.ServiceEnrollment, error) {
+func GetServiceEnrollmentByID(ctx context.Context, pkID int) (*models.ServiceEnrollment, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Errorft(ctx, "Error : %v ", err)
 		return nil, err
 	}
 	var serviceenroll models.ServiceEnrollment
-	if err := dbConnection.Where("id = ?", pkId).First(&serviceenroll).Error; err != nil {
+	if err := dbConnection.Where("id = ?", pkID).First(&serviceenroll).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			log.Infof("record not found")
 		} else {
@@ -55,13 +55,13 @@ func SaveServiceEnrollment(ctx context.Context, serviceEnrollment models.Service
 	return &serviceEnrollment, nil
 }
 
-func UpdateServiceEnrollment(ctx context.Context, pkId int, seviceEnrRecord models.ServiceEnrollment) (*models.ServiceEnrollment, error) {
+func UpdateServiceEnrollment(ctx context.Context, pkID int, seviceEnrRecord models.ServiceEnrollment) (*models.ServiceEnrollment, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("error to connect database", err.Error())
 		return nil, err
 	}
-	gorm := dbConnection.Model(&models.ServiceEnrollment{}).Where("id = ?", pkId).Updates(&seviceEnrRecord)
+	gorm := dbConnection.Model(&models.ServiceEnrollment{}).Where("id = ?", pkID).Updates(&seviceEnrRecord)
 	if gorm != nil && gorm.Error != nil {
 		log.Infof("error in updating data")
 		return nil, err
@@ -71,14 +71,14 @@ func UpdateServiceEnrollment(ctx context.Context, pkId int, seviceEnrRecord mode
 	return &seviceEnrRecord, nil
 }
 
-func DeleteServiceEnrollment(ctx context.Context, pkId int) (int64, error) {
+func DeleteServiceEnrollment(ctx context.Context, pkID int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("error in getting DB connection %v ", err.Error())
 		return 0, nil
 	}
 	var serviceEnrollment models.ServiceEnrollment
-	gorm := dbConnection.Where("id = ?", pkId).Delete(&serviceEnrollment)
+	gorm := dbConnection.Where("id = ?", pkID).Delete(&serviceEnrollment)
 	if gorm != nil && gorm.Error != nil {
 		log.Infof("error in deleting serviceEnrollment data ")
 		return 0, err

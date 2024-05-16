@@ -13,7 +13,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Read services
+// GetServices Read services
 func GetServices(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	log.Info("This is GetServices handler")
@@ -76,11 +76,11 @@ func SaveService(w http.ResponseWriter, r *http.Request) {
 	log.Infof("ServiceList : success data %v ", serviceRecord)
 }
 
-func DeleteServiceById(w http.ResponseWriter, r *http.Request) {
+func DeleteServiceByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -90,8 +90,8 @@ func DeleteServiceById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Infof("pkId : %v ", pkId)
-	rowsEffected, err := service.DeleteServiceById(ctx, pkId)
+	log.Infof("pkID : %v ", pkID)
+	rowsEffected, err := service.DeleteServiceByID(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,

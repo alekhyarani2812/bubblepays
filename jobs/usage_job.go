@@ -22,7 +22,7 @@ func getConsumptionsByMonthnum(ctx context.Context, dbConnection *gorm.DB) (map[
 	}
 
 	log.Infoft(ctx, "SIZE of consumption: size:: %v ", len(consumptions))
-	cardIdServiceId := make(map[string]float64)
+	cardIDServiceID := make(map[string]float64)
 	for _, consum := range consumptions {
 		layout := "2006-01-02T15:04:05-07:00"
 		// Parse the time string into a time.Time object
@@ -40,26 +40,26 @@ func getConsumptionsByMonthnum(ctx context.Context, dbConnection *gorm.DB) (map[
 		}
 		// Print the parsed time
 		monthnum := fmt.Sprintf("%v-%v", year, monthNumStr)
-		myKey := fmt.Sprintf("%v_%v_%v", consum.CardId, consum.ServiceId, monthnum)
+		myKey := fmt.Sprintf("%v_%v_%v", consum.CardID, consum.ServiceID, monthnum)
 
 		//duration = endDate-startDate
 		duration := consum.EndTime.Sub(*consum.StartTime)
 
-		if dur, ok := cardIdServiceId[myKey]; ok {
+		if dur, ok := cardIDServiceID[myKey]; ok {
 			// log.Info( "previous duration is : ", duration.Seconds())
 			totalDuration := dur + duration.Seconds()
-			cardIdServiceId[myKey] = totalDuration
+			cardIDServiceID[myKey] = totalDuration
 			//log.Info( "totalDuration is : ", totalDuration)
 		} else {
 			totalDuration := duration.Seconds()
-			cardIdServiceId[myKey] = totalDuration
+			cardIDServiceID[myKey] = totalDuration
 		}
 	}
 	// Iterate over the map using a for loop and range
-	for key, value := range cardIdServiceId {
+	for key, value := range cardIDServiceID {
 		log.Infoft(ctx, "Key: %s, Value: %v\n", key, value)
 	}
-	return cardIdServiceId, nil
+	return cardIDServiceID, nil
 }
 
 func UsageData(ctx context.Context, dbConnection *gorm.DB) {
@@ -72,13 +72,13 @@ func UsageData(ctx context.Context, dbConnection *gorm.DB) {
 		//fmt.Printf("Key: %s , Value: %v ", key, duration)
 		// Split the string by _
 		keyStr := strings.Split(key, "_")
-		cardId := keyStr[0]
-		serviceId := keyStr[1]
+		cardID := keyStr[0]
+		serviceID := keyStr[1]
 		monthNum := keyStr[2]
-		log.Infoft(ctx, "cardId : %v, serviceId : %v, monthNum : %v ",cardId, serviceId, monthNum)
+		log.Infoft(ctx, "cardID : %v, serviceID : %v, monthNum : %v ", cardID, serviceID, monthNum)
 		usageData := models.Usages{
-			CardId:    cardId,
-			ServiceId: serviceId,
+			CardID:    cardID,
+			ServiceID: serviceID,
 			Monthnum:  monthNum,
 			Duration:  duration,
 		}

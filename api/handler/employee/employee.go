@@ -30,7 +30,7 @@ func GetEmployees(w http.ResponseWriter) ([]models.Employee, error) {
 	log.Info("select query compiled")
 	for rows.Next() {
 		var employee models.Employee
-		if err := rows.Scan(&employee.Id, &employee.EmpId, &employee.Name, &employee.Age,
+		if err := rows.Scan(&employee.ID, &employee.EmpID, &employee.Name, &employee.Age,
 			&employee.Salary); err != nil {
 			log.Fatal(err.Error())
 		}
@@ -40,7 +40,7 @@ func GetEmployees(w http.ResponseWriter) ([]models.Employee, error) {
 	return empArray, nil
 }
 
-func GetEmployeesJsonData(w http.ResponseWriter, r *http.Request) {
+func GetEmployeesJSONData(w http.ResponseWriter, r *http.Request) {
 	empList, err := GetEmployees(w)
 	if err != nil {
 		response := models.Response{
@@ -65,7 +65,7 @@ func GetEmployeeByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	//idStr := r.PathValue("id")
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -75,9 +75,9 @@ func GetEmployeeByID(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Infof(" Employee iD %v ", pkId)
+	log.Infof(" Employee iD %v ", pkID)
 	var employee models.Employee
-	rows, err := db.Query("select * from employee where id = ?", pkId)
+	rows, err := db.Query("select * from employee where id = ?", pkID)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -88,7 +88,7 @@ func GetEmployeeByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for rows.Next() {
-		if err := rows.Scan(&employee.Id, &employee.EmpId, &employee.Name, &employee.Age,
+		if err := rows.Scan(&employee.ID, &employee.EmpID, &employee.Name, &employee.Age,
 			&employee.Salary); err != nil {
 			response := models.Response{
 				Message: utils.Fail,
@@ -124,7 +124,7 @@ func SaveEmployee(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	_, err := db.Exec("INSERT INTO employee (empId, name, age, salary) VALUES (?,?,?,?)",
-		employee.EmpId, employee.Name, employee.Age, employee.Salary)
+		employee.EmpID, employee.Name, employee.Age, employee.Salary)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -149,7 +149,7 @@ func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {
 	// vars := mux.Vars(r)
 	// idStr := vars["id"]
 	idStr := r.PathValue("id")
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -159,7 +159,7 @@ func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Infof("pkId is %v ", pkId)
+	log.Infof("pkID is %v ", pkID)
 
 	var employee models.Employee
 	db := database.GetDbConnection()
@@ -175,7 +175,7 @@ func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	result, err := db.Exec("UPDATE employee SET empId = ?, name=?, age = ?, salary=? WHERE id = ?",
-		employee.EmpId, employee.Name, employee.Age, employee.Salary, pkId)
+		employee.EmpID, employee.Name, employee.Age, employee.Salary, pkID)
 	if err != nil {
 		response := models.Response{
 			Error:  err.Error(),
@@ -213,7 +213,7 @@ func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {
 	log.Infof("update Handler %v ", rowsAffected)
 }
 
-// delete employee rows
+// DeleteEmpHandler delete employee rows
 func DeleteEmpHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idStr := vars["id"]
@@ -255,14 +255,14 @@ func DeleteEmpHandler(w http.ResponseWriter, r *http.Request) {
 		response := models.Response{
 			Message: utils.Fail,
 			Status:  http.StatusBadRequest,
-			Error:   fmt.Sprintf("Id = %v does not exist in the Employee table", idStr),
+			Error:   fmt.Sprintf("ID = %v does not exist in the Employee table", idStr),
 		}
 		utils.Render(w, response)
 	} else {
 		response := models.Response{
 			Message: utils.Success,
 			Status:  http.StatusOK,
-			Description: fmt.Sprintf("Id = '%v' record is deleted successfully %v row is effected",
+			Description: fmt.Sprintf("ID = '%v' record is deleted successfully %v row is effected",
 				id, rowsAffected),
 		}
 		utils.Render(w, response)

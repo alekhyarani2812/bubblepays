@@ -6,13 +6,13 @@ import (
 	"github.com/bubblepays/log"
 )
 
-// Insert a node at given index
+//Node Insert a node at given index
 type Node struct {
 	data int
 	next *Node
 }
 
-// function to create new node
+//NewNode function to create new node
 func NewNode(val int) *Node {
 	return &Node{
 		data: val,

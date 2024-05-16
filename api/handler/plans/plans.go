@@ -23,7 +23,7 @@ func GetPlans(w http.ResponseWriter, r *http.Request) {
 			Error:   err.Error(),
 		}
 		utils.Render(w, response)
-		log.Infoft(ctx,"GetPlans : error %v ", err)
+		log.Infoft(ctx, "GetPlans : error %v ", err)
 		return
 	}
 	response := models.Response{
@@ -34,11 +34,11 @@ func GetPlans(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 }
 
-func GetPlanById(w http.ResponseWriter, r *http.Request) {
+func GetPlanByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -48,8 +48,8 @@ func GetPlanById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Infoft(ctx, "pkId : %v ", pkId)
-	planRecord, err := plans.GetPlanById(ctx, pkId)
+	log.Infoft(ctx, "pkID : %v ", pkID)
+	planRecord, err := plans.GetPlanByID(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -105,7 +105,7 @@ func UpdatePlan(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -115,7 +115,7 @@ func UpdatePlan(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Infoft(ctx, "pkId : %v ", pkId)
+	log.Infoft(ctx, "pkID : %v ", pkID)
 	var plan models.Plans
 	if err := json.NewDecoder(r.Body).Decode(&plan); err != nil {
 		response := models.Response{
@@ -126,7 +126,7 @@ func UpdatePlan(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	rowsEffected, err := plans.UpdatePlan(ctx, pkId, &plan)
+	rowsEffected, err := plans.UpdatePlan(ctx, pkID, &plan)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -149,7 +149,7 @@ func DeletePlan(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -160,7 +160,7 @@ func DeletePlan(w http.ResponseWriter, r *http.Request) {
 		log.Infoft(ctx, "GetPlans : error %v ", err)
 		return
 	}
-	rowsEffected, err := plans.DeletePlan(ctx, pkId)
+	rowsEffected, err := plans.DeletePlan(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -177,10 +177,9 @@ func DeletePlan(w http.ResponseWriter, r *http.Request) {
 			Description: fmt.Sprintf(" %d rows deleted ", rowsEffected),
 		}
 		utils.Render(w, response)
-		return
 	} else {
 		response := models.Response{
-			Error:       fmt.Sprintf(" %d Id should be in database ", rowsEffected),
+			Error:       fmt.Sprintf(" %d ID should be in database ", rowsEffected),
 			Message:     utils.Fail,
 			Status:      http.StatusBadRequest,
 			Description: fmt.Sprintf(" %d rows deleted ", rowsEffected),

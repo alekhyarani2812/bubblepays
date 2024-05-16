@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Price struct {
-	Id        int        `json:"id"`
+	ID        int        `json:"id"`
 	Price     float64    `json:"price"`
 	Status    string     `json:"status"`
 	CreatedAt *time.Time `json:"created_at"`

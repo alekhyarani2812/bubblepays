@@ -17,7 +17,7 @@ import (
 
 const startConsumeDir = "/home/satyanarayana/Alekhya/gofilesdirectories/start_consume/"
 
-// Read consumption data from file
+//ReadConsumptionData from file
 func ReadConsumptionData(filePath string) (data [][]string) {
 	log.Infof("Read MachineData is called")
 	// Open the CSV file
@@ -41,7 +41,7 @@ func ReadConsumptionData(filePath string) (data [][]string) {
 	return records
 }
 
-// Insert consumption data into DB
+//SaveFileConsumption Insert consumption data into DB
 func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption,
 	wg *sync.WaitGroup) error {
 	//get dbconnection from contex
@@ -66,7 +66,7 @@ func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption
 	return nil
 }
 
-// Get Consumption data from destination dirctory and process it
+//ConsumeDeviceData Get Consumption data from destination dirctory and process it
 func ConsumeDeviceData(ctx context.Context) {
 	var wg sync.WaitGroup
 	// Open the directory
@@ -90,9 +90,9 @@ func ConsumeDeviceData(ctx context.Context) {
 		log.Infof("records : %v ", records)
 		// Create a wait group to wait for all goroutines to finish
 		for _, record := range records {
-			serviceId, err := utils.StringToInt(record[5])
+			serviceID, err := utils.StringToInt(record[5])
 			if err != nil {
-				log.Infof("Got an ERROR at serviceId: %v ", err.Error())
+				log.Infof("Got an ERROR at serviceID: %v ", err.Error())
 				continue
 			}
 			//convert startdate string to int
@@ -108,12 +108,12 @@ func ConsumeDeviceData(ctx context.Context) {
 			}
 			createdDate := time.Now()
 			consumptionData := models.Consumption{
-				DeviceId:        record[0],
-				CardId:          record[1],
+				DeviceID:        record[0],
+				CardID:          record[1],
 				ConsumptionDate: record[2],
 				StartTime:       startDate, //&time.Time{},
 				EndTime:         endDate,   //&time.Time{},
-				ServiceId:       serviceId,
+				ServiceID:       serviceID,
 				ServiceName:     record[6],
 				CreatedDate:     &createdDate,
 				CreatedBy:       "Alekhya",
@@ -136,7 +136,7 @@ func ConsumeDeviceData(ctx context.Context) {
 	}
 }
 
-// Move Consumption data from one directory to another
+//PickDeviceData Move Consumption data from one directory to another
 func PickDeviceData() {
 	// Define source and destination directories
 	sourceDir := "/home/satyanarayana/Alekhya/gofilesdirectories/machine_data/"

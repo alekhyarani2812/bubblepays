@@ -27,15 +27,15 @@ func GetCardPlan(ctx context.Context) ([]models.CardPlan, error) {
 	return cardplan, nil
 }
 
-func GetCardPlanById(ctx context.Context, pkId int) (*models.CardPlan, error) {
-	log.Infof("GetCardPlanById repo ************")
+func GetCardPlanByID(ctx context.Context, pkID int) (*models.CardPlan, error) {
+	log.Infof("GetCardPlanByID repo ************")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Errorft(ctx, "error in db connection %v ", err)
 		return nil, err
 	}
 	var cardPlanRecord models.CardPlan
-	gorm := dbConnection.Where("id = ?", pkId).Find(&cardPlanRecord)
+	gorm := dbConnection.Where("id = ?", pkID).Find(&cardPlanRecord)
 	if gorm != nil && gorm.Error != nil {
 		log.Infof("error in getting CardPlan data")
 		return nil, err
@@ -60,15 +60,15 @@ func SaveCardPlan(ctx context.Context, cardPlanData *models.CardPlan) (*models.C
 	return cardPlanData, nil
 }
 
-func UpdateCardPlan(ctx context.Context, pkId int, cardPlanRecord *models.CardPlan) (*models.CardPlan, error) {
-	log.Infof("this is cardplan repo cardPlanRecord : %v ,pkId %v", cardPlanRecord, pkId)
+func UpdateCardPlan(ctx context.Context, pkID int, cardPlanRecord *models.CardPlan) (*models.CardPlan, error) {
+	log.Infof("this is cardplan repo cardPlanRecord : %v ,pkID %v", cardPlanRecord, pkID)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("error in db connection ")
 		return nil, err
 	}
 	//cardPlanRecord
-	gorm := dbConnection.Model(&models.CardPlan{}).Where("id = ?", pkId).Updates(&cardPlanRecord)
+	gorm := dbConnection.Model(&models.CardPlan{}).Where("id = ?", pkID).Updates(&cardPlanRecord)
 	if gorm != nil && gorm.Error != nil {
 		log.Infof("error in updating cardPlan Record ")
 		return nil, err
@@ -78,14 +78,14 @@ func UpdateCardPlan(ctx context.Context, pkId int, cardPlanRecord *models.CardPl
 	return cardPlanRecord, nil
 }
 
-func DeleteCardPlan(ctx context.Context, pkId int) (int64, error) {
+func DeleteCardPlan(ctx context.Context, pkID int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("error in db connection ")
 		return 0, err
 	}
 	var cardPlanRecord models.CardPlan
-	gorm := dbConnection.Where("id = ?", pkId).Delete(&cardPlanRecord)
+	gorm := dbConnection.Where("id = ?", pkID).Delete(&cardPlanRecord)
 	if gorm.Error != nil {
 		log.Infof("error in deleting card PlanRecord *****gorm.Error != nil*****")
 		return 0, err

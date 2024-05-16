@@ -13,7 +13,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Get all consumptions
 func GetConsumptions(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	consumptionList, err := consumption.GetConsumptions(ctx)
@@ -34,13 +33,13 @@ func GetConsumptions(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 }
 
-// Get 1 consumption data by Id primarykey
-func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
+//GetConsumptionByID Get 1 Consumption by ID
+func GetConsumptionByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	//idStr := r.PathValue("id")
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -50,7 +49,7 @@ func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	consumptionList, err := consumption.GetConsumptionById(ctx, pkId)
+	consumptionList, err := consumption.GetConsumptionByID(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -68,7 +67,7 @@ func GetConsumptionById(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 }
 
-// Insert consumption data
+//SavesConsumption Insert consumption data
 func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	var consum models.Consumption
@@ -109,7 +108,7 @@ func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	//idStr := r.PathValue("id")
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -119,7 +118,7 @@ func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	rowsEffected, err := consumption.DeleteConsumption(ctx, pkId)
+	rowsEffected, err := consumption.DeleteConsumption(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -133,15 +132,14 @@ func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 		response := models.Response{
 			Message:     utils.Success,
 			Status:      http.StatusOK,
-			Description: fmt.Sprintf("consumption record %v is deleted", pkId),
+			Description: fmt.Sprintf("consumption record %v is deleted", pkID),
 		}
 		utils.Render(w, response)
-		return
 	} else {
 		response := models.Response{
 			Message:     utils.Fail,
 			Status:      http.StatusBadRequest,
-			Description: fmt.Sprintf("consumption record %v does not exist in consumption table", pkId),
+			Description: fmt.Sprintf("consumption record %v does not exist in consumption table", pkID),
 		}
 		utils.Render(w, response)
 	}

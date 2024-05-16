@@ -2,11 +2,12 @@ package log
 
 import (
 	"context"
-	bcontext "github.com/bubblepays/context"
-	"github.com/sirupsen/logrus"
 	"os"
 	"path/filepath"
 	"runtime"
+
+	bcontext "github.com/bubblepays/context"
+	"github.com/sirupsen/logrus"
 )
 
 var logger *logrus.Logger
@@ -28,9 +29,9 @@ func NewLogger() *logrus.Logger {
 }
 
 func getLogFields(ctx context.Context) logrus.Fields {
-	transactionId := ""
+	transactionID := ""
 	if ctx != nil {
-		transactionId = bcontext.GetTransactionID(ctx)
+		transactionID = bcontext.GetTransactionID(ctx)
 	}
 	functionName := "unknown"
 	pc, file, line, ok := runtime.Caller(2)
@@ -47,7 +48,7 @@ func getLogFields(ctx context.Context) logrus.Fields {
 		"fileName":      file,
 		"functionName":  functionName,
 		"lineNumber":    line,
-		"transactionId": transactionId,
+		"transactionID": transactionID,
 	}
 }
 
@@ -91,7 +92,7 @@ func Debugft(ctx context.Context, format string, args ...interface{}) {
 	logger.WithFields(getLogFields(ctx)).Debugf(format, args...)
 }
 
-// without context
+//Info without context
 func Info(message interface{}) {
 	logger.SetLevel(logrus.InfoLevel)
 	logger.WithFields(getLogFields(nil)).Info(message)

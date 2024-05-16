@@ -6,12 +6,12 @@ import (
 	"net/http"
 )
 
-type Message struct {
+type message struct {
 	Text string `json:"name"`
 }
 
 func GetMessageHandler(w http.ResponseWriter, r *http.Request) {
-	message := Message{Text: "***********Hello, World!**************"}
+	message := message{Text: "***********Hello, World!**************"}
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(message)
 	if err != nil {

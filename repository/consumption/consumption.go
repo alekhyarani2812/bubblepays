@@ -7,11 +7,11 @@ import (
 	"github.com/bubblepays/database"
 	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
-	_ "github.com/go-sql-driver/mysql"
+	
 	"gorm.io/gorm"
 )
 
-// Get all consumptions data
+//GetConsumptions Get all consumptions data
 func GetConsumptions(ctx context.Context) ([]models.Consumption, error) {
 	//get dbconnection from contex
 	dbConnection, err := bcontext.GetDBConnection(ctx)
@@ -28,7 +28,7 @@ func GetConsumptions(ctx context.Context) ([]models.Consumption, error) {
 	return consumptions, nil
 }
 
-func GetConsumptionById(ctx context.Context, id int) ([]models.Consumption, error) {
+func GetConsumptionByID(ctx context.Context, id int) ([]models.Consumption, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("err %v ", err)
@@ -62,15 +62,15 @@ func SavesConsumption(ctx context.Context, consumRecord models.Consumption) (*mo
 	return &consumRecord, nil
 }
 
-func DeleteConsumption(ctx context.Context, pkId int) (int64, error) {
-	log.Infof("pkId : %v ", pkId)
+func DeleteConsumption(ctx context.Context, pkID int) (int64, error) {
+	log.Infof("pkID : %v ", pkID)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Info("err in dbConnection :****")
 		return 0, err
 	}
 	var consumption models.Consumption
-	result := dbConnection.Where("id = ?", pkId).Delete(&consumption)
+	result := dbConnection.Where("id = ?", pkID).Delete(&consumption)
 	if result.Error != nil {
 		log.Info("failed to delete consumption")
 	}

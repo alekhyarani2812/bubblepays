@@ -7,7 +7,7 @@ import (
 	"github.com/bubblepays/log"
 )
 
-// Longest subString
+// LangestSubString for longest sub string
 func LangestSubString() {
 	str := "abcabcbb"
 	longestSubStr := make(map[string]string)
@@ -37,15 +37,15 @@ func LangestSubString() {
 type Employee struct {
 	EmployeeName string
 	Salary       float32
-	Id           int
+	ID           int
 }
 
 func SortEmployeeStructByName() {
 	employees := []Employee{
-		{EmployeeName: "Satya", Salary: 500000, Id: 901},
-		{EmployeeName: "Alekhya", Salary: 200000, Id: 401},
-		{EmployeeName: "Loukya", Salary: 600000, Id: 301},
-		{EmployeeName: "Adhvith", Salary: 700000, Id: 101},
+		{EmployeeName: "Satya", Salary: 500000, ID: 901},
+		{EmployeeName: "Alekhya", Salary: 200000, ID: 401},
+		{EmployeeName: "Loukya", Salary: 600000, ID: 301},
+		{EmployeeName: "Adhvith", Salary: 700000, ID: 101},
 	}
 	sort.Slice(employees,
 		func(i, j int) bool {
@@ -56,30 +56,30 @@ func SortEmployeeStructByName() {
 	}
 }
 
-func SortEmployeeStructById() {
+func SortEmployeeStructByID() {
 	employees := []Employee{
-		{EmployeeName: "Satya", Salary: 500000, Id: 901},
-		{EmployeeName: "Alekhya", Salary: 200000, Id: 401},
-		{EmployeeName: "Loukya", Salary: 600000, Id: 301},
-		{EmployeeName: "Adhvith", Salary: 700000, Id: 101},
+		{EmployeeName: "Satya", Salary: 500000, ID: 901},
+		{EmployeeName: "Alekhya", Salary: 200000, ID: 401},
+		{EmployeeName: "Loukya", Salary: 600000, ID: 301},
+		{EmployeeName: "Adhvith", Salary: 700000, ID: 101},
 	}
 	sort.Slice(employees,
 		func(i, j int) bool {
-			return employees[i].Id < employees[j].Id
+			return employees[i].ID < employees[j].ID
 		})
 	for _, emp := range employees {
-		log.Infof("employee Id : %v  ,employee name : %v, salary : %v\n", emp.Id, emp.EmployeeName, emp.Salary)
+		log.Infof("employee ID : %v  ,employee name : %v, salary : %v\n", emp.ID, emp.EmployeeName, emp.Salary)
 	}
 }
 
-// sort string array with sort.strings method
+// SortStringArray with sort.strings method
 func SortStringArray() {
 	strArray := []string{"Satya", "Sindhu", "Alekhya", "Loukya", "Adhvith"}
 	sort.Strings(strArray)
 	log.Infof("sorted name (ascending) : %v ", strArray)
 }
 
-// sort string array without predefined methods using bubble sort
+// SortStringArrayBubbleSort without predefined methods using bubble sort
 func SortStringArrayBubbleSort() {
 	arr := []string{"Satya", "Sindhu", "Alekhya", "Loukya", "Adhvith"}
 	n := len(arr)
@@ -97,12 +97,14 @@ func SortStringArrayBubbleSort() {
 			break
 		}
 	}
-	for i, arrVal := range arr {
-		log.Infof("Sorted names %v ", i, "th index : %v \t", arrVal)
+	for _, arrVal := range arr {
+		//log.Infof("Sorted names %v ", i,"th index : %v \t", arrVal)
+		log.Infof(" array value %v ", arrVal)
+
 	}
 }
 
-// Unique string
+// UniqueStringArray for un
 func UniqueStringArray() {
 	strArray := []string{"hi", "how", "are", "doing", "i", "am", "doing", "good", "how", "are", "i", "good", "are", "am"}
 	mapStr := make(map[string]int)
@@ -112,14 +114,16 @@ func UniqueStringArray() {
 	}
 	for str, count := range mapStr {
 		if count < 2 {
-			log.Infof("******unique string******: %v ", str, ",******count %v ", count)
+			//fmt.Printf("******unique string******: %v ", str, ",******count %v ", count)
+			log.Infof(" unique str : %v, count %v ", str, count)
 		} else {
-			log.Infof("dublicate string : %v ", str, ",count : %v ", count)
+			//fmt.Printf("dublicate string : %v ", str, ",count : %v ", count)
+			log.Infof(" dublicate str : %v, count %v ", str, count)
 		}
 	}
 }
 
-// Remove dublicate characters from string
+// UniqueString Remove dublicate characters from string
 func UniqueString() {
 	str := "alekhyanmufghbfgalekhya"
 	var result string

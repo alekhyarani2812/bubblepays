@@ -14,7 +14,7 @@ func TestSortEmployeeStructByName(t *testing.T) {
 
 func TestSortEmployeeStructById(t *testing.T) {
 	t.Log("this is SortEmployeeStruct")
-	SortEmployeeStructById()
+	SortEmployeeStructByID()
 }
 
 func TestSortStringArray(t *testing.T) {

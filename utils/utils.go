@@ -25,7 +25,7 @@ func Render(w http.ResponseWriter, response models.Response) {
 	}
 }
 
-// IDStr :=  r.PathValue("id")
+//StringToInt IDStr := r.PathValue("id")
 func StringToInt(idStr string) (int, error) {
 	if idStr == "" {
 		return 0, errors.New("id should not be empty")

@@ -1,4 +1,4 @@
-package plan_price
+package planprice
 
 import (
 	"context"
@@ -27,15 +27,15 @@ func GetPlanPrice(ctx context.Context) ([]models.PlanPrice, error) {
 	return planPrice, nil
 }
 
-func GetPlanPriceById(ctx context.Context, pkId int) (*models.PlanPrice, error) {
-	log.Infof("this is GetPlanPriceById repo")
+func GetPlanPriceByID(ctx context.Context, pkID int) (*models.PlanPrice, error) {
+	log.Infof("this is GetPlanPriceByID repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Errorft(ctx, "error in db connection %v ", err)
 		return nil, err
 	}
 	var planPrice models.PlanPrice
-	if err := dbConnection.Where("id = ?", pkId).First(&planPrice).Error; err != nil {
+	if err := dbConnection.Where("id = ?", pkID).First(&planPrice).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			log.Info("plan not found")
 		} else {
@@ -62,13 +62,13 @@ func SavePlanPrice(ctx context.Context, planPriceData *models.PlanPrice) (*model
 	return planPriceData, nil
 }
 
-func UpdatePlanPrice(ctx context.Context, pkId int, planPriceRecord *models.PlanPrice) (*models.PlanPrice, error) {
+func UpdatePlanPrice(ctx context.Context, pkID int, planPriceRecord *models.PlanPrice) (*models.PlanPrice, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Errorft(ctx, "error in db connection %v ", err)
 		return nil, err
 	}
-	gorm := dbConnection.Model(&models.PlanPrice{}).Where("id = ?", pkId).Updates(&planPriceRecord)
+	gorm := dbConnection.Model(&models.PlanPrice{}).Where("id = ?", pkID).Updates(&planPriceRecord)
 	if gorm != nil && gorm.Error != nil {
 		log.Infof("error in updating data %v ", err.Error())
 		return nil, err
@@ -78,7 +78,7 @@ func UpdatePlanPrice(ctx context.Context, pkId int, planPriceRecord *models.Plan
 	return planPriceRecord, nil
 }
 
-func DeletePlanPrice(ctx context.Context, pkId int) (int64, error) {
+func DeletePlanPrice(ctx context.Context, pkID int) (int64, error) {
 	log.Infof("this is DeletePlanPrice repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -86,7 +86,7 @@ func DeletePlanPrice(ctx context.Context, pkId int) (int64, error) {
 		return 0, err
 	}
 	var planPrice models.PlanPrice
-	gorm := dbConnection.Where("id = ?", pkId).Delete(&planPrice)
+	gorm := dbConnection.Where("id = ?", pkID).Delete(&planPrice)
 	if gorm.Error != nil && gorm != nil {
 		log.Infof("error in deleting PlanPrice data")
 		return 0, err

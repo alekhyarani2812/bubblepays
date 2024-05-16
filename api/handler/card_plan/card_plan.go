@@ -6,16 +6,11 @@ import (
 	"net/http"
 
 	bcontext "github.com/bubblepays/context"
-	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	cardplan "github.com/bubblepays/repository/card_plan"
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
 )
-
-func TestMethod() {
-	log.Info("************Hello test method*************")
-}
 
 func GetCardPlan(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
@@ -37,11 +32,11 @@ func GetCardPlan(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 }
 
-func GetCardPlanById(w http.ResponseWriter, r *http.Request) {
+func GetCardPlanByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -51,7 +46,7 @@ func GetCardPlanById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	cardPlanRecord, err := cardplan.GetCardPlanById(ctx, pkId)
+	cardPlanRecord, err := cardplan.GetCardPlanByID(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -104,7 +99,7 @@ func UpdateCardPlan(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -123,7 +118,7 @@ func UpdateCardPlan(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.Render(w, response)
 	}
-	cardPlanRecordData, err := cardplan.UpdateCardPlan(ctx, pkId, &cardPlanRecord)
+	cardPlanRecordData, err := cardplan.UpdateCardPlan(ctx, pkID, &cardPlanRecord)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -136,7 +131,7 @@ func UpdateCardPlan(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusOK,
-		Description: fmt.Sprintf("record with id %d has been updated", pkId),
+		Description: fmt.Sprintf("record with id %d has been updated", pkID),
 		Data:        cardPlanRecordData,
 	}
 	utils.Render(w, response)
@@ -146,7 +141,7 @@ func DeleteCardPlan(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -155,22 +150,22 @@ func DeleteCardPlan(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.Render(w, response)
 	}
-	rowsEffected, err := cardplan.DeleteCardPlan(ctx, pkId)
+	rowsEffected, err := cardplan.DeleteCardPlan(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Error:       err.Error(),
 			Message:     utils.Fail,
 			Status:      http.StatusBadRequest,
-			Description: fmt.Sprintf("you should err.Error()%d", pkId),
+			Description: fmt.Sprintf("you should err.Error()%d", pkID),
 		}
 		utils.Render(w, response)
 		return
 	}
-	if pkId == 0 {
+	if pkID == 0 {
 		response := models.Response{
 			Message:     utils.Fail,
 			Status:      http.StatusBadRequest,
-			Description: fmt.Sprintf("you should not enter id is : %d : ", pkId),
+			Description: fmt.Sprintf("you should not enter id is : %d : ", pkID),
 		}
 		utils.Render(w, response)
 		return
@@ -179,7 +174,7 @@ func DeleteCardPlan(w http.ResponseWriter, r *http.Request) {
 		response := models.Response{
 			Message:     utils.Fail,
 			Status:      http.StatusBadRequest,
-			Description: fmt.Sprintf(" please enter sufficient id %d : ", pkId),
+			Description: fmt.Sprintf(" please enter sufficient id %d : ", pkID),
 		}
 		utils.Render(w, response)
 		return
@@ -187,7 +182,7 @@ func DeleteCardPlan(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusOK,
-		Description: fmt.Sprintf("cardplan record with id %d has been deleted", pkId),
+		Description: fmt.Sprintf("cardplan record with id %d has been deleted", pkID),
 	}
 	utils.Render(w, response)
 }

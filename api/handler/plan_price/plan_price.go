@@ -6,10 +6,10 @@ import (
 	"net/http"
 
 	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	planprice "github.com/bubblepays/repository/plan_price"
 	"github.com/bubblepays/utils"
-	"github.com/bubblepays/log"
 	"github.com/gorilla/mux"
 )
 
@@ -34,11 +34,11 @@ func GetPlanPrice(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 }
 
-func GetPlanPriceById(w http.ResponseWriter, r *http.Request) {
+func GetPlanPriceByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -48,7 +48,7 @@ func GetPlanPriceById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	planPriceRecord, err := planprice.GetPlanPriceById(ctx, pkId)
+	planPriceRecord, err := planprice.GetPlanPriceByID(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -61,7 +61,7 @@ func GetPlanPriceById(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusOK,
-		Description: fmt.Sprintf("PlanPrice record with id %d fetched successfully ", planPriceRecord.Id),
+		Description: fmt.Sprintf("PlanPrice record with id %d fetched successfully ", planPriceRecord.ID),
 		Data:        planPriceRecord,
 	}
 	utils.Render(w, response)
@@ -93,7 +93,7 @@ func SavePlanPrice(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusOK,
-		Description: fmt.Sprintf("PlanPrice record with id %d inserted successfully ", planPriceRecord.Id),
+		Description: fmt.Sprintf("PlanPrice record with id %d inserted successfully ", planPriceRecord.ID),
 		Data:        planPriceRecord,
 	}
 	utils.Render(w, response)
@@ -102,8 +102,8 @@ func SavePlanPrice(w http.ResponseWriter, r *http.Request) {
 func UpdatePlanPrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
-	strId := vars["id"]
-	pkId, err := utils.StringToInt(strId)
+	strID := vars["id"]
+	pkID, err := utils.StringToInt(strID)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -113,7 +113,7 @@ func UpdatePlanPrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Infof("pkId : %v ", pkId)
+	log.Infof("pkID : %v ", pkID)
 	var planPrice models.PlanPrice
 	erro := json.NewDecoder(r.Body).Decode(&planPrice)
 	if erro != nil {
@@ -125,7 +125,7 @@ func UpdatePlanPrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	planPriceRecord, err := planprice.UpdatePlanPrice(ctx, pkId, &planPrice)
+	planPriceRecord, err := planprice.UpdatePlanPrice(ctx, pkID, &planPrice)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -147,7 +147,7 @@ func DeletePlanPrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)
 	idStr := varStr["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -157,8 +157,8 @@ func DeletePlanPrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Infof("pkId : %v ", pkId)
-	rowsEffected, err := planprice.DeletePlanPrice(ctx, pkId)
+	log.Infof("pkID : %v ", pkID)
+	rowsEffected, err := planprice.DeletePlanPrice(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -168,11 +168,11 @@ func DeletePlanPrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	if pkId == 0 {
+	if pkID == 0 {
 		response := models.Response{
 			Message:     utils.Fail,
 			Status:      http.StatusBadRequest,
-			Description: fmt.Sprintf("you should not enter id %d : ", pkId),
+			Description: fmt.Sprintf("you should not enter id %d : ", pkID),
 		}
 		utils.Render(w, response)
 		return
@@ -181,7 +181,7 @@ func DeletePlanPrice(w http.ResponseWriter, r *http.Request) {
 		response := models.Response{
 			Message:     utils.Fail,
 			Status:      http.StatusBadRequest,
-			Description: fmt.Sprintf(" please enter sufficient id %d : ", pkId),
+			Description: fmt.Sprintf(" please enter sufficient id %d : ", pkID),
 		}
 		utils.Render(w, response)
 		return
@@ -189,7 +189,7 @@ func DeletePlanPrice(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusOK,
-		Description: fmt.Sprintf("PlanPrice record with id %d has been deleted", pkId),
+		Description: fmt.Sprintf("PlanPrice record with id %d has been deleted", pkID),
 	}
 	utils.Render(w, response)
 }

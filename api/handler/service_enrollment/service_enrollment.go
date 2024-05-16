@@ -6,10 +6,10 @@ import (
 	"net/http"
 
 	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	serviceenrollment "github.com/bubblepays/repository/service_enrollment"
 	"github.com/bubblepays/utils"
-	"github.com/bubblepays/log"
 	"github.com/gorilla/mux"
 )
 
@@ -33,11 +33,11 @@ func GetServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 }
 
-func GetServiceEnrollmentById(w http.ResponseWriter, r *http.Request) {
+func GetServiceEnrollmentByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -47,7 +47,7 @@ func GetServiceEnrollmentById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	serviceEnrollmentRecord, err := serviceenrollment.GetServiceEnrollmentById(ctx, pkId)
+	serviceEnrollmentRecord, err := serviceenrollment.GetServiceEnrollmentByID(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -91,7 +91,7 @@ func SaveServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusOK,
-		Description: fmt.Sprintf("SE record with id: %d inserted successfully", serviceEnrollmentRecord.Id),
+		Description: fmt.Sprintf("SE record with id: %d inserted successfully", serviceEnrollmentRecord.ID),
 		Data:        serviceEnrollmentRecord,
 	}
 	utils.Render(w, response)
@@ -101,7 +101,7 @@ func UpdateServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -111,7 +111,7 @@ func UpdateServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Infof("pkId : %v ", pkId)
+	log.Infof("pkID : %v ", pkID)
 	var serviceEnrollment models.ServiceEnrollment
 	if err := json.NewDecoder(r.Body).Decode(&serviceEnrollment); err != nil {
 		response := models.Response{
@@ -122,7 +122,7 @@ func UpdateServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	serviceEnrollmentRecord, err := serviceenrollment.UpdateServiceEnrollment(ctx, pkId, serviceEnrollment)
+	serviceEnrollmentRecord, err := serviceenrollment.UpdateServiceEnrollment(ctx, pkID, serviceEnrollment)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -144,7 +144,7 @@ func DeleteServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -154,8 +154,8 @@ func DeleteServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Infof("pkId : %v ", pkId)
-	rowsEffected, err := serviceenrollment.DeleteServiceEnrollment(ctx, pkId)
+	log.Infof("pkID : %v ", pkID)
+	rowsEffected, err := serviceenrollment.DeleteServiceEnrollment(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Error:   err.Error(),
@@ -165,11 +165,11 @@ func DeleteServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	if pkId == 0 {
+	if pkID == 0 {
 		response := models.Response{
 			Message:     utils.Fail,
 			Status:      http.StatusBadRequest,
-			Description: fmt.Sprintf("you should not enter id %d : ", pkId),
+			Description: fmt.Sprintf("you should not enter id %d : ", pkID),
 		}
 		utils.Render(w, response)
 		return
@@ -178,7 +178,7 @@ func DeleteServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 		response := models.Response{
 			Message:     utils.Fail,
 			Status:      http.StatusBadRequest,
-			Description: fmt.Sprintf(" please enter sufficient id %d : ", pkId),
+			Description: fmt.Sprintf(" please enter sufficient id %d : ", pkID),
 		}
 		utils.Render(w, response)
 		return
@@ -186,7 +186,7 @@ func DeleteServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusOK,
-		Description: fmt.Sprintf("record with id %d has deleted successfully ", pkId),
+		Description: fmt.Sprintf("record with id %d has deleted successfully ", pkID),
 	}
 	utils.Render(w, response)
 }

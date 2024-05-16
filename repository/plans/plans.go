@@ -26,7 +26,7 @@ func GetPlans(ctx context.Context) ([]models.Plans, error) {
 	return plans, nil
 }
 
-func GetPlanById(ctx context.Context, id int) (*models.Plans, error) {
+func GetPlanByID(ctx context.Context, id int) (*models.Plans, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("err %v ", err)
@@ -61,27 +61,27 @@ func SavePlan(ctx context.Context, planData models.Plans) (*models.Plans, error)
 	return &planData, nil
 }
 
-// Update the plan
-func UpdatePlan(ctx context.Context, pkId int, plan *models.Plans) (int64, error) {
+//UpdatePlan Update the plan
+func UpdatePlan(ctx context.Context, pkID int, plan *models.Plans) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("err in dbConnection :****")
 		return 0, err
 	}
-	gorm := dbConnection.Model(&models.Plans{}).Where("id = ?", pkId).Updates(&plan)
+	gorm := dbConnection.Model(&models.Plans{}).Where("id = ?", pkID).Updates(&plan)
 	rowsEffected := gorm.RowsAffected
 	log.Infof("rowsEffected : %v ", rowsEffected)
 	return rowsEffected, nil
 }
 
-func DeletePlan(ctx context.Context, pkId int) (int64, error) {
+func DeletePlan(ctx context.Context, pkID int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("err in dbConnection :****")
 		return 0, err
 	}
 	var plan models.Plans
-	result := dbConnection.Where("id = ?", pkId).Delete(&plan)
+	result := dbConnection.Where("id = ?", pkID).Delete(&plan)
 	if result.Error != nil {
 		log.Info("***********failed to delete plan")
 		return 0, result.Error

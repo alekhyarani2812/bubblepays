@@ -33,11 +33,11 @@ func GetPrices(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 }
 
-func GetPricesById(w http.ResponseWriter, r *http.Request) {
+func GetPricesByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -47,7 +47,7 @@ func GetPricesById(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	priceReord, err := prices.GetPricesById(ctx, pkId)
+	priceReord, err := prices.GetPricesByID(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -91,7 +91,7 @@ func SavePrice(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusCreated,
-		Description: fmt.Sprintf("%d record inserted successfully", priceRecord.Id),
+		Description: fmt.Sprintf("%d record inserted successfully", priceRecord.ID),
 		Data:        priceRecord,
 	}
 	utils.Render(w, response)
@@ -101,7 +101,7 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -111,7 +111,7 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Infoft(ctx, "pkId : %v ", pkId)
+	log.Infoft(ctx, "pkID : %v ", pkID)
 	var price models.Price
 	err1 := json.NewDecoder(r.Body).Decode(&price)
 	if err1 != nil {
@@ -123,7 +123,7 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	updatedRecord, err := prices.UpdatePrice(ctx, pkId, &price)
+	updatedRecord, err := prices.UpdatePrice(ctx, pkID, &price)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -136,7 +136,7 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 	response := models.Response{
 		Message:     utils.Success,
 		Status:      http.StatusOK,
-		Description: fmt.Sprintf("%d record updated successfully", pkId),
+		Description: fmt.Sprintf("%d record updated successfully", pkID),
 		Data:        updatedRecord,
 	}
 	utils.Render(w, response)
@@ -146,7 +146,7 @@ func DeletePrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	pkId, err := utils.StringToInt(idStr)
+	pkID, err := utils.StringToInt(idStr)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,
@@ -156,8 +156,8 @@ func DeletePrice(w http.ResponseWriter, r *http.Request) {
 		utils.Render(w, response)
 		return
 	}
-	log.Infoft(ctx, "pkId : %v ", pkId)
-	rowsEffected, err := prices.DeletePrice(ctx, pkId)
+	log.Infoft(ctx, "pkID : %v ", pkID)
+	rowsEffected, err := prices.DeletePrice(ctx, pkID)
 	if err != nil {
 		response := models.Response{
 			Message: utils.Fail,

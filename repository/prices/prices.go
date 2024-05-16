@@ -26,15 +26,15 @@ func GetPrices(ctx context.Context) ([]models.Price, error) {
 	return prices, nil
 }
 
-func GetPricesById(ctx context.Context, pkId int) (*models.Price, error) {
-	log.Infof("This is GetPricesById Repo")
+func GetPricesByID(ctx context.Context, pkID int) (*models.Price, error) {
+	log.Infof("This is GetPricesByID Repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("err %v ", err)
 		return nil, err
 	}
 	var price models.Price
-	if err := dbConnection.Where("id = ?", pkId).First(&price).Error; err != nil {
+	if err := dbConnection.Where("id = ?", pkID).First(&price).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			log.Info("plan not found")
 		} else {
@@ -62,13 +62,13 @@ func SavePrice(ctx context.Context, price models.Price) (*models.Price, error) {
 	return &price, nil
 }
 
-func UpdatePrice(ctx context.Context, pkId int, prices *models.Price) (*models.Price, error) {
+func UpdatePrice(ctx context.Context, pkID int, prices *models.Price) (*models.Price, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("error in db connecton  ")
 		return nil, err
 	}
-	gorm := dbConnection.Model(&models.Price{}).Where("id = ?", pkId).Updates(&prices)
+	gorm := dbConnection.Model(&models.Price{}).Where("id = ?", pkID).Updates(&prices)
 	if gorm != nil && gorm.Error != nil {
 		log.Infof("error in updating price data")
 		return nil, err
@@ -77,7 +77,7 @@ func UpdatePrice(ctx context.Context, pkId int, prices *models.Price) (*models.P
 	return prices, nil
 }
 
-func DeletePrice(ctx context.Context, pkId int) (int64, error) {
+func DeletePrice(ctx context.Context, pkID int) (int64, error) {
 	log.Infof("This is DeletePrice Repo")
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -85,7 +85,7 @@ func DeletePrice(ctx context.Context, pkId int) (int64, error) {
 		return 0, err
 	}
 	var price models.Price
-	ormDb := dbConnection.Where("id=?", pkId).Delete(&price)
+	ormDb := dbConnection.Where("id=?", pkID).Delete(&price)
 	rowsEffected := ormDb.RowsAffected
 	return rowsEffected, nil
 }

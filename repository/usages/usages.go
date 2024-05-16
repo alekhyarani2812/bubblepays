@@ -8,8 +8,8 @@ import (
 
 func SaveUsage(usageData models.Usages, dbConnection *gorm.DB) {
 	var usages []models.Usages
-	res := dbConnection.Where("card_id = ?", usageData.CardId)
-	res.Where("service_id = ?", usageData.ServiceId)
+	res := dbConnection.Where("card_id = ?", usageData.CardID)
+	res.Where("service_id = ?", usageData.ServiceID)
 	res.Where("monthnum = ?", usageData.Monthnum)
 	res.Find(&usages)
 

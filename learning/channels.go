@@ -26,7 +26,7 @@ func CheckLink(link string) {
 	fmt.Println(link, " is up")
 }
 
-// with go routines
+//ChanneleLinksGo with go routines
 func ChanneleLinksGo() {
 	links := []string{
 		"http://google.com",
@@ -85,7 +85,7 @@ func CheckLinkGor(link string, c chan string) {
 	c <- "yeh its up"
 }
 
-// repeating go routines
+//ChanneleLinksGoRepeat repeating go routines
 func ChanneleLinksGoRepeat() {
 	links := []string{
 		"http://google.com",

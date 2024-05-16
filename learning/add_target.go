@@ -2,7 +2,7 @@ package learning
 
 import "github.com/bubblepays/log"
 
-// nums = [10, 1, 11, -1], target = 10
+//AddTwoIntTarget nums = [10, 1, 11, -1], target = 10
 func AddTwoIntTarget(nums []int, target int) []int {
 	numIndices := make(map[int]int)
 	for i, num := range nums {

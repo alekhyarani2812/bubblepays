@@ -64,35 +64,35 @@ func main() {
 
 	//CardPlan
 	router.HandleFunc("/api/getcardplan", cardplanApi.GetCardPlan).Methods("GET")
-	router.HandleFunc("/api/getcardplanbyid/{id}", cardplanApi.GetCardPlanById).Methods("GET")
+	router.HandleFunc("/api/getcardplanbyid/{id}", cardplanApi.GetCardPlanByID).Methods("GET")
 	router.HandleFunc("/api/savecardplan", cardplanApi.SaveCardPlan).Methods("POST")
 	router.HandleFunc("/api/updatecardplan/{id}", cardplanApi.UpdateCardPlan).Methods("PUT")
 	router.HandleFunc("/api/deletecardplan/{id}", cardplanApi.DeleteCardPlan).Methods("DELETE")
 
 	//plan_price
 	router.HandleFunc("/api/getplanprice", planpriceApi.GetPlanPrice).Methods("GET")
-	router.HandleFunc("/api/getplanpricebyid/{id}", planpriceApi.GetPlanPriceById).Methods("GET")
+	router.HandleFunc("/api/getplanpricebyid/{id}", planpriceApi.GetPlanPriceByID).Methods("GET")
 	router.HandleFunc("/api/saveplanprice", planpriceApi.SavePlanPrice).Methods("POST")
 	router.HandleFunc("/api/updateplanpricebyid/{id}", planpriceApi.UpdatePlanPrice).Methods("PUT")
 	router.HandleFunc("/api/deleteplanpricebyid/{id}", planpriceApi.DeletePlanPrice).Methods("DELETE")
 
 	//ServiceEnrollment
 	router.HandleFunc("/api/getserviceenrollment", serviceenrollmentApi.GetServiceEnrollment).Methods("GET")
-	router.HandleFunc("/api/getserviceenrollmentbyid/{id}", serviceenrollmentApi.GetServiceEnrollmentById).Methods("GET")
+	router.HandleFunc("/api/getserviceenrollmentbyid/{id}", serviceenrollmentApi.GetServiceEnrollmentByID).Methods("GET")
 	router.HandleFunc("/api/saveserviceenrollment", serviceenrollmentApi.SaveServiceEnrollment).Methods("POST")
 	router.HandleFunc("/api/updateserviceenrollment/{id}", serviceenrollmentApi.UpdateServiceEnrollment).Methods("PUT")
 	router.HandleFunc("/api/deleteserviceenrollment/{id}", serviceenrollmentApi.DeleteServiceEnrollment).Methods("DELETE")
 
 	//prices
 	router.HandleFunc("/api/getprices", priceApi.GetPrices).Methods("GET")
-	router.HandleFunc("/api/getpricesbyid/{id}", priceApi.GetPricesById).Methods("GET")
+	router.HandleFunc("/api/getpricesbyid/{id}", priceApi.GetPricesByID).Methods("GET")
 	router.HandleFunc("/api/saveprice", priceApi.SavePrice).Methods("POST")
 	router.HandleFunc("/api/updateprice/{id}", priceApi.UpdatePrice).Methods("PUT")
 	router.HandleFunc("/api/deleteprice/{id}", priceApi.DeletePrice).Methods("DELETE")
 
 	//Plans
 	router.HandleFunc("/api/getplans", planApi.GetPlans).Methods("GET")
-	router.HandleFunc("/api/getplanbyid/{id}", planApi.GetPlanById).Methods("GET")
+	router.HandleFunc("/api/getplanbyid/{id}", planApi.GetPlanByID).Methods("GET")
 	router.HandleFunc("/api/saveplan", planApi.SavePlan).Methods("POST")
 	router.HandleFunc("/api/updateplan/{id}", planApi.UpdatePlan).Methods("PUT")
 	router.HandleFunc("/api/deleteplan/{id}", planApi.DeletePlan).Methods("DELETE")
@@ -100,16 +100,16 @@ func main() {
 	//Service
 	router.HandleFunc("/api/getservices", serviceApi.GetServices).Methods("GET")
 	router.HandleFunc("/api/saveservice", serviceApi.SaveService).Methods("POST")
-	router.HandleFunc("/api/deleteservice/{id}", serviceApi.DeleteServiceById).Methods("DELETE")
+	router.HandleFunc("/api/deleteservice/{id}", serviceApi.DeleteServiceByID).Methods("DELETE")
 
 	//consumption
 	router.HandleFunc("/api/consumptions", consumptionApi.GetConsumptions).Methods("GET")
-	router.HandleFunc("/api/consumptions/{id}", consumptionApi.GetConsumptionById).Methods("GET")
+	router.HandleFunc("/api/consumptions/{id}", consumptionApi.GetConsumptionByID).Methods("GET")
 	router.HandleFunc("/api/saveconsumption", consumptionApi.SavesConsumption).Methods("POST")
 	router.HandleFunc("/api/deleteconsumption/{id}", consumptionApi.DeleteConsumption).Methods("DELETE")
 
 	//Employee api's
-	router.HandleFunc("/api/getemployees", employeeApi.GetEmployeesJsonData).Methods("GET")
+	router.HandleFunc("/api/getemployees", employeeApi.GetEmployeesJSONData).Methods("GET")
 	router.HandleFunc("/api/getemployeebyid/{id}", employeeApi.GetEmployeeByID).Methods("GET")
 	router.HandleFunc("/api/employee", employeeApi.SaveEmployee).Methods("POST")
 	router.HandleFunc("/api/deleteEmployee/{id}", employeeApi.DeleteEmpHandler).Methods("DELETE")
@@ -119,7 +119,7 @@ func main() {
 	router.HandleFunc("/api/hello", func(w http.ResponseWriter, r *http.Request) {
 		// Get the context from the request
 		ctx := r.Context()
-		w.Write([]byte("Hello transactionId: " + bcontext.GetTransactionID(ctx)))
+		w.Write([]byte("Hello transactionID: " + bcontext.GetTransactionID(ctx)))
 	}).Methods("GET")
 
 	// Swagger UI route

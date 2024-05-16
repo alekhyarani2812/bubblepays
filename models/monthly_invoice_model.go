@@ -1,9 +1,9 @@
 package models
 
-// swagger:response MonthlyInvoice
+//MonthlyInvoice swagger:response MonthlyInvoice
 type MonthlyInvoice struct {
-	Id          int     `json:"-"`
-	CardId      string  `json:"card_id"`
+	ID          int     `json:"-"`
+	CardID      string  `json:"card_id"`
 	Monthnum    string  `json:"monthnum"`
 	Duration    float64 `json:"-"`
 	Price       float64 `json:"-"`

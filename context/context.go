@@ -9,14 +9,16 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
-type ContextKey string
+type contextKey string
 const (
-	TransactionIDKey ContextKey = "transaction_id"
+	//TransactionIDKey is used for represent http request for tracing an issue
+	TransactionIDKey contextKey = "transaction_id"
 )
 
-type DBconnection string
+type dbConnection string
 const (
-	DBconnectionKey DBconnection = "DBconnection"
+	//DBconnectionKey used for getting db connection
+	DBconnectionKey dbConnection = "dbConnection"
 )
 func GenerateTransactionID() string {
 	// Generate a UUID for the transaction ID

@@ -9,7 +9,7 @@ import (
 	"github.com/bubblepays/models"
 )
 
-// Read services
+//GetServices for Read all the services
 func GetServices(ctx context.Context) ([]models.Services, error) {
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
@@ -41,14 +41,14 @@ func SaveService(ctx context.Context, service models.Services) (*models.Services
 	return &service, nil
 }
 
-func DeleteServiceById(ctx context.Context, pkId int) (int64, error) {
+func DeleteServiceByID(ctx context.Context, pkID int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("error in db connecton  ")
 		return 0, err
 	}
 	var service models.Services
-	ormDb := dbConnection.Where("id=?", pkId).Delete(&service)
+	ormDb := dbConnection.Where("id=?", pkID).Delete(&service)
 	rowsEffected := ormDb.RowsAffected
 	return rowsEffected, nil
 }
