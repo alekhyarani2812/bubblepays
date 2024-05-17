@@ -8,4 +8,12 @@ pipeline {
             }
         }
     }
+    stage('Build') {
+            steps {
+                echo 'build go application'
+                //sh 'go build -o bubblepays'
+                make build
+         }
+    }
 }
+
