@@ -7,13 +7,13 @@ pipeline {
                 echo 'Hello, World!'
             }
         }
-    }
-    stage('Build') {
+        stage('Build') {
             steps {
                 echo 'build go application'
                 //sh 'go build -o bubblepays'
-                make build
-         }
+                sh 'make build'
+            }
+        }
     }
 }
 
