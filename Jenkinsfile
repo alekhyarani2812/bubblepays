@@ -12,8 +12,7 @@ pipeline {
                 echo 'build go application'
                 //sh 'go build -o bubblepays'
                 sh 'make build'
-            }
-        }
+         }
+    }
     }
 }
-
