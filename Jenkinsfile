@@ -5,6 +5,8 @@ pipeline {
         stage('Hello') {
             steps {
                 echo 'Hello, World!'
+                echo 'Thius is Jenkins 1st build'
+                echo '**************************'
             }
         }
         stage('Build') {
