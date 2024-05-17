@@ -12,6 +12,17 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func LoadRoutes(router *mux.Router){
+	router.HandleFunc("/api/hello", Hello).Methods("GET")
+	router.HandleFunc("/api/hellomessage", GetMessageHandler).Methods("GET")
+	//Employee api's
+	router.HandleFunc("/api/getemployees", GetEmployeesJSONData).Methods("GET")
+	router.HandleFunc("/api/getemployeebyid/{id}", GetEmployeeByID).Methods("GET")
+	router.HandleFunc("/api/employee", SaveEmployee).Methods("POST")
+	router.HandleFunc("/api/deleteEmployee/{id}", DeleteEmpHandler).Methods("DELETE")
+	router.HandleFunc("/api/updateEmployee/{id}", UpdateEmpHandler).Methods("PUT")
+}
+
 func GetEmployees(w http.ResponseWriter) ([]models.Employee, error) {
 	var empArray []models.Employee
 	db := database.GetDbConnection()
@@ -142,7 +153,7 @@ func SaveEmployee(w http.ResponseWriter, r *http.Request) {
 		Status:      http.StatusCreated,
 	}
 	utils.Render(w, successResponse)
-	log.Infof(" Employee %v", employee.Name, " record is inserted")
+	log.Infof(" Employee %v record is inserted", employee.Name)
 }
 
 func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {

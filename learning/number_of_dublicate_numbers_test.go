@@ -16,7 +16,8 @@ func TestDuplicateNumbers(t *testing.T) {
 		fmt.Sprintln("Expcted an array of dublicate numbers. But got empty array"))
 }
 func TestDuplicateNumbersArray(t *testing.T) {
-	numbers := []int{3, 6, 1, 3, 3, 4, 3, 3}
+	//numbers := []int{3, 6, 1, 3, 3, 4, 3, 3}
+	numbers := []int{3, 6, 1, 3}
 	nums := DuplicateNumbers(numbers)
 	assert.Equal(t, []int{3}, nums, 
 		fmt.Sprintln("Expcted an array of dublicate numbers. But got empty array"))

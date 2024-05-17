@@ -8,8 +8,13 @@ import (
 	"github.com/bubblepays/models"
 	monthlyinvoice "github.com/bubblepays/repository/monthly_invoice"
 	"github.com/bubblepays/utils"
+	"github.com/gorilla/mux"
 )
 
+func LoadRoutes(router *mux.Router) {
+	//monthly invoice
+	router.HandleFunc("/api/getmonthlyinvoice", GetMonthlyInvoice).Methods("GET")
+}
 // GetMonthlyInvoice godoc
 // @Summary Get a list of MonthlyInvoices
 // @Description Get a list of all MonthlyInvoice

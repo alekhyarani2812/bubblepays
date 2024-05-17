@@ -26,9 +26,9 @@ func AddTwoIntegersArray(nums []int, target int) (int, int) {
 	for i, num := range nums {
 		// Calculate the complement needed to reach the target
 		complement := target - num
-		log.Infof("num  : %v, complement: %v ", num, complement)
+		log.Infof("num  : %v,complement: %v ",num,complement)
 		if complement == nums[i] {
-
+			log.Infof(" nums[i] value : %v",nums[i])
 		}
 	}
 	return i, i + 1

@@ -13,6 +13,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func LoadRoutes(router *mux.Router){
+	router.HandleFunc("/api/getplanprice", GetPlanPrice).Methods("GET")
+	router.HandleFunc("/api/getplanpricebyid/{id}", GetPlanPriceByID).Methods("GET")
+	router.HandleFunc("/api/saveplanprice", SavePlanPrice).Methods("POST")
+	router.HandleFunc("/api/updateplanpricebyid/{id}", UpdatePlanPrice).Methods("PUT")
+	router.HandleFunc("/api/deleteplanpricebyid/{id}", DeletePlanPrice).Methods("DELETE")
+}
 func GetPlanPrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	planpriceRecords, err := planprice.GetPlanPrice(ctx)

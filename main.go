@@ -34,20 +34,18 @@ func middleware(next http.Handler) http.Handler {
 		TransactionsIDKey := bcontext.TransactionIDKey
 		// Create a new context with the transaction ID
 		ctx := context.WithValue(r.Context(), TransactionsIDKey, transactionID)
-		//ctx.Value(dbConnection)
-		ctx = context.WithValue(r.Context(), bcontext.DBconnectionKey, dbConnection)
+		//set dbconnection in context
+		ctx = context.WithValue(ctx, bcontext.DBconnectionKey, dbConnection)
 		// Serve the request with the new context
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
-
 // @title Bubblepays API
 // @version 1.0
 // @description This is a sample API
 // @host localhost:8080
 // @BasePath /
 func main() {
-	//utils.LoggerMessages()
 	dbConnection, dbErr := database.GetORMDbConnection()
 	if dbErr != nil {
 		log.Errorf("err %v ", dbErr.Error())
@@ -57,71 +55,8 @@ func main() {
 	router := mux.NewRouter()
 	//add middleware
 	router.Use(middleware)
-	router.HandleFunc("/api/hellomessage", employeeApi.GetMessageHandler).Methods("GET")
-
-	//monthly invoice
-	router.HandleFunc("/api/getmonthlyinvoice", monthlyinvoiceApi.GetMonthlyInvoice).Methods("GET")
-
-	//CardPlan
-	router.HandleFunc("/api/getcardplan", cardplanApi.GetCardPlan).Methods("GET")
-	router.HandleFunc("/api/getcardplanbyid/{id}", cardplanApi.GetCardPlanByID).Methods("GET")
-	router.HandleFunc("/api/savecardplan", cardplanApi.SaveCardPlan).Methods("POST")
-	router.HandleFunc("/api/updatecardplan/{id}", cardplanApi.UpdateCardPlan).Methods("PUT")
-	router.HandleFunc("/api/deletecardplan/{id}", cardplanApi.DeleteCardPlan).Methods("DELETE")
-
-	//plan_price
-	router.HandleFunc("/api/getplanprice", planpriceApi.GetPlanPrice).Methods("GET")
-	router.HandleFunc("/api/getplanpricebyid/{id}", planpriceApi.GetPlanPriceByID).Methods("GET")
-	router.HandleFunc("/api/saveplanprice", planpriceApi.SavePlanPrice).Methods("POST")
-	router.HandleFunc("/api/updateplanpricebyid/{id}", planpriceApi.UpdatePlanPrice).Methods("PUT")
-	router.HandleFunc("/api/deleteplanpricebyid/{id}", planpriceApi.DeletePlanPrice).Methods("DELETE")
-
-	//ServiceEnrollment
-	router.HandleFunc("/api/getserviceenrollment", serviceenrollmentApi.GetServiceEnrollment).Methods("GET")
-	router.HandleFunc("/api/getserviceenrollmentbyid/{id}", serviceenrollmentApi.GetServiceEnrollmentByID).Methods("GET")
-	router.HandleFunc("/api/saveserviceenrollment", serviceenrollmentApi.SaveServiceEnrollment).Methods("POST")
-	router.HandleFunc("/api/updateserviceenrollment/{id}", serviceenrollmentApi.UpdateServiceEnrollment).Methods("PUT")
-	router.HandleFunc("/api/deleteserviceenrollment/{id}", serviceenrollmentApi.DeleteServiceEnrollment).Methods("DELETE")
-
-	//prices
-	router.HandleFunc("/api/getprices", priceApi.GetPrices).Methods("GET")
-	router.HandleFunc("/api/getpricesbyid/{id}", priceApi.GetPricesByID).Methods("GET")
-	router.HandleFunc("/api/saveprice", priceApi.SavePrice).Methods("POST")
-	router.HandleFunc("/api/updateprice/{id}", priceApi.UpdatePrice).Methods("PUT")
-	router.HandleFunc("/api/deleteprice/{id}", priceApi.DeletePrice).Methods("DELETE")
-
-	//Plans
-	router.HandleFunc("/api/getplans", planApi.GetPlans).Methods("GET")
-	router.HandleFunc("/api/getplanbyid/{id}", planApi.GetPlanByID).Methods("GET")
-	router.HandleFunc("/api/saveplan", planApi.SavePlan).Methods("POST")
-	router.HandleFunc("/api/updateplan/{id}", planApi.UpdatePlan).Methods("PUT")
-	router.HandleFunc("/api/deleteplan/{id}", planApi.DeletePlan).Methods("DELETE")
-
-	//Service
-	router.HandleFunc("/api/getservices", serviceApi.GetServices).Methods("GET")
-	router.HandleFunc("/api/saveservice", serviceApi.SaveService).Methods("POST")
-	router.HandleFunc("/api/deleteservice/{id}", serviceApi.DeleteServiceByID).Methods("DELETE")
-
-	//consumption
-	router.HandleFunc("/api/consumptions", consumptionApi.GetConsumptions).Methods("GET")
-	router.HandleFunc("/api/consumptions/{id}", consumptionApi.GetConsumptionByID).Methods("GET")
-	router.HandleFunc("/api/saveconsumption", consumptionApi.SavesConsumption).Methods("POST")
-	router.HandleFunc("/api/deleteconsumption/{id}", consumptionApi.DeleteConsumption).Methods("DELETE")
-
-	//Employee api's
-	router.HandleFunc("/api/getemployees", employeeApi.GetEmployeesJSONData).Methods("GET")
-	router.HandleFunc("/api/getemployeebyid/{id}", employeeApi.GetEmployeeByID).Methods("GET")
-	router.HandleFunc("/api/employee", employeeApi.SaveEmployee).Methods("POST")
-	router.HandleFunc("/api/deleteEmployee/{id}", employeeApi.DeleteEmpHandler).Methods("DELETE")
-	router.HandleFunc("/api/updateEmployee/{id}", employeeApi.UpdateEmpHandler).Methods("PUT")
-
+	loadAllRoutes(router)
 	//jobs.RunMachineJob()
-	router.HandleFunc("/api/hello", func(w http.ResponseWriter, r *http.Request) {
-		// Get the context from the request
-		ctx := r.Context()
-		w.Write([]byte("Hello transactionID: " + bcontext.GetTransactionID(ctx)))
-	}).Methods("GET")
-
 	// Swagger UI route
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"), // The Swagger JSON endpoint
@@ -134,12 +69,14 @@ func main() {
 		log.Errorf(" ERROR ListenAndServe err: %v", err)
 	}
 }
-func handler(w http.ResponseWriter, r *http.Request) {
-	log.Info("Handler executing")
-	w.Write([]byte("Hello, World!"))
-}
-
-func handler2(w http.ResponseWriter, r *http.Request) {
-	log.Info("Handler executing2")
-	w.Write([]byte("Hello, World2!"))
+func loadAllRoutes(router *mux.Router){
+	consumptionApi.LoadRoutes(router)
+	monthlyinvoiceApi.LoadRoutes(router)
+	cardplanApi.LoadRoutes(router)
+	planpriceApi.LoadRoutes(router)
+	planApi.LoadRoutes(router)
+	priceApi.LoadRoutes(router)
+	serviceApi.LoadRoutes(router)
+	serviceenrollmentApi.LoadRoutes(router)
+	employeeApi.LoadRoutes(router)
 }

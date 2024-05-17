@@ -12,6 +12,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func LoadRoutes(router *mux.Router){
+	router.HandleFunc("/api/getcardplan", GetCardPlan).Methods("GET")
+	router.HandleFunc("/api/getcardplanbyid/{id}", GetCardPlanByID).Methods("GET")
+	router.HandleFunc("/api/savecardplan", SaveCardPlan).Methods("POST")
+	router.HandleFunc("/api/updatecardplan/{id}", UpdateCardPlan).Methods("PUT")
+	router.HandleFunc("/api/deletecardplan/{id}", DeleteCardPlan).Methods("DELETE")
+}
+
 func GetCardPlan(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	cardPlanRecords, err := cardplan.GetCardPlan(ctx)

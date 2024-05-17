@@ -13,6 +13,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func LoadRoutes(router *mux.Router){
+	//ServiceEnrollment
+	router.HandleFunc("/api/getserviceenrollment", GetServiceEnrollment).Methods("GET")
+	router.HandleFunc("/api/getserviceenrollmentbyid/{id}", GetServiceEnrollmentByID).Methods("GET")
+	router.HandleFunc("/api/saveserviceenrollment", SaveServiceEnrollment).Methods("POST")
+	router.HandleFunc("/api/updateserviceenrollment/{id}", UpdateServiceEnrollment).Methods("PUT")
+	router.HandleFunc("/api/deleteserviceenrollment/{id}", DeleteServiceEnrollment).Methods("DELETE")
+}
 func GetServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	serviceEnrollRecords, err := serviceenrollment.GetServiceEnrollment(ctx)

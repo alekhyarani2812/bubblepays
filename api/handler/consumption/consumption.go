@@ -13,6 +13,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func LoadRoutes(router *mux.Router){
+	router.HandleFunc("/api/consumptions", GetConsumptions).Methods("GET")
+	router.HandleFunc("/api/consumptions/{id}", GetConsumptionByID).Methods("GET")
+	router.HandleFunc("/api/saveconsumption", SavesConsumption).Methods("POST")
+	router.HandleFunc("/api/deleteconsumption/{id}", DeleteConsumption).Methods("DELETE")
+}
 func GetConsumptions(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	consumptionList, err := consumption.GetConsumptions(ctx)
