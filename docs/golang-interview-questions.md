@@ -1,3 +1,7 @@
+***Important*** 
+
+https://www.turing.com/interview-questions/golang
+
 ***Interview Questions for a Go Developer. Part 1: Fundamentals***
 
 https://medium.com/@alsgladkikh/interview-questions-for-a-go-developer-part-1-fundamentals-c7b2cc4177b9
