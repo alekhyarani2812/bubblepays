@@ -50,7 +50,7 @@ func SaveServiceEnrollment(ctx context.Context, serviceEnrollment models.Service
 	}
 	gorm := dbConnection.Create(&serviceEnrollment)
 	if gorm.Error != nil {
-		log.Infof("gorm.Error :   error in inserting service enrollment")
+		log.Errorf("gorm.Error :   error in inserting service enrollment error : %v ", err.Error())
 	}
 	return &serviceEnrollment, nil
 }
@@ -58,7 +58,7 @@ func SaveServiceEnrollment(ctx context.Context, serviceEnrollment models.Service
 func UpdateServiceEnrollment(ctx context.Context, pkID int, seviceEnrRecord models.ServiceEnrollment) (*models.ServiceEnrollment, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
-		log.Infof("error to connect database", err.Error())
+		log.Errorf("error to connect database %v ", err.Error())
 		return nil, err
 	}
 	gorm := dbConnection.Model(&models.ServiceEnrollment{}).Where("id = ?", pkID).Updates(&seviceEnrRecord)
@@ -67,7 +67,7 @@ func UpdateServiceEnrollment(ctx context.Context, pkID int, seviceEnrRecord mode
 		return nil, err
 	}
 	gorm.Find(&seviceEnrRecord)
-	log.Infof("seviceEnrRecord :", seviceEnrRecord)
+	log.Infof("seviceEnrRecord : %v ", seviceEnrRecord)
 	return &seviceEnrRecord, nil
 }
 

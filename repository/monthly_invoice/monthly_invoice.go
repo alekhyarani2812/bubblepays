@@ -23,7 +23,7 @@ func GetMonthlyInvoice(ctx context.Context, monthNumQparam string) ([]*models.Mo
 		Joins("JOIN plan_price ON card_plan.plan_id = plan_price.plan_id").
 		Joins("JOIN plans ON plan_price.plan_id = plans.id").
 		Joins("JOIN price ON plan_price.price_id = price.id").
-		Select("usages.card_id as card_id, usages.monthnum as monthnum, usages.duration as duration, price.price as price").
+		Select("usages.card_id as card_id, usages.service_id as service_id, usages.monthnum as monthnum, usages.duration as duration, price.price as price").
 		Where("usages.monthnum = ?", monthNumQparam).
 		Find(&usages).Find(&monthlyInvoices)
 	if gorm.Error != nil && gorm != nil {

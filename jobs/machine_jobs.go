@@ -16,16 +16,16 @@ func RunMachineJob(dbConnection *gorm.DB) {
 	ctx := bcontext.WithTransactionID(bctx)
 	ctx = bcontext.WithDBConnection(ctx)
 	// Execute the HTTP request every 10 seconds //new cron job
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 
 	for {
 		select {
 		case <-ticker.C:
-			log.Infot(ctx, "this fuction is executing in every 10 seconds")
-			consumption.ConsumeDeviceData(ctx)
+			log.Infot(ctx, "this fuction is executing in every 30 seconds")
 			consumption.PickDeviceData()
-			UsageData(ctx, dbConnection)
+			consumption.ConsumeDeviceData(ctx)
+			//UsageData(ctx, dbConnection)
 		}
 	}
 }
