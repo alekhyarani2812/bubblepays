@@ -14,7 +14,7 @@ func SaveUsage(usageData models.Usages, dbConnection *gorm.DB) {
 	res.Find(&usages)
 
 	if res.Error != nil {
-		log.Infof("error in this block............", res.Error)
+		log.Infof("error in this block............ %v ", res.Error)
 		return
 	}
 	if len(usages) > 0 {

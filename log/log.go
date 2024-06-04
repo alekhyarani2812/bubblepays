@@ -11,11 +11,9 @@ import (
 )
 
 var logger *logrus.Logger
-
 func init() {
 	logger = NewLogger()
 }
-
 //NewLogger to Create a new instance of the logger
 func NewLogger() *logrus.Logger {
 	logger := logrus.New()
@@ -27,7 +25,6 @@ func NewLogger() *logrus.Logger {
 	})
 	return logger
 }
-
 func getLogFields(ctx context.Context) logrus.Fields {
 	transactionID := ""
 	if ctx != nil {
@@ -43,7 +40,6 @@ func getLogFields(ctx context.Context) logrus.Fields {
 		//get function name
 		functionName = runtime.FuncForPC(pc).Name()
 	}
-
 	return logrus.Fields{
 		"fileName":      file,
 		"functionName":  functionName,
@@ -91,7 +87,6 @@ func Debugft(ctx context.Context, format string, args ...interface{}) {
 	logger.SetLevel(logrus.DebugLevel)
 	logger.WithFields(getLogFields(ctx)).Debugf(format, args...)
 }
-
 //Info for info message
 func Info(message interface{}) {
 	logger.SetLevel(logrus.InfoLevel)

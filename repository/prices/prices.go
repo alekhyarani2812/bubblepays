@@ -54,11 +54,11 @@ func SavePrice(ctx context.Context, price models.Price) (*models.Price, error) {
 	}
 	ormDb := dbConnection.Create(&price)
 	if ormDb.Error != nil {
-		log.Infof("Error in inserting data in price", ormDb.Error)
+		log.Infof("Error in inserting data in price %v ", ormDb.Error)
 		return nil, ormDb.Error
 	}
 	rowsEffected := ormDb.RowsAffected
-	log.Infof(" %d rows effected : %v ", rowsEffected)
+	log.Infof("Number of rows effected are: %v ", rowsEffected)
 	return &price, nil
 }
 

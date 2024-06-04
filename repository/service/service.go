@@ -26,7 +26,7 @@ func GetServices(ctx context.Context) ([]models.Services, error) {
 }
 
 func SaveService(ctx context.Context, service models.Services) (*models.Services, error) {
-	log.Infof("serviceData in service repo", service)
+	log.Infof("serviceData in service repo %v ", service)
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
 		log.Infof("err in dbConnection :****")

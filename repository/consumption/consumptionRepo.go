@@ -5,7 +5,6 @@ import (
 	"encoding/csv"
 
 	"os"
-	"path/filepath"
 	"sync"
 	"time"
 
@@ -49,7 +48,7 @@ func ConsumeDeviceData(ctx context.Context) {
 			}
 			endDate, err := utils.StringToTime(record[4])
 			if err != nil {
-				log.Infof("Got an ERROR at enddate: %v ", err.Error())
+				log.Errorft(ctx, "Got an ERROR at enddate: %v ", err.Error())
 				continue
 			}
 			createdDate := time.Now()
@@ -66,29 +65,27 @@ func ConsumeDeviceData(ctx context.Context) {
 			dbConnection, err := bcontext.GetDBConnection(ctx)
 			if err != nil {
 				log.Errorft(ctx, "error in db connection %v ", err)
-				return 
+				return
 			}
 			var serviceenrollment models.ServiceEnrollment
 			sefRef := &serviceenrollment
-			gorm := dbConnection.Where("card_id=?",consumptionData.CardID).
-			Where("service_id=?",consumptionData.ServiceID).
-			Find(&serviceenrollment)
+			gorm := dbConnection.Where("card_id=?", consumptionData.CardID).
+				Where("service_id=?", consumptionData.ServiceID).
+				Find(&serviceenrollment)
 			if gorm != nil && gorm.Error != nil {
-				log.Errorft(ctx, "&&&&&&&&&&&&&error while getting user data")
-				return 
+				log.Errorft(ctx, "error while getting user data")
+				return
 			}
-			//if sefRef == nil || 
+			//if sefRef == nil ||
 			if sefRef.CardID == "" || sefRef.ServiceID == "" {
 				log.Errorft(ctx, "There is no service enrollment for this cardId : %v and Service Id : %v ", consumptionData.CardID, consumptionData.ServiceID)
-				return 
+				return
 			}
-			log.Infof("Data from db found serviceEnrolment : %v ", serviceenrollment)
 			log.Info("calling SaveFileConsumption")
 			wg.Add(1)
 			go SaveFileConsumption(ctx, consumptionData, &wg)
 		}
 	}
-
 	wg.Wait()
 	// Delete the files
 	for _, file1 := range files {
@@ -107,7 +104,7 @@ func ReadConsumptionData(filePath string) (data [][]string) {
 	// Open the CSV file
 	file, err := os.Open(filePath)
 	if err != nil {
-		log.Info("Error: *****************")
+		log.Info("Error:*****************")
 		log.Infof("Error: %v", err)
 		return
 	}
@@ -128,13 +125,13 @@ func ReadConsumptionData(filePath string) (data [][]string) {
 // SaveFileConsumption Insert consumption data into DB
 func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption,
 	wg *sync.WaitGroup) error {
+	defer wg.Done()
 	//get dbconnection from contex
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
 		log.Errorft(ctx, "error in db connection %v ", err)
 		return err
 	}
-	defer wg.Done()
 	createdBy := "Alekhya"
 	currentTime := time.Now()
 
@@ -148,31 +145,4 @@ func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption
 	log.Infof("ormDB  :  %v ", ormDB)
 	log.Infof("Consumption '%s' created successfully\n", createdBy)
 	return nil
-}
-
-// PickDeviceData Move Consumption data from one directory to another
-func PickDeviceData() {
-	// Define source and destination directories
-	sourceDir := "/home/satyanarayana/Alekhya/gofilesdirectories/machine_data/"
-	destDir := "/home/satyanarayana/Alekhya/gofilesdirectories/start_consume/"
-	// Get list of files in the source directory
-	files, err := filepath.Glob(filepath.Join(sourceDir, "*"))
-	if err != nil {
-		log.Infof("Error: %v ", err)
-		return
-	}
-	// Move each file to the destination directory
-	for _, file := range files {
-		// Extract filename from path
-		_, fileName := filepath.Split(file)
-		// Generate destination path
-		destPath := filepath.Join(destDir, fileName)
-		// Move the file
-		err := os.Rename(file, destPath)
-		if err != nil {
-			log.Infof("Error moving file: %v ", err)
-		} else {
-			log.Infof("Moved file: , to  %v %v ", file, destPath)
-		}
-	}
 }

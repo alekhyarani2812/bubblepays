@@ -20,10 +20,10 @@ func GetPlanPrice(ctx context.Context) ([]models.PlanPrice, error) {
 	var planPrice []models.PlanPrice
 	gorm := dbConnection.Find(&planPrice)
 	if gorm.Error != nil {
-		log.Infof("error in getting records from planPrice %v ", err.Error())
+		log.Error("error in getting records from planPrice")
 		return nil, err
 	}
-	log.Infof("planPrice :", planPrice)
+	log.Infof("planPrice : %v", planPrice)
 	return planPrice, nil
 }
 
@@ -43,7 +43,7 @@ func GetPlanPriceByID(ctx context.Context, pkID int) (*models.PlanPrice, error) 
 		}
 		return nil, err
 	}
-	log.Infof("planPrice :", planPrice)
+	log.Infof("planPrice : %v", planPrice)
 	return &planPrice, nil
 }
 
@@ -58,7 +58,7 @@ func SavePlanPrice(ctx context.Context, planPriceData *models.PlanPrice) (*model
 		log.Infof("error in insertion of records %v ", gorm.Error)
 		return nil, err
 	}
-	log.Infof("planPriceData :", planPriceData)
+	log.Infof("planPriceData : %v", planPriceData)
 	return planPriceData, nil
 }
 
@@ -70,7 +70,7 @@ func UpdatePlanPrice(ctx context.Context, pkID int, planPriceRecord *models.Plan
 	}
 	gorm := dbConnection.Model(&models.PlanPrice{}).Where("id = ?", pkID).Updates(&planPriceRecord)
 	if gorm != nil && gorm.Error != nil {
-		log.Infof("error in updating data %v ", err.Error())
+		log.Infof("error in updating data ")
 		return nil, err
 	}
 	gorm.Find(&planPriceRecord)
