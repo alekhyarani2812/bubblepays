@@ -88,5 +88,6 @@ func TestChanneleLinks(t *testing.T) {
 	//ChanneleLinksGo()
 	//ChanneleLinksGor()
 	//ChanneleLinksGoRepeat()
-	StrLteral()
+	//StrLteral()
+	Prime()
 }
