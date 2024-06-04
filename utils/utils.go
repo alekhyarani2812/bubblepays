@@ -25,7 +25,7 @@ func Render(w http.ResponseWriter, response models.Response) {
 	}
 }
 
-//StringToInt IDStr := r.PathValue("id")
+// StringToInt IDStr := r.PathValue("id")
 func StringToInt(idStr string) (int, error) {
 	if idStr == "" {
 		return 0, errors.New("id should not be empty")
@@ -43,9 +43,9 @@ func StringToTime(str string) (*time.Time, error) {
 	layout := "2006-01-02 15:04:05"
 	parsedTime, err := time.Parse(layout, str)
 	if err != nil {
-		log.Infof("Error parsing time:", err)
+		log.Errorf("Error parsing time: %v", err)
 		return nil, err
 	}
-	log.Infof("Parsed time:", parsedTime)
+	log.Infof("Parsed time: %v", parsedTime)
 	return &parsedTime, nil
 }

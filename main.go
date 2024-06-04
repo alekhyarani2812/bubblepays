@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	authzApi "github.com/bubblepays/api/handler/authz"
 	cardplanApi "github.com/bubblepays/api/handler/card_plan"
 	consumptionApi "github.com/bubblepays/api/handler/consumption"
 	employeeApi "github.com/bubblepays/api/handler/employee"
@@ -40,12 +41,22 @@ func middleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
+type Emp struct{
+	Name string
+}
+func UpdateEmp(e Emp) Emp{
+	e.Name = "Alekhya"
+	return e
+}
 // @title Bubblepays API
 // @version 1.0
 // @description This is a sample API
 // @host localhost:8080
 // @BasePath /
 func main() {
+	e := Emp{Name : "Satya"}
+	e = UpdateEmp(e)
+	log.Info(e)
 	dbConnection, dbErr := database.GetORMDbConnection()
 	if dbErr != nil {
 		log.Errorf("err %v ", dbErr.Error())
@@ -70,6 +81,7 @@ func main() {
 	}
 }
 func loadAllRoutes(router *mux.Router){
+	authzApi.LoadRoutes(router)
 	consumptionApi.LoadRoutes(router)
 	monthlyinvoiceApi.LoadRoutes(router)
 	cardplanApi.LoadRoutes(router)
