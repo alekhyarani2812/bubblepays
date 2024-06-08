@@ -24,8 +24,8 @@ func RunMachineJob(dbConnection *gorm.DB) {
 		case <-ticker.C:
 			log.Infot(ctx, "this fuction is executing in every 30 seconds")
 			consumption.PickDeviceData(ctx)
-			consumption.ConsumeDeviceData(ctx)
-			//consumption.JobData(ctx)
+			//consumption.ConsumeDeviceData(ctx)
+			consumption.GetJobRecords(ctx)
 			//UsageData(ctx, dbConnection)
 		}
 	}

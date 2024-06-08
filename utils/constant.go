@@ -2,9 +2,10 @@ package utils
 
 const (
 	// Fail is used for http response status
-	Fail = "fail"
+	Fail    = "fail"
+	Success = "success"
 	// Success is used for http response status
-	Success    = "SUCCESS"
+	JobSuccess = "SUCCESS"
 	Inprogress = "IN_PROGRESS"
-	Failed     = "FAILED"
+	JobFailed  = "FAILED"
 )
