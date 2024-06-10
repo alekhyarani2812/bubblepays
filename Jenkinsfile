@@ -5,8 +5,6 @@ pipeline {
         stage('Hello') {
             steps {
                 echo 'Hello, World!'
-                echo 'Thius is Jenkins 1st build'
-                echo '**************************'
             }
         }
         stage('Build') {
@@ -14,7 +12,14 @@ pipeline {
                 echo 'build go application'
                 //sh 'go build -o bubblepays'
                 sh 'make build'
-         }
-    }
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Test go application'
+                //sh 'go build -o bubblepays'
+                sh 'make junit'
+            }
+        }
     }
 }
