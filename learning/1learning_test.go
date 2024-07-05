@@ -76,7 +76,8 @@ func TestClimbStairs(t *testing.T) {
 }
 
 func TestProducerConsumer(t *testing.T) {
-	ProducerConsumerChGoRoutines()
+	//ProducerConsumerChGoRoutines()
+	GoChannels()
 }
 
 func TestShapeImpls(t *testing.T) {
