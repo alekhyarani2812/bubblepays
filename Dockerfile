@@ -9,8 +9,8 @@ RUN echo "This is first docker bubblepays application"
 COPY . .
 
 # Set environment variables
-ENV DB_CONNECTION=root:root@tcp(127.0.0.1:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local
-ENV TEST_ENV='Hello environment'
+# ENV DB_CONNECTION=root:root@tcp(127.0.0.1:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local
+# ENV TEST_ENV='Hello environment'
 
 # Download dependencies
 RUN go mod tidy 

@@ -1,0 +1,4 @@
+
+docker login  -u alekhyarani2812
+
+dckr_pat_5YEfXz8p6vfhD_W2pOUFGqCV7QY
