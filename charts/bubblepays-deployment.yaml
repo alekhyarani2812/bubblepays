@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bubblepays
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bubblepays
+  template:
+    metadata:
+      labels:
+        app: bubblepays
+    spec:
+      containers:
+      - name: bubblepays
+        image: alekhyarani2812/bubblepays:latest
+        env:
+        - name: DB_CONNECTION
+          valueFrom:
+            secretKeyRef:
+              name: bubblepays-secret
+              key: mysql-dbconnection
+        ports:
+        - containerPort: 8080
