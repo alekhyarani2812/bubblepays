@@ -1,3 +1,4 @@
+# To run makefile use this command $ make commandname
 build: tidy
 	echo "build source"
 	go build
