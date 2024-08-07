@@ -1,0 +1,27 @@
+replicaCount: 1
+name: bubblepays
+metadata:
+  namespace: bpays
+image:
+  repository: alekhyarani2812/bubblepays
+  tag: latest
+  pullPolicy: IfNotPresent
+  
+service:
+  type: LoadBalancer
+  port: 80
+
+secret:
+  dbconnection: c3FsMTI3MjEwODg6N1RiZTZMUkRpaEB0Y3Aoc3FsMTIuZnJlZXNxbGRhdGFiYXNlLmNvbTozMzA2KS9zcWwxMjcyMTA4OD9jaGFyc2V0PXV0ZjhtYjQmcGFyc2VUaW1lPVRydWUmbG9jPUxvY2FsCg==
+bubblepays-secret: bubblepays
+
+ingress:
+  enabled: false
+  
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

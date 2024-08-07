@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    meta.helm.sh/release-name: bubblepays
+    meta.helm.sh/release-namespace: bpays
+  creationTimestamp: "2024-08-06T10:41:09Z"
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    kubernetes.io/metadata.name: bpays
+  name: bpays
+  resourceVersion: "260130"
+  uid: 2e37ea54-56c7-434c-ae30-e93fa0f677e6
+spec:
+  finalizers:
+  - kubernetes
+status:
+  phase: Active
