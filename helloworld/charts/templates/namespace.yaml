@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    meta.helm.sh/release-name: helloworld
+    meta.helm.sh/release-namespace: hello
+  creationTimestamp: "2024-08-06T07:20:51Z"
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    kubernetes.io/metadata.name: hello
+  name: hello
+  resourceVersion: "255026"
+  uid: a5be22d6-84b3-47ad-a41a-35a0ab2d0f61
+spec:
+  finalizers:
+  - kubernetes
+status:
+  phase: Active

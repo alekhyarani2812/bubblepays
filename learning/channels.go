@@ -35,7 +35,7 @@ func ChanneleLinksGo() {
 		"http://stackoverflow.com",
 		"http://amazon.com",
 	}
-	c := make(chan string)
+	c := make(chan string)  //buffered channel
 	for _, link := range links {
 		go CheckLinkGo(link, c)
 		//fmt.Println(<-c, i)

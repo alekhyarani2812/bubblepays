@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"time"
-	//This is a blank import. It is a mysql driver library
 	_ "github.com/go-sql-driver/mysql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -24,7 +23,6 @@ func GetDbConnection() *sql.DB {
 	}
 	return db
 }
-
 // GetORMDbConnection get orm db connection
 func GetORMDbConnection() (*gorm.DB, error) {
 	newLogger := logger.New(
