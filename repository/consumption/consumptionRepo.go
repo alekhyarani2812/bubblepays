@@ -132,7 +132,7 @@ func MoveTOSuccessDir(filename string) error{
 		log.Infof("Error moving the file: %v", err)
 		return  err 
 	}
-	log.Infof("&&&&&&&&&&&&&&& File moved successfully %v", filename)
+	log.Infof("File moved successfully %v", filename)
 	return nil
 }
 func MoveTOFailureDir(filename string) error{
@@ -143,20 +143,9 @@ func MoveTOFailureDir(filename string) error{
 		log.Infof("Error moving the file: %v", err)
 		return err
 	}
-	log.Infof("&&&&&&&&&&&&&&& File moved successfully %v", filename)
+	log.Infof("File moved successfully %v", filename)
 	return nil
 }
-
-//	func RemoveFile(filename string) {
-//		var err error
-//		err = os.Remove(startConsumeDir + filename)
-//		if err != nil {
-//			log.Infof("Error deleting file: %v", err)
-//			return
-//		}
-//		log.Infof("Deleted file: from startConsumeDir %v", filename)
-//	}
-
 // ReadConsumptionData from file
 func ReadConsumptionData(filePath string) (data [][]string, err error) {
 	log.Info("Read MachineData is called")

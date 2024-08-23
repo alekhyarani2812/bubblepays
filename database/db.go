@@ -34,15 +34,17 @@ func GetORMDbConnection() (*gorm.DB, error) {
 			Colorful:                  false,       // Disable color
 		},
 	)
+	//bubblepays:Chikki@123@tcp(34.93.245.190:3306)/todo
+	//dsn := "bubblepays:Chikki@123@tcp(34.93.245.190:3306)/todo?charset=utf8mb4"
+	//dsn := "bubblepays:Chikki@123@tcp(34.93.245.190:3306)/todo"
 	//echo $DB_CONNECTION
-	//dsn := "root:root@tcp(127.0.0.1:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local"
-	dsn := os.Getenv("DB_CONNECTION")
+	dsn := "root:root@tcp(127.0.0.1:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local"
 	fmt.Printf("Mysql DSN DB Connection %v ", dsn)
+	//dsn := os.Getenv("DB_CONNECTION")
 	//dsn := "root:PASSWORD@tcp(192.168.49.2:3306)/todo"
 	//dsn := "root:PASSWORD@tcp(192.168.49.1:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local"
 
 	//"root:PASSWORD@tcp(mysql-local:3306)/todo"
-
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: newLogger,
 	})

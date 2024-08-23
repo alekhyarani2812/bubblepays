@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"time"
+
 	bcontext "github.com/bubblepays/context"
 	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
@@ -14,6 +15,7 @@ import (
 )
 
 var jwtkey = []byte("secret_key")
+
 func LoadRoutes(router *mux.Router) {
 	router.HandleFunc("/api/getToken", Login).Methods("POST")
 }

@@ -14,7 +14,7 @@ func Login(ctx context.Context, userPayload models.User) (*models.User, error) {
 		log.Infof("error in db connection %v", err.Error())
 		return nil, err
 	}
-	log.Infof("payload useraname , password  %v, %v", userPayload.Username, userPayload.Password)
+	log.Infof("payload useraname, password %v,%v", userPayload.Username, userPayload.Password)
 	var userData []*models.User
 	gorm := dbConnection.Where("user_name = ?", userPayload.Username).Where(
 		"password=?", userPayload.Password).Find(&userData)

@@ -9,10 +9,10 @@ image:
   
 service:
   type: LoadBalancer
-  port: 80
+  port: 8080
 
 secret:
-  dbconnection: c3FsMTI3MjEwODg6N1RiZTZMUkRpaEB0Y3Aoc3FsMTIuZnJlZXNxbGRhdGFiYXNlLmNvbTozMzA2KS9zcWwxMjcyMTA4OD9jaGFyc2V0PXV0ZjhtYjQmcGFyc2VUaW1lPVRydWUmbG9jPUxvY2FsCg==
+  dbconnection: YnViYmxlcGF5czpDaGlra2lAMTIzQHRjcCgzNC45My4yNDUuMTkwOjMzMDYpL3RvZG8/Y2hhcnNldD11dGY4bWI0Cg==
 bubblepays-secret: bubblepays
 
 ingress:

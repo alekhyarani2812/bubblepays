@@ -13,7 +13,7 @@ func JobValidation(ctx context.Context, consumptionData models.Consumption) (boo
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
 		log.Errorft(ctx, "error in db connection %v ", err)
-		return true, err
+		return false, err
 	}
 	// validate cardId, serviceId in service enrolment table
 	var serviceenrollment models.ServiceEnrollment
@@ -48,5 +48,6 @@ func JobValidation(ctx context.Context, consumptionData models.Consumption) (boo
 		errMsg := errors.New(msg)
 		return false, errMsg
 	}
+	// Job validation is success. Nil errors
 	return true, nil
 }

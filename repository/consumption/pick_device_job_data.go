@@ -33,13 +33,17 @@ func PickDeviceData(ctx context.Context) {
 			JobMessage: "Pending",
 			Status:     utils.Inprogress,
 		}
-		SaveJobInfo(ctx, jobData)
+		err := SaveJobInfo(ctx, jobData)
+		if err != nil {
+			log.Errorft(ctx, "Error while saving the job data %v", err)
+		}
+		log.Infof("Job file saved into %v directory", destDir)
 		// Generate destination path
 		destPath := filepath.Join(destDir, fileName)
 		// Move the file
-		err := os.Rename(file, destPath)
+		err1 := os.Rename(file, destPath)
 		if err != nil {
-			log.Infof("Error moving file: %v ", err)
+			log.Errorft(ctx, "Error moving file: %v ", err1)
 		} else {
 			log.Infof("Moved file: %v to directory %v ", fileName, destDir)
 		}
