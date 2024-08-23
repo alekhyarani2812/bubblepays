@@ -8,6 +8,7 @@ import (
 	cardplanApi "github.com/bubblepays/api/handler/card_plan"
 	consumptionApi "github.com/bubblepays/api/handler/consumption"
 	employeeApi "github.com/bubblepays/api/handler/employee"
+	jobsApi "github.com/bubblepays/api/handler/jobs"
 	monthlyinvoiceApi "github.com/bubblepays/api/handler/monthly_invoice"
 	planpriceApi "github.com/bubblepays/api/handler/plan_price"
 	planApi "github.com/bubblepays/api/handler/plans"
@@ -17,8 +18,8 @@ import (
 	bcontext "github.com/bubblepays/context"
 	"github.com/bubblepays/database"
 	_ "github.com/bubblepays/docs" // This is where Swagger comments are located
-	"github.com/bubblepays/jobs"
 	"github.com/bubblepays/log"
+	"github.com/bubblepays/cronejobs"
 	"github.com/gorilla/mux" 
 	httpSwagger "github.com/swaggo/http-swagger"
 )
@@ -62,7 +63,7 @@ func main() {
 		log.Errorf("err %v ", dbErr.Error())
 		return
 	}
-	go jobs.RunMachineJob(dbConnection)
+	go cronejobs.RunMachineJob(dbConnection)
 	router := mux.NewRouter()
 	//add middleware
 	router.Use(middleware)
@@ -91,4 +92,5 @@ func loadAllRoutes(router *mux.Router){
 	serviceApi.LoadRoutes(router)
 	serviceenrollmentApi.LoadRoutes(router)
 	employeeApi.LoadRoutes(router)
+	jobsApi.LoadRoutes(router)
 }
