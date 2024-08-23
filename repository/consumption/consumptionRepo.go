@@ -5,7 +5,6 @@ import (
 	"encoding/csv"
 
 	"os"
-	"sync"
 	"time"
 
 	bcontext "github.com/bubblepays/context"
@@ -15,35 +14,44 @@ import (
 )
 
 const startConsumeDir = "/home/satyanarayana/Alekhya/gofilesdirectories/start_consume/"
+const consumeSuccessDir = "/home/satyanarayana/Alekhya/gofilesdirectories/consume_success/"
+const ConsumeFailureDir = "/home/satyanarayana/Alekhya/gofilesdirectories/consume_failure/"
 
-func GetJobRecords(ctx context.Context) {
-	var wg sync.WaitGroup
+func GetJobRecords(ctx context.Context) error {
+	//var wg sync.WaitGroup
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
 		log.Errorft(ctx, "error in db connection %v ", err)
-		return
+		return err
 	}
 	var jobs []models.Jobs
+	//dbConnection.Where("status=?", "IN_PROGRESS").Or("status=?", "FAILED").Find(&jobs)
 	dbConnection.Where("status=?", "IN_PROGRESS").Find(&jobs)
 	log.Infoft(ctx, "in_progress jobs are : %v\n", jobs)
 	for _, job := range jobs {
+		//var jobData models.Jobs
 		filename := job.Filename
 		log.Infof("file name from DB job table %v", filename)
 		// ConsumeDeviceData from destination dirctory and process it
-		records := ReadConsumptionData(startConsumeDir + filename)
-		log.Infof("records : %v ", records)
+		records, err := ReadConsumptionData(startConsumeDir + filename)
+		if err != nil {
+			log.Errorft(ctx, "Error while getting Records %v", err)
+			return err
+		}
+		log.Infof("*****************records : %v ", records)
 		for _, record := range records {
 			//convert startdate string to int
 			startDate, err := utils.StringToTime(record[3])
 			if err != nil {
 				log.Infof("Got an ERROR at startdate: %v ", err.Error())
-				return
+				return err
 			}
 			endDate, err := utils.StringToTime(record[4])
 			if err != nil {
 				log.Errorft(ctx, "Got an ERROR at enddate: %v ", err.Error())
-				return
+				return err
 			}
+			//Preparing consumption data
 			createdDate := time.Now()
 			consumptionData := models.Consumption{
 				DeviceID:        record[0],
@@ -55,50 +63,108 @@ func GetJobRecords(ctx context.Context) {
 				CreatedDate:     &createdDate,
 				CreatedBy:       "Alekhya",
 			}
-			jobdata := models.Jobs{
-				JobMessage: "Job completed",
-				Status:     utils.JobSuccess,
-			}
 			//validate cardId, serviceId in service enrolment table
-			bool := JobValidation(ctx, consumptionData)
-			if !bool {
-				jobdata := models.Jobs{
+			bl, err := JobValidation(ctx, consumptionData)
+			if err != nil {
+				log.Infof("Got an ERROR in Job validation: %v ", err.Error())
+			}
+			if bl {
+				//validation is success
+				log.Infot(ctx, "Job validation done. Now calling SaveFileConsumption")
+				err := SaveFileConsumption(ctx, consumptionData)
+				// If we get error while saving consumption data
+				if err != nil {
+					log.Errorft(ctx, "Error while saving consumption data %v", err)
+					return err
+				}
+				// consumption data has been saved
+				log.Infot(ctx, "consumption data has been saved in consumption table")
+				// Preparing job data
+				jobData := models.Jobs{
+					JobMessage: "Job completed",
+					Status:     utils.JobSuccess,
+				}
+				// If we get an error while updating job data
+				err1 := UpdateJobInfo(ctx, &jobData, filename)
+				if err1 != nil {
+					log.Errorft(ctx, "Error while updating Job data %v", err1)
+					return err1
+				}
+				// Job data updated successfully 
+				log.Infot(ctx, "Job data updated successfully")
+				//Move file to destination dir
+				err2 := MoveTOSuccessDir(filename)
+				if err2 != nil {
+					// Error while while moving file 
+					log.Errorft(ctx, "######### Error while moving file :%v from source dir to destination dir", filename)
+					return err2
+				}
+				log.Infoft(ctx, "######### successfully file %v moved from %v to %v ", filename,consumeSuccessDir, ConsumeFailureDir)
+				return nil
+			} else {
+				// If validation fails
+				jobData := models.Jobs{
 					JobMessage: "Incorrect Job data",
 					Status:     utils.JobFailed,
 				}
-				wg.Add(1)
-				go UpdateJobInfo(ctx, &jobdata, filename, &wg)
-				return
+				err := UpdateJobInfo(ctx, &jobData, filename)
+				if err != nil {
+					log.Errorft(ctx, "Error while updating Job data %v", err)
+					return err
+				}
+				err2 := MoveTOFailureDir(filename)
+				if err2 != nil {
+					// Error while while moving file 
+					log.Errorft(ctx, "######### Error while moving file :%v from source dir to destination dir", filename)
+					return err2
+				}
+				log.Infoft(ctx, "######### successfully file %v moved from %v to %v ", filename,consumeSuccessDir, ConsumeFailureDir)
 			}
-			jobdata.Status = utils.JobSuccess
-			wg.Add(1)
-			go UpdateJobInfo(ctx, &jobdata, filename, &wg)
-			wg.Add(1)
-			log.Info("calling SaveFileConsumption")
-			go SaveFileConsumption(ctx, consumptionData, &wg)
 		}
-		wg.Wait()
-		RemoveFile(filename)
 	}
+	return nil
 }
-func RemoveFile(filename string) {
-	var err error
-	err = os.Remove(startConsumeDir + filename)
+func MoveTOSuccessDir(filename string) error{
+	sourcePath := startConsumeDir + filename
+	destinationPath := consumeSuccessDir + filename
+	err := os.Rename(sourcePath, destinationPath)
 	if err != nil {
-		log.Infof("Error deleting file: %v", err)
-		return
+		log.Infof("Error moving the file: %v", err)
+		return  err 
 	}
-	log.Infof("Deleted file: from startConsumeDir %v", filename)
+	log.Infof("&&&&&&&&&&&&&&& File moved successfully %v", filename)
+	return nil
+}
+func MoveTOFailureDir(filename string) error{
+	sourcePath := startConsumeDir + filename
+	destinationPath := ConsumeFailureDir + filename
+	err := os.Rename(sourcePath, destinationPath)
+	if err != nil {
+		log.Infof("Error moving the file: %v", err)
+		return err
+	}
+	log.Infof("&&&&&&&&&&&&&&& File moved successfully %v", filename)
+	return nil
 }
 
+//	func RemoveFile(filename string) {
+//		var err error
+//		err = os.Remove(startConsumeDir + filename)
+//		if err != nil {
+//			log.Infof("Error deleting file: %v", err)
+//			return
+//		}
+//		log.Infof("Deleted file: from startConsumeDir %v", filename)
+//	}
+
 // ReadConsumptionData from file
-func ReadConsumptionData(filePath string) (data [][]string) {
+func ReadConsumptionData(filePath string) (data [][]string, err error) {
 	log.Info("Read MachineData is called")
 	// Open the CSV file
 	file, err := os.Open(filePath)
 	if err != nil {
 		log.Errorf("Error: %v", err)
-		return nil
+		return nil, err
 	}
 	defer file.Close()
 	// Create a new CSV reader
@@ -107,16 +173,14 @@ func ReadConsumptionData(filePath string) (data [][]string) {
 	records, err := reader.ReadAll()
 	if err != nil {
 		log.Errorf("Error: %v", err)
-		return nil
+		return nil, err
 	}
 	log.Infof("records : %v ", records)
-	return records
+	return records, nil
 }
 
 // SaveFileConsumption Insert consumption data into DB
-func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption,
-	wg *sync.WaitGroup) error {
-	defer wg.Done()
+func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption) error {
 	//get dbconnection from contex
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
@@ -134,83 +198,4 @@ func SaveFileConsumption(ctx context.Context, consumptionData models.Consumption
 	log.Infof("ormDB consumption inserted successfully :  %v ", ormDB)
 	log.Infof("Consumption '%s' created successfully\n", createdBy)
 	return nil
-}
-
-// ConsumeDeviceData Get Consumption data from destination dirctory and process it
-func ConsumeDeviceData(ctx context.Context) {
-	var wg sync.WaitGroup
-	// Open the directory
-	f, err := os.Open(startConsumeDir)
-	if err != nil {
-		log.Infof("Error opening directory: %v", err)
-		return
-	}
-	defer f.Close()
-	// Read the directory contents
-	files, err := f.Readdir(-1)
-	if err != nil {
-		log.Infof("Error reading directory contents: %v", err)
-		return
-	}
-	// Iterate over the files and print their names
-	for _, file := range files {
-		log.Infof("fileName : %v ", file.Name())
-		fileName := file.Name()
-
-		records := ReadConsumptionData(startConsumeDir + fileName)
-		log.Infof("records : %v ", records)
-		// Create a wait group to wait for all goroutines to finish
-		for _, record := range records {
-			//convert startdate string to int
-			startDate, err := utils.StringToTime(record[3])
-			if err != nil {
-				log.Infof("Got an ERROR at startdate: %v ", err.Error())
-				continue
-			}
-			endDate, err := utils.StringToTime(record[4])
-			if err != nil {
-				log.Errorft(ctx, "Got an ERROR at enddate: %v ", err.Error())
-				continue
-			}
-			createdDate := time.Now()
-			consumptionData := models.Consumption{
-				DeviceID:        record[0],
-				CardID:          record[1],
-				ConsumptionDate: record[2],
-				StartTime:       startDate, //&time.Time{},
-				EndTime:         endDate,   //&time.Time{},
-				ServiceID:       record[5],
-				CreatedDate:     &createdDate,
-				CreatedBy:       "Alekhya",
-			}
-			jobdata := models.Jobs{
-				ID:         8,
-				JobMessage: "Job completed",
-				Status:     utils.JobSuccess,
-			}
-			//validate cardId, serviceId in service enrolment table
-			bool := JobValidation(ctx, consumptionData)
-			if !bool {
-				jobdata.Status = utils.JobFailed
-				UpdateJobInfo(ctx, &jobdata, fileName, &wg)
-				return
-			}
-			jobdata.Status = utils.JobSuccess
-			wg.Add(1)
-			go UpdateJobInfo(ctx, &jobdata, fileName, &wg)
-			wg.Add(1)
-			log.Info("calling SaveFileConsumption")
-			go SaveFileConsumption(ctx, consumptionData, &wg)
-		}
-	}
-	wg.Wait()
-	// Delete the files
-	for _, file1 := range files {
-		err = os.Remove(startConsumeDir + file1.Name())
-		if err != nil {
-			log.Infof("Error deleting file: %v", err)
-			continue
-		}
-		log.Infof("Deleted file: %v", file1)
-	}
 }

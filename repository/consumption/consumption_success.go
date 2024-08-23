@@ -1,0 +1,5 @@
+package consumption
+
+func ConsumeSuccess(){
+	
+}

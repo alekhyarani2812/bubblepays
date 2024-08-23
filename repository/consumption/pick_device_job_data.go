@@ -13,7 +13,6 @@ import (
 
 // PickDeviceData Move Consumption data from one directory to another
 func PickDeviceData(ctx context.Context) {
-
 	// Define source and destination directories
 	sourceDir := "/home/satyanarayana/Alekhya/gofilesdirectories/machine_data/"
 	destDir := "/home/satyanarayana/Alekhya/gofilesdirectories/start_consume/"
@@ -42,7 +41,8 @@ func PickDeviceData(ctx context.Context) {
 		if err != nil {
 			log.Infof("Error moving file: %v ", err)
 		} else {
-			log.Infof("Moved file: , to  %v %v ", file, destPath)
+			log.Infof("Moved file: %v to directory %v ", fileName, destDir)
 		}
 	}
 }
+
