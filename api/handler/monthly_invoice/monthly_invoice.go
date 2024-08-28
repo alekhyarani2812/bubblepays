@@ -15,6 +15,7 @@ func LoadRoutes(router *mux.Router) {
 	//monthly invoice
 	router.HandleFunc("/api/getmonthlyinvoice", GetMonthlyInvoice).Methods("GET")
 }
+
 // GetMonthlyInvoice godoc
 // @Summary Get a list of MonthlyInvoices
 // @Description Get a list of all MonthlyInvoice
@@ -26,15 +27,17 @@ func LoadRoutes(router *mux.Router) {
 // @Failure 404 {object} models.Response "Can not found monthnum"
 // @Failure 401 {object} models.Response "Unauthorized Authentication is required"
 // @Router /api/getmonthlyinvoice [get]
-func GetMonthlyInvoice(w http.ResponseWriter, r *http.Request) {
 
+// Get monthly invoice based on usage data
+func GetMonthlyInvoice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	queryParams := r.URL.Query()
 	monthNumQparam := queryParams.Get("monthnum")
 	if monthNumQparam == "" {
 		response := models.Response{
-			Message: utils.Fail,
-			Status:  http.StatusBadRequest,
+			Message:     utils.Fail,
+			Description: "monthnum should not be empty",
+			Status:      http.StatusBadRequest,
 		}
 		utils.Render(w, response)
 		return

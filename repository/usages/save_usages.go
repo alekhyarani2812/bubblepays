@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func SaveUsage(usageData models.Usages, dbConnection *gorm.DB) {
+func SaveUsage(usageData models.Usages, dbConnection *gorm.DB) error{
 	var usages []models.Usages
 	res := dbConnection.Where("card_id = ?", usageData.CardID)
 	res.Where("service_id = ?", usageData.ServiceID)
@@ -15,7 +15,7 @@ func SaveUsage(usageData models.Usages, dbConnection *gorm.DB) {
 
 	if res.Error != nil {
 		log.Infof("error in this block.... %v ", res.Error)
-		return
+		return res.Error
 	}
 	if len(usages) > 0 {
 		//should run update query
@@ -30,4 +30,5 @@ func SaveUsage(usageData models.Usages, dbConnection *gorm.DB) {
 		ormDB := dbConnection.Create(&usageData)
 		log.Infof("**************ormDB usages table rows Inserted %v ", ormDB.RowsAffected)
 	}
+	return nil
 }

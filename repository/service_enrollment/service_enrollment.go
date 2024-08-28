@@ -18,7 +18,7 @@ func GetServiceEnrollment(ctx context.Context) ([]models.ServiceEnrollment, erro
 	}
 	var serviceEnrollRecords []models.ServiceEnrollment
 	if err := dbConnection.Find(&serviceEnrollRecords).Error; err != nil {
-		log.Infof("TransactionId: %v. Failed to retrieve consumption data: %v", err, bcontext.GetTransactionID(ctx))
+		log.Infof("TransactionId: %v. Failed to retrieve serviceEnrollment Records data: %v", err, bcontext.GetTransactionID(ctx))
 		return nil, err
 	}
 	return serviceEnrollRecords, nil
@@ -50,8 +50,10 @@ func SaveServiceEnrollment(ctx context.Context, serviceEnrollment models.Service
 	}
 	gorm := dbConnection.Create(&serviceEnrollment)
 	if gorm.Error != nil {
-		log.Errorf("gorm.Error :   error in inserting service enrollment error : %v ", err.Error())
+		log.Errorf("gorm.Error :   error in inserting service enrollment error : %v ", gorm.Error)
+		return nil, gorm.Error
 	}
+	log.Infot(ctx, "service enrollment data saved successfully")
 	return &serviceEnrollment, nil
 }
 

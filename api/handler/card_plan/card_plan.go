@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 	cardplan "github.com/bubblepays/repository/card_plan"
 	"github.com/bubblepays/utils"
@@ -24,15 +25,16 @@ func GetCardPlan(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	cardPlanRecords, err := cardplan.GetCardPlan(ctx)
 	if err != nil {
+		log.Errorft(ctx, "getting error in getcardplan %v", err.Error())
 		response := models.Response{
 			Error:   err.Error(),
 			Message: utils.Fail,
 			Status:  http.StatusInternalServerError,
 		}
 		utils.Render(w, response)
-		return
+		return 
 	}
-	response := models.Response{
+	response := models.Response {
 		Message: utils.Success,
 		Status:  http.StatusOK,
 		Data:    cardPlanRecords,

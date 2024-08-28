@@ -17,15 +17,14 @@ const startConsumeDir = "/home/satyanarayana/Alekhya/gofilesdirectories/start_co
 const consumeSuccessDir = "/home/satyanarayana/Alekhya/gofilesdirectories/consume_success/"
 const ConsumeFailureDir = "/home/satyanarayana/Alekhya/gofilesdirectories/consume_failure/"
 
-func GetJobRecords(ctx context.Context) error {
-	//var wg sync.WaitGroup
+//Start consuming data, then save it into the Job and Consumption tables.
+func SaveJobConsumptionData(ctx context.Context) error {
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
 		log.Errorft(ctx, "error in db connection %v ", err)
 		return err
 	}
 	var jobs []models.Jobs
-	//dbConnection.Where("status=?", "IN_PROGRESS").Or("status=?", "FAILED").Find(&jobs)
 	dbConnection.Where("status=?", "IN_PROGRESS").Find(&jobs)
 	log.Infoft(ctx, "in_progress jobs are : %v\n", jobs)
 	for _, job := range jobs {
@@ -40,7 +39,7 @@ func GetJobRecords(ctx context.Context) error {
 		}
 		log.Infof("*****************records : %v ", records)
 		for _, record := range records {
-			//convert startdate string to int
+			//convert startdate string to time
 			startDate, err := utils.StringToTime(record[3])
 			if err != nil {
 				log.Infof("Got an ERROR at startdate: %v ", err.Error())
@@ -64,11 +63,12 @@ func GetJobRecords(ctx context.Context) error {
 				CreatedBy:       "Alekhya",
 			}
 			//validate cardId, serviceId in service enrolment table
-			bl, err := JobValidation(ctx, consumptionData)
+			boole, err := JobValidation(ctx, consumptionData)
 			if err != nil {
 				log.Infof("Got an ERROR in Job validation: %v ", err.Error())
+				return err
 			}
-			if bl {
+			if boole {
 				//validation is success
 				log.Infot(ctx, "Job validation done. Now calling SaveFileConsumption")
 				err := SaveFileConsumption(ctx, consumptionData)
@@ -115,7 +115,7 @@ func GetJobRecords(ctx context.Context) error {
 				err2 := MoveTOFailureDir(filename)
 				if err2 != nil {
 					// Error while while moving file 
-					log.Errorft(ctx, "######### Error while moving file :%v from source dir to destination dir", filename)
+					log.Errorft(ctx, "######### If got Error in validation the file :%v moves from consume dir to failure dir", filename)
 					return err2
 				}
 				log.Infoft(ctx, "######### successfully file %v moved from %v to %v ", filename,consumeSuccessDir, ConsumeFailureDir)
@@ -124,6 +124,7 @@ func GetJobRecords(ctx context.Context) error {
 	}
 	return nil
 }
+// Move file from consume dir to success dir 
 func MoveTOSuccessDir(filename string) error{
 	sourcePath := startConsumeDir + filename
 	destinationPath := consumeSuccessDir + filename
@@ -135,6 +136,7 @@ func MoveTOSuccessDir(filename string) error{
 	log.Infof("File moved successfully %v", filename)
 	return nil
 }
+// Move file from consume dir to failure dir 
 func MoveTOFailureDir(filename string) error{
 	sourcePath := startConsumeDir + filename
 	destinationPath := ConsumeFailureDir + filename
@@ -146,7 +148,7 @@ func MoveTOFailureDir(filename string) error{
 	log.Infof("File moved successfully %v", filename)
 	return nil
 }
-// ReadConsumptionData from file
+// Read ConsumptionData from complete path of single file 
 func ReadConsumptionData(filePath string) (data [][]string, err error) {
 	log.Info("Read MachineData is called")
 	// Open the CSV file

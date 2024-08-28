@@ -17,10 +17,9 @@ func getConsumptionsByMonthnum(ctx context.Context, dbConnection *gorm.DB) (map[
 	// Retrieve consumption data from the database
 	var consumptions []models.Consumption
 	if err := dbConnection.Find(&consumptions).Error; err != nil {
-		log.Infof("failed to retrieve consumption data: %v", err)
+		log.Errorft(ctx, "failed to retrieve consumption data:%v", err)
 		return nil, err
 	}
-
 	log.Infoft(ctx, "SIZE of consumption: size:: %v ", len(consumptions))
 	cardIDServiceID := make(map[string]float64)
 	for _, consum := range consumptions {
@@ -62,11 +61,11 @@ func getConsumptionsByMonthnum(ctx context.Context, dbConnection *gorm.DB) (map[
 	return cardIDServiceID, nil
 }
 
-func UsageData(ctx context.Context, dbConnection *gorm.DB) {
+func UsageData(ctx context.Context, dbConnection *gorm.DB) error{
 	usageData, err := getConsumptionsByMonthnum(ctx, dbConnection)
 	if err != nil {
-		log.Infof("err %v ", err.Error())
-		return
+		log.Infoft(ctx, "err %v ", err.Error())
+		return err
 	}
 	for key, duration := range usageData {
 		//fmt.Printf("Key: %s , Value: %v ", key, duration)
@@ -76,12 +75,19 @@ func UsageData(ctx context.Context, dbConnection *gorm.DB) {
 		serviceID := keyStr[1]
 		monthNum := keyStr[2]
 		log.Infoft(ctx, "cardID : %v, serviceID : %v, monthNum : %v ", cardID, serviceID, monthNum)
+		//Preparing usage data
 		usageData := models.Usages{
 			CardID:    cardID,
 			ServiceID: serviceID,
 			Monthnum:  monthNum,
 			Duration:  duration,
 		}
-		repository.SaveUsage(usageData, dbConnection)
+		err := repository.SaveUsage(usageData, dbConnection)
+		if err != nil {
+			log.Errorft(ctx, "Failed to save usage data")
+			return err
+		}
+		log.Info("Usage data saved successfully")
 	}
+	return nil
 }

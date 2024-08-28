@@ -23,10 +23,21 @@ func RunMachineJob(dbConnection *gorm.DB) {
 		select {
 		case <-ticker.C:
 			log.Infot(ctx, "this fuction is executing in every 30 seconds")
-			consumption.PickDeviceData(ctx)
-			//consumption.ConsumeDeviceData(ctx)
-			consumption.GetJobRecords(ctx)
-			//UsageData(ctx, dbConnection)
+			// consuming device data 
+			err := consumption.PickDeviceData(ctx)
+			if err != nil {
+				log.Errorft(ctx, "getting error while getting device data %v", err)
+			}
+			//Start consuming data, then save it into the Job and Consumption tables.
+			err1 := consumption.SaveJobConsumptionData(ctx)
+			if err != nil {
+				log.Errorft(ctx, "getting error while getting device data %v", err1)
+			}
+			usageDataError := UsageData(ctx, dbConnection)
+			if usageDataError != nil {
+				log.Errorft(ctx, "Failed to get usageData %v",usageDataError)
+			}
+			log.Infot(ctx, "saved Job and consumtion data successfully")
 		}
 	}
 }
