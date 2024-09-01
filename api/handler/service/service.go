@@ -12,13 +12,13 @@ import (
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
 )
-
+// LoadRoutes for routing all service api's
 func LoadRoutes(router *mux.Router){
 	router.HandleFunc("/api/getservices", GetServices).Methods("GET")
 	router.HandleFunc("/api/saveservice", SaveService).Methods("POST")
 	router.HandleFunc("/api/deleteservice/{id}", DeleteServiceByID).Methods("DELETE")
 }
-// GetServices Read services
+// GetServices retrieves all service records from the table
 func GetServices(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	log.Info("This is GetServices handler")
@@ -42,7 +42,7 @@ func GetServices(w http.ResponseWriter, r *http.Request) {
 	log.Infof("serviceData : %v ", serviceData)
 
 }
-
+// SaveService for inserting services into table
 func SaveService(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	log.Info("This is Service handler")
@@ -80,7 +80,7 @@ func SaveService(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 	log.Infof("ServiceList : success data %v ", serviceRecord)
 }
-
+// DeleteServiceByID for deleting service record based on serviceId
 func DeleteServiceByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)

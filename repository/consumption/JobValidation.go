@@ -8,7 +8,7 @@ import (
 	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 )
-
+// JobValidation for validating the job data
 func JobValidation(ctx context.Context, consumptionData models.Consumption) (bool, error) {
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {

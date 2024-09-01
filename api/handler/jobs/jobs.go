@@ -10,10 +10,11 @@ import (
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
 )
-
+// LoadRoutes for routing all job api's
 func LoadRoutes(router *mux.Router) {
 	router.HandleFunc("/api/getjobs", GetJobs).Methods("GET")
 }
+// GetJobs retrieves all job records from the table
 func GetJobs(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	jobList, err := jobs.GetJobs(ctx)

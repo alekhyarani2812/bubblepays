@@ -23,7 +23,7 @@ import (
 	"github.com/gorilla/mux" 
 	httpSwagger "github.com/swaggo/http-swagger"
 )
-
+// middleware acts as a gateway through which each HTTP request passes
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		dbConnection, dbErr := database.GetORMDbConnection()
@@ -42,22 +42,22 @@ func middleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
-type Emp struct{
-	Name string
-}
-func UpdateEmp(e Emp) Emp{
-	e.Name = "Alekhya"
-	return e
-}
+// type Emp struct{
+// 	Name string
+// }
+// func UpdateEmp(e Emp) Emp{
+// 	e.Name = "Alekhya"
+// 	return e
+// }
 // @title Bubblepays API
 // @version 1.0
 // @description This is a sample API
 // @host localhost:8080
 // @BasePath /
 func main() {
-	e := Emp{Name : "Satya"}
-	e = UpdateEmp(e)
-	log.Info(e)
+	// e := Emp{Name : "Satya"}
+	// e = UpdateEmp(e)
+	// log.Info(e)
 	dbConnection, dbErr := database.GetORMDbConnection()
 	if dbErr != nil {
 		log.Errorf("err %v ", dbErr.Error())
@@ -81,6 +81,7 @@ func main() {
 		log.Errorf(" ERROR ListenAndServe err: %v", err)
 	}
 }
+//loadAllRoutes function for routing all routes
 func loadAllRoutes(router *mux.Router){
 	authzApi.LoadRoutes(router)
 	consumptionApi.LoadRoutes(router)

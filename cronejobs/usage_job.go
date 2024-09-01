@@ -12,7 +12,7 @@ import (
 	repository "github.com/bubblepays/repository/usages"
 	"gorm.io/gorm"
 )
-
+// getConsumptionsByMonthnum for getting monthly usage
 func getConsumptionsByMonthnum(ctx context.Context, dbConnection *gorm.DB) (map[string]float64, error) {
 	// Retrieve consumption data from the database
 	var consumptions []models.Consumption
@@ -60,7 +60,7 @@ func getConsumptionsByMonthnum(ctx context.Context, dbConnection *gorm.DB) (map[
 	}
 	return cardIDServiceID, nil
 }
-
+// UsageData generating usage information based on monthly usage data
 func UsageData(ctx context.Context, dbConnection *gorm.DB) error{
 	usageData, err := getConsumptionsByMonthnum(ctx, dbConnection)
 	if err != nil {

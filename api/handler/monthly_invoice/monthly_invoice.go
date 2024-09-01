@@ -9,8 +9,8 @@ import (
 	monthlyinvoice "github.com/bubblepays/repository/monthly_invoice"
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
-)
-
+) 
+// LoadRoutes for routing to get monthly invoice 
 func LoadRoutes(router *mux.Router) {
 	//monthly invoice
 	router.HandleFunc("/api/getmonthlyinvoice", GetMonthlyInvoice).Methods("GET")
@@ -28,7 +28,7 @@ func LoadRoutes(router *mux.Router) {
 // @Failure 401 {object} models.Response "Unauthorized Authentication is required"
 // @Router /api/getmonthlyinvoice [get]
 
-// Get monthly invoice based on usage data
+// GetMonthlyInvoice to get monthly invoice based on usage data
 func GetMonthlyInvoice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	queryParams := r.URL.Query()

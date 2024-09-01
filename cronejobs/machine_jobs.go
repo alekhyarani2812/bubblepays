@@ -9,7 +9,7 @@ import (
 	"github.com/bubblepays/log"
 	"gorm.io/gorm"
 )
-
+// RunMachineJob for running jobs 
 func RunMachineJob(dbConnection *gorm.DB) {
 	// Create a background context
 	bctx := context.Background()

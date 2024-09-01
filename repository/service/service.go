@@ -9,7 +9,7 @@ import (
 	"github.com/bubblepays/models"
 )
 
-//GetServices for Read all the services
+// GetServices retrieves all service records from the table
 func GetServices(ctx context.Context) ([]models.Services, error) {
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
@@ -24,7 +24,7 @@ func GetServices(ctx context.Context) ([]models.Services, error) {
 	log.Infof("SIZE of consumption: size:: %v ", len(service))
 	return service, nil
 }
-
+// SaveService for inserting services into table
 func SaveService(ctx context.Context, service models.Services) (*models.Services, error) {
 	log.Infof("serviceData in service repo %v ", service)
 	dbConnection, err := database.GetORMDbConnection()
@@ -40,7 +40,7 @@ func SaveService(ctx context.Context, service models.Services) (*models.Services
 	log.Infof("Employee inserted successfully")
 	return &service, nil
 }
-
+// DeleteServiceByID for deleting service record based on serviceId
 func DeleteServiceByID(ctx context.Context, pkID int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {

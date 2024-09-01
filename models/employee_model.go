@@ -1,5 +1,6 @@
 package models
 
+// Employee model
 type Employee struct {
 	ID     int     `json:"id"`
 	EmpID  int     `json:"empId"`

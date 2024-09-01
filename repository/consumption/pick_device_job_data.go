@@ -45,7 +45,6 @@ func PickDeviceData(ctx context.Context) error{
 		err1 := os.Rename(file, destPath)
 		if err1 != nil {
 			log.Errorft(ctx, "Error moving file: %v ", err1)
-			return err1
 		} else {
 			log.Infof("Moved file: %v to directory %v ", fileName, destDir)
 		}

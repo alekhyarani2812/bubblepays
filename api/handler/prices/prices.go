@@ -12,15 +12,15 @@ import (
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
 )
-
+// LoadRoutes for routing all price api's
 func LoadRoutes(router *mux.Router){
-	//prices
 	router.HandleFunc("/api/getprices", GetPrices).Methods("GET")
 	router.HandleFunc("/api/getpricesbyid/{id}", GetPricesByID).Methods("GET")
 	router.HandleFunc("/api/saveprice", SavePrice).Methods("POST")
 	router.HandleFunc("/api/updateprice/{id}", UpdatePrice).Methods("PUT")
 	router.HandleFunc("/api/deleteprice/{id}", DeletePrice).Methods("DELETE")
 }
+// GetPrices retrieves all price records from the table
 func GetPrices(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	priceReords, err := prices.GetPrices(ctx)
@@ -40,7 +40,7 @@ func GetPrices(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// GetPricesByID Retrieve the prices record based on the priceId
 func GetPricesByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
@@ -72,7 +72,7 @@ func GetPricesByID(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// SavePrice for inserting prices into table
 func SavePrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	var price models.Price
@@ -104,7 +104,7 @@ func SavePrice(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// UpdatePrice function is used to update the data in the price table
 func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
@@ -149,7 +149,7 @@ func UpdatePrice(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// DeletePrice for deleting price record based on priceId
 func DeletePrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)

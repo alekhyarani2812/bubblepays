@@ -5,7 +5,7 @@ import (
 	"github.com/bubblepays/models"
 	"gorm.io/gorm"
 )
-
+// SaveUsage is responsible for saving usage data in the usage table based on consumption data
 func SaveUsage(usageData models.Usages, dbConnection *gorm.DB) error{
 	var usages []models.Usages
 	res := dbConnection.Where("card_id = ?", usageData.CardID)

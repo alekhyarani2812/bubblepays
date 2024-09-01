@@ -8,7 +8,7 @@ import (
 	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 )
-
+// GetCardPlan retrieves all cardPlan records from the table
 func GetCardPlan(ctx context.Context) ([]models.CardPlan, error) {
 	//get dbconnection from contex
 	dbConnection, err := bcontext.GetDBConnection(ctx)
@@ -26,7 +26,7 @@ func GetCardPlan(ctx context.Context) ([]models.CardPlan, error) {
 	log.Infof("cardplan : %v ", cardplan)
 	return cardplan, nil
 }
-
+// GetCardPlanByID Retrieve the cardplan record based on the cardplanId
 func GetCardPlanByID(ctx context.Context, pkID int) (*models.CardPlan, error) {
 	log.Infof("GetCardPlanByID repo ************")
 	dbConnection, err := database.GetORMDbConnection()
@@ -43,7 +43,7 @@ func GetCardPlanByID(ctx context.Context, pkID int) (*models.CardPlan, error) {
 	log.Infof(" cardplan record : %v ", cardPlanRecord)
 	return &cardPlanRecord, nil
 }
-
+// SaveCardPlan for inserting plans into table
 func SaveCardPlan(ctx context.Context, cardPlanData *models.CardPlan) (*models.CardPlan, error) {
 	log.Infof("this is CardPlan repo  CardPlan : %v ", cardPlanData)
 	dbConnection, err := database.GetORMDbConnection()
@@ -59,7 +59,7 @@ func SaveCardPlan(ctx context.Context, cardPlanData *models.CardPlan) (*models.C
 	log.Infof("cardPlanData : %v ", cardPlanData)
 	return cardPlanData, nil
 }
-
+// UpdateCardPlan function is used to update the data in the cardPlan table
 func UpdateCardPlan(ctx context.Context, pkID int, cardPlanRecord *models.CardPlan) (*models.CardPlan, error) {
 	log.Infof("this is cardplan repo cardPlanRecord : %v ,pkID %v", cardPlanRecord, pkID)
 	dbConnection, err := database.GetORMDbConnection()
@@ -77,7 +77,7 @@ func UpdateCardPlan(ctx context.Context, pkID int, cardPlanRecord *models.CardPl
 	log.Infof("cardPlanRecord : %v ", cardPlanRecord)
 	return cardPlanRecord, nil
 }
-
+// DeleteCardPlan for deleting cardPlan record based on cardPlanID
 func DeleteCardPlan(ctx context.Context, pkID int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {

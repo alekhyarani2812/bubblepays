@@ -15,10 +15,11 @@ import (
 )
 
 var jwtkey = []byte("secret_key")
-
+// LoadRoutes for routing to get the token
 func LoadRoutes(router *mux.Router) {
 	router.HandleFunc("/api/getToken", Login).Methods("POST")
 }
+// Login handler for authenticating the user
 func Login(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	// data, err := token.GenerateToken(&ctx)

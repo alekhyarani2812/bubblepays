@@ -11,18 +11,17 @@ import (
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
 )
-
+// LoadRoutes for routing all employee api's
 func LoadRoutes(router *mux.Router){
 	router.HandleFunc("/api/hello", Hello).Methods("GET")
 	router.HandleFunc("/api/hellomessage", GetMessageHandler).Methods("GET")
-	//Employee api's
 	router.HandleFunc("/api/getemployees", GetEmployeesJSONData).Methods("GET")
 	router.HandleFunc("/api/getemployeebyid/{id}", GetEmployeeByID).Methods("GET")
 	router.HandleFunc("/api/employee", SaveEmployee).Methods("POST")
 	router.HandleFunc("/api/deleteEmployee/{id}", DeleteEmpHandler).Methods("DELETE")
 	router.HandleFunc("/api/updateEmployee/{id}", UpdateEmpHandler).Methods("PUT")
 }
-
+// GetEmployees retrieves all employees records from the table
 func GetEmployees(w http.ResponseWriter) ([]models.Employee, error) {
 	var empArray []models.Employee
 	db := database.GetDbConnection()
@@ -50,7 +49,7 @@ func GetEmployees(w http.ResponseWriter) ([]models.Employee, error) {
 	log.Infof("*****empArray****** %v ", empArray)
 	return empArray, nil
 }
-
+// GetEmployeesJSONData Retrieve the employee data in json format based on the employee table
 func GetEmployeesJSONData(w http.ResponseWriter, r *http.Request) {
 	empList, err := GetEmployees(w)
 	if err != nil {
@@ -69,7 +68,7 @@ func GetEmployeesJSONData(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// GetEmployeeByID Retrieve the employee record based on the employeeId
 func GetEmployeeByID(w http.ResponseWriter, r *http.Request) {
 	db := database.GetDbConnection()
 	defer db.Close()
@@ -118,7 +117,7 @@ func GetEmployeeByID(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, successResponse)
 	log.Infof("employee : %v", employee)
 }
-
+// SaveEmployee for inserting employees into table
 func SaveEmployee(w http.ResponseWriter, r *http.Request) {
 	var employee models.Employee
 	w.Header().Set("Content-Type", "application/json")
@@ -155,7 +154,7 @@ func SaveEmployee(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, successResponse)
 	log.Infof(" Employee %v record is inserted", employee.Name)
 }
-
+// UpdateEmpHandler function is used to update the data in the employee table
 func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {
 	// vars := mux.Vars(r)
 	// idStr := vars["id"]
@@ -224,7 +223,7 @@ func UpdateEmpHandler(w http.ResponseWriter, r *http.Request) {
 	log.Infof("update Handler %v ", rowsAffected)
 }
 
-// DeleteEmpHandler delete employee rows
+// DeleteEmpHandler for deleting employee record based on employeeID
 func DeleteEmpHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idStr := vars["id"]

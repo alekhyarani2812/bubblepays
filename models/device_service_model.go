@@ -1,5 +1,6 @@
 package models
 
+// DeviceServices model
 type DeviceServices struct {
 	ID        int    `json:"id"`
 	DeviceID  string `json:"device_id"`

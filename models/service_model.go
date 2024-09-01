@@ -1,5 +1,6 @@
 package models
 
+// Services model
 type Services struct {
 	ID          int    `json:"id"`
 	ServiceID   string `json:"service_id"`

@@ -1,5 +1,6 @@
 package models
 
+// Response model for utils
 type Response struct {
 	Message     string      `json:"message"`
 	Description string      `json:"description"`

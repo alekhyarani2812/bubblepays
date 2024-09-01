@@ -1,7 +1,7 @@
 package models
 
 import "time"
-
+// Consumption model
 type Consumption struct {
 	ID              int        `json:"id"`
 	DeviceID        string     `json:"device_id"`
@@ -15,7 +15,7 @@ type Consumption struct {
 
 	// Mention the table name explicitly  because gorm takes plural table name by default
 }
-
+// Tabler interface has TableName() method
 type Tabler interface {
 	TableName() string
 }

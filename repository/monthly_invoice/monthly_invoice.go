@@ -7,9 +7,8 @@ import (
 	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 )
-
+// GetMonthlyInvoice to get monthly invoice based on usage data
 func GetMonthlyInvoice(ctx context.Context, monthNumQparam string) ([]*models.MonthlyInvoice, error) {
-
 	log.Infoft(ctx, "This is GetMonthlyInvoice monthlyBillQparam: %v", monthNumQparam)
 	log.Infof("*************** hello world")
 	dbConnection, err := bcontext.GetDBConnection(ctx)

@@ -8,9 +8,8 @@ import (
 )
 
 var passwordLen, hasUppercase, hasLowercase, hasDigit, hasSpecialChar bool
-
+// ValidatePassword for validating password
 func ValidatePassword(password string) (bool, error) {
-
 	if len(password) >= 8 {
 		log.Infof("len(password) %v", len(password))
 		passwordLen = true

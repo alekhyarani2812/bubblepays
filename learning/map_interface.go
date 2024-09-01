@@ -11,6 +11,7 @@ type Caliculations interface {
 	addStrings() string
 	add() int
 }
+// Addition struct for adding 2 values
 type Addition struct {
 	p, q       int
 	str1, str2 string
@@ -96,10 +97,11 @@ type Circle struct {
 type Rectangle struct {
 	length, height float32
 }
-
+// Circle.Area is method 
 func (c Circle) Area() float32 {
 	return math.Pi * c.radius * c.radius
 }
+// Rectangle.Area 
 func (r Rectangle) Area() float32 {
 	return r.length * r.height
 }

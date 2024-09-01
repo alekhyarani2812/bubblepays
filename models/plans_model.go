@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+//Plans model 
 type Plans struct {
 	ID        int        `json:"id"`
 	PlanName  string     `json:"plan_name"`

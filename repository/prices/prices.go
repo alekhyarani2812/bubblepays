@@ -9,7 +9,7 @@ import (
 	"github.com/bubblepays/models"
 	"gorm.io/gorm"
 )
-
+// GetPrices retrieves all price records from the table
 func GetPrices(ctx context.Context) ([]models.Price, error) {
 	//get dbconnection from contex
 	dbConnection, err := bcontext.GetDBConnection(ctx)
@@ -25,7 +25,7 @@ func GetPrices(ctx context.Context) ([]models.Price, error) {
 	log.Infof("prices : %v ", &prices)
 	return prices, nil
 }
-
+// GetPricesByID Retrieve the prices record based on the priceId
 func GetPricesByID(ctx context.Context, pkID int) (*models.Price, error) {
 	log.Infof("This is GetPricesByID Repo")
 	dbConnection, err := database.GetORMDbConnection()
@@ -45,7 +45,7 @@ func GetPricesByID(ctx context.Context, pkID int) (*models.Price, error) {
 	log.Infof("price : %v ", &price)
 	return &price, nil
 }
-
+// SavePrice for inserting prices into table
 func SavePrice(ctx context.Context, price models.Price) (*models.Price, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -61,7 +61,7 @@ func SavePrice(ctx context.Context, price models.Price) (*models.Price, error) {
 	log.Infof("Number of rows effected are: %v ", rowsEffected)
 	return &price, nil
 }
-
+// UpdatePrice function is used to update the data in the price table
 func UpdatePrice(ctx context.Context, pkID int, prices *models.Price) (*models.Price, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -76,7 +76,7 @@ func UpdatePrice(ctx context.Context, pkID int, prices *models.Price) (*models.P
 	gorm.Find(&prices)
 	return prices, nil
 }
-
+// DeletePrice for deleting price record based on priceId
 func DeletePrice(ctx context.Context, pkID int) (int64, error) {
 	log.Infof("This is DeletePrice Repo")
 	dbConnection, err := database.GetORMDbConnection()

@@ -10,13 +10,13 @@ import (
 type message struct {
 	Text string `json:"name"`
 }
-
+// Hello handler to handle hello api
 func Hello(w http.ResponseWriter, r *http.Request) {
 	// Get the context from the request
 	ctx := r.Context()
 	w.Write([]byte("Hello transactionID: " + bcontext.GetTransactionID(ctx)))
 }
-
+//GetMessageHandler to handle message api 
 func GetMessageHandler(w http.ResponseWriter, r *http.Request) {
 	message := message{Text: "***********Hello, World!**************"}
 	w.Header().Set("Content-Type", "application/json")

@@ -11,7 +11,7 @@ import (
 	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 )
-
+// Render for reading and giving json response 
 func Render(w http.ResponseWriter, response models.Response) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(response.Status)
@@ -37,6 +37,7 @@ func StringToInt(idStr string) (int, error) {
 	}
 	return id, nil
 }
+// StringToTime to convert string to time
 func StringToTime(str string) (*time.Time, error) {
 	// Parse the string into a time.Time object
 	// Define the layout of the string representing the time

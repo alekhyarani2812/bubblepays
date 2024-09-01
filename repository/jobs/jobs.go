@@ -7,7 +7,7 @@ import (
 	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 )
-
+// GetJobs retrieves all job records from the table
 func GetJobs(ctx context.Context) ([]models.Jobs, error) {
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {

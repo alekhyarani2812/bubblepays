@@ -9,7 +9,7 @@ import (
 	"github.com/bubblepays/models"
 	"gorm.io/gorm"
 )
-
+// GetPlans retrieves all plan records from the table
 func GetPlans(ctx context.Context) ([]models.Plans, error) {
 	//get dbconnection from contex
 	dbConnection, err := bcontext.GetDBConnection(ctx)
@@ -25,7 +25,7 @@ func GetPlans(ctx context.Context) ([]models.Plans, error) {
 	log.Infof("plans : %v ", plans)
 	return plans, nil
 }
-
+// GetPlanByID Retrieve the plans record based on the planId
 func GetPlanByID(ctx context.Context, id int) (*models.Plans, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -44,7 +44,7 @@ func GetPlanByID(ctx context.Context, id int) (*models.Plans, error) {
 	log.Infof("plan : %v ", plan)
 	return &plan, nil
 }
-
+//SavePlan for inserting priceplans into table
 func SavePlan(ctx context.Context, planData models.Plans) (*models.Plans, error) {
 	log.Infof("planRecord %v", planData)
 	dbConnection, err := database.GetORMDbConnection()
@@ -61,7 +61,7 @@ func SavePlan(ctx context.Context, planData models.Plans) (*models.Plans, error)
 	return &planData, nil
 }
 
-//UpdatePlan Update the plan
+// UpdatePlan function is used to update the data in the plan table
 func UpdatePlan(ctx context.Context, pkID int, plan *models.Plans) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -73,7 +73,7 @@ func UpdatePlan(ctx context.Context, pkID int, plan *models.Plans) (int64, error
 	log.Infof("rowsEffected : %v ", rowsEffected)
 	return rowsEffected, nil
 }
-
+// DeletePlan for deleting plan record based on planId
 func DeletePlan(ctx context.Context, pkID int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {

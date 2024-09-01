@@ -10,7 +10,7 @@ type MonthlyInvoice struct {
 	Price       float64 `json:"-"`
 	MonthlyBill float64 `json:"monthlybill"`
 }
-
+// TableName overrides the table name used by User to `profiles`
 func (MonthlyInvoice) TableName() string {
 	return "monthly_invoice"
 }

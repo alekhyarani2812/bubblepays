@@ -15,9 +15,9 @@ import (
 
 const startConsumeDir = "/home/satyanarayana/Alekhya/gofilesdirectories/start_consume/"
 const consumeSuccessDir = "/home/satyanarayana/Alekhya/gofilesdirectories/consume_success/"
-const ConsumeFailureDir = "/home/satyanarayana/Alekhya/gofilesdirectories/consume_failure/"
+const consumeFailureDir = "/home/satyanarayana/Alekhya/gofilesdirectories/consume_failure/"
 
-//Start consuming data, then save it into the Job and Consumption tables.
+//SaveJobConsumptionData Start consuming data, then save it into the Job and Consumption tables.
 func SaveJobConsumptionData(ctx context.Context) error {
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
@@ -99,8 +99,7 @@ func SaveJobConsumptionData(ctx context.Context) error {
 					log.Errorft(ctx, "######### Error while moving file :%v from source dir to destination dir", filename)
 					return err2
 				}
-				log.Infoft(ctx, "######### successfully file %v moved from %v to %v ", filename,consumeSuccessDir, ConsumeFailureDir)
-				return nil
+				log.Infoft(ctx, "######### successfully file %v moved from %v to %v ", filename,consumeSuccessDir, consumeFailureDir)
 			} else {
 				// If validation fails
 				jobData := models.Jobs{
@@ -118,13 +117,13 @@ func SaveJobConsumptionData(ctx context.Context) error {
 					log.Errorft(ctx, "######### If got Error in validation the file :%v moves from consume dir to failure dir", filename)
 					return err2
 				}
-				log.Infoft(ctx, "######### successfully file %v moved from %v to %v ", filename,consumeSuccessDir, ConsumeFailureDir)
+				log.Infoft(ctx, "######### successfully file %v moved from %v to %v ", filename,consumeSuccessDir, consumeFailureDir)
 			}
 		}
 	}
 	return nil
 }
-// Move file from consume dir to success dir 
+// MoveTOSuccessDir Move file from consume dir to success dir 
 func MoveTOSuccessDir(filename string) error{
 	sourcePath := startConsumeDir + filename
 	destinationPath := consumeSuccessDir + filename
@@ -136,10 +135,10 @@ func MoveTOSuccessDir(filename string) error{
 	log.Infof("File moved successfully %v", filename)
 	return nil
 }
-// Move file from consume dir to failure dir 
+//MoveTOFailureDir Move file from consume dir to failure dir 
 func MoveTOFailureDir(filename string) error{
 	sourcePath := startConsumeDir + filename
-	destinationPath := ConsumeFailureDir + filename
+	destinationPath := consumeFailureDir + filename
 	err := os.Rename(sourcePath, destinationPath)
 	if err != nil {
 		log.Infof("Error moving the file: %v", err)
@@ -148,7 +147,7 @@ func MoveTOFailureDir(filename string) error{
 	log.Infof("File moved successfully %v", filename)
 	return nil
 }
-// Read ConsumptionData from complete path of single file 
+// ReadConsumptionData from complete path of single file 
 func ReadConsumptionData(filePath string) (data [][]string, err error) {
 	log.Info("Read MachineData is called")
 	// Open the CSV file

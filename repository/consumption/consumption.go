@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-//GetConsumptions Get all consumptions data
+// GetConsumptions retrieves all consumption records from the table
 func GetConsumptions(ctx context.Context) ([]models.Consumption, error) {
 	//get dbconnection from contex
 	dbConnection, err := bcontext.GetDBConnection(ctx)
@@ -27,7 +27,7 @@ func GetConsumptions(ctx context.Context) ([]models.Consumption, error) {
 	log.Infof("consumptions : %v ", consumptions)
 	return consumptions, nil
 }
-
+// GetConsumptionByID  Retrieve the consumption record based on the consumptionId
 func GetConsumptionByID(ctx context.Context, id int) ([]models.Consumption, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -46,7 +46,7 @@ func GetConsumptionByID(ctx context.Context, id int) ([]models.Consumption, erro
 	log.Infof("consumption : %v ", consumption)
 	return consumption, nil
 }
-
+//SavesConsumption for Inserting consumption data into table
 func SavesConsumption(ctx context.Context, consumRecord models.Consumption) (*models.Consumption, error) {
 	log.Infof("consumRecord %v ", consumRecord)
 	dbConnection, err := database.GetORMDbConnection()
@@ -61,7 +61,7 @@ func SavesConsumption(ctx context.Context, consumRecord models.Consumption) (*mo
 	}
 	return &consumRecord, nil
 }
-
+// DeleteConsumption for deleting consumption record based on ConsumptionID
 func DeleteConsumption(ctx context.Context, pkID int) (int64, error) {
 	log.Infof("pkID : %v ", pkID)
 	dbConnection, err := database.GetORMDbConnection()

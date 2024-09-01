@@ -12,7 +12,7 @@ import (
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
 )
-
+//LoadRoutes for routing all plan api's
 func LoadRoutes(router *mux.Router){
 	router.HandleFunc("/api/getplans", GetPlans).Methods("GET")
 	router.HandleFunc("/api/getplanbyid/{id}", GetPlanByID).Methods("GET")
@@ -20,6 +20,7 @@ func LoadRoutes(router *mux.Router){
 	router.HandleFunc("/api/updateplan/{id}", UpdatePlan).Methods("PUT")
 	router.HandleFunc("/api/deleteplan/{id}", DeletePlan).Methods("DELETE")
 }
+// GetPlans retrieves all plan records from the table
 func GetPlans(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	plansList, err := plans.GetPlans(ctx)
@@ -40,7 +41,7 @@ func GetPlans(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// GetPlanByID Retrieve the plans record based on the planId
 func GetPlanByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
@@ -73,7 +74,7 @@ func GetPlanByID(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+//SavePlan for inserting priceplans into table
 func SavePlan(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	var plan models.Plans
@@ -107,7 +108,7 @@ func SavePlan(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// UpdatePlan function is used to update the data in the plan table
 func UpdatePlan(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
@@ -151,7 +152,7 @@ func UpdatePlan(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// DeletePlan for deleting plan record based on planId
 func DeletePlan(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)

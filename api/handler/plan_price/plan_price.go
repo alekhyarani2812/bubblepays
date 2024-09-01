@@ -12,7 +12,7 @@ import (
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
 )
-
+//LoadRoutes for routing all price api's
 func LoadRoutes(router *mux.Router){
 	router.HandleFunc("/api/getplanprice", GetPlanPrice).Methods("GET")
 	router.HandleFunc("/api/getplanpricebyid/{id}", GetPlanPriceByID).Methods("GET")
@@ -20,6 +20,7 @@ func LoadRoutes(router *mux.Router){
 	router.HandleFunc("/api/updateplanpricebyid/{id}", UpdatePlanPrice).Methods("PUT")
 	router.HandleFunc("/api/deleteplanpricebyid/{id}", DeletePlanPrice).Methods("DELETE")
 }
+// GetPlanPrice retrieves all planPrice records from the table
 func GetPlanPrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	planpriceRecords, err := planprice.GetPlanPrice(ctx)
@@ -40,7 +41,7 @@ func GetPlanPrice(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// GetPlanPriceByID Retrieve the planprice record based on the planpriceId
 func GetPlanPriceByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
@@ -73,7 +74,7 @@ func GetPlanPriceByID(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// SavePlanPrice for inserting priceplans into table
 func SavePlanPrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	var planPrice models.PlanPrice
@@ -105,7 +106,7 @@ func SavePlanPrice(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// UpdatePlanPrice function is used to update the data in the planprice table
 func UpdatePlanPrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
@@ -149,7 +150,7 @@ func UpdatePlanPrice(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// DeletePlanPrice for deleting planprice record based on planpriceId
 func DeletePlanPrice(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	varStr := mux.Vars(r)

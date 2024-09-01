@@ -9,7 +9,7 @@ import (
 	"github.com/bubblepays/models"
 	"gorm.io/gorm"
 )
-
+// GetServiceEnrollment retrieves all serviceEnrollment records from the table
 func GetServiceEnrollment(ctx context.Context) ([]models.ServiceEnrollment, error) {
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {
@@ -23,7 +23,7 @@ func GetServiceEnrollment(ctx context.Context) ([]models.ServiceEnrollment, erro
 	}
 	return serviceEnrollRecords, nil
 }
-
+// GetServiceEnrollmentByID Retrieve the serviceEnrollments record based on the serviceEnrollmentID
 func GetServiceEnrollmentByID(ctx context.Context, pkID int) (*models.ServiceEnrollment, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -41,7 +41,7 @@ func GetServiceEnrollmentByID(ctx context.Context, pkID int) (*models.ServiceEnr
 	}
 	return &serviceenroll, nil
 }
-
+// SaveServiceEnrollment for inserting serviceEnrollments into table
 func SaveServiceEnrollment(ctx context.Context, serviceEnrollment models.ServiceEnrollment) (*models.ServiceEnrollment, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -56,7 +56,7 @@ func SaveServiceEnrollment(ctx context.Context, serviceEnrollment models.Service
 	log.Infot(ctx, "service enrollment data saved successfully")
 	return &serviceEnrollment, nil
 }
-
+// UpdateServiceEnrollment function is used to update the data in the serviceEnrollment table
 func UpdateServiceEnrollment(ctx context.Context, pkID int, seviceEnrRecord models.ServiceEnrollment) (*models.ServiceEnrollment, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {
@@ -72,7 +72,7 @@ func UpdateServiceEnrollment(ctx context.Context, pkID int, seviceEnrRecord mode
 	log.Infof("seviceEnrRecord : %v ", seviceEnrRecord)
 	return &seviceEnrRecord, nil
 }
-
+// DeleteServiceEnrollment for deleting serviceenrollment record based on serviceenrollmentId
 func DeleteServiceEnrollment(ctx context.Context, pkID int) (int64, error) {
 	dbConnection, err := database.GetORMDbConnection()
 	if err != nil {

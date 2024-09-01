@@ -12,15 +12,15 @@ import (
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
 )
-
+// LoadRoutes for routing all service enrollment api's
 func LoadRoutes(router *mux.Router){
-	//ServiceEnrollment
 	router.HandleFunc("/api/getserviceenrollment", GetServiceEnrollment).Methods("GET")
 	router.HandleFunc("/api/getserviceenrollmentbyid/{id}", GetServiceEnrollmentByID).Methods("GET")
 	router.HandleFunc("/api/saveserviceenrollment", SaveServiceEnrollment).Methods("POST")
 	router.HandleFunc("/api/updateserviceenrollment/{id}", UpdateServiceEnrollment).Methods("PUT")
 	router.HandleFunc("/api/deleteserviceenrollment/{id}", DeleteServiceEnrollment).Methods("DELETE")
 }
+// GetServiceEnrollment retrieves all serviceEnrollment records from the table
 func GetServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	serviceEnrollRecords, err := serviceenrollment.GetServiceEnrollment(ctx)
@@ -40,7 +40,7 @@ func GetServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// GetServiceEnrollmentByID Retrieve the serviceEnrollments record based on the serviceEnrollmentID
 func GetServiceEnrollmentByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
@@ -72,7 +72,7 @@ func GetServiceEnrollmentByID(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// SaveServiceEnrollment for inserting serviceEnrollments into table
 func SaveServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	var serviceEnrollment models.ServiceEnrollment
@@ -104,7 +104,7 @@ func SaveServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// UpdateServiceEnrollment function is used to update the data in the serviceEnrollment table
 func UpdateServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
@@ -147,7 +147,7 @@ func UpdateServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+// DeleteServiceEnrollment for deleting serviceenrollment record based on serviceenrollmentId
 func DeleteServiceEnrollment(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)

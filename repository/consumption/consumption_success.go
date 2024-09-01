@@ -1,5 +1,0 @@
-package consumption
-
-func ConsumeSuccess(){
-	
-}

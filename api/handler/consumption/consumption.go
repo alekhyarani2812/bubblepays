@@ -12,13 +12,14 @@ import (
 	"github.com/bubblepays/utils"
 	"github.com/gorilla/mux"
 )
-
+// LoadRoutes for routing all consumption api's
 func LoadRoutes(router *mux.Router){
 	router.HandleFunc("/api/consumptions", GetConsumptions).Methods("GET")
 	router.HandleFunc("/api/consumptions/{id}", GetConsumptionByID).Methods("GET")
 	router.HandleFunc("/api/saveconsumption", SavesConsumption).Methods("POST")
 	router.HandleFunc("/api/deleteconsumption/{id}", DeleteConsumption).Methods("DELETE")
 }
+// GetConsumptions retrieves all consumption records from the table
 func GetConsumptions(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	consumptionList, err := consumption.GetConsumptions(ctx)
@@ -39,7 +40,7 @@ func GetConsumptions(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 }
 
-//GetConsumptionByID Get 1 Consumption by ID
+//GetConsumptionByID  Retrieve the consumption record based on the consumptionId
 func GetConsumptionByID(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)
@@ -73,7 +74,7 @@ func GetConsumptionByID(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, response)
 }
 
-//SavesConsumption Insert consumption data
+//SavesConsumption for Inserting consumption data into table
 func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	var consum models.Consumption
@@ -108,7 +109,7 @@ func SavesConsumption(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.Render(w, response)
 }
-
+ // DeleteConsumption for deleting consumption record based on ConsumptionID
 func DeleteConsumption(w http.ResponseWriter, r *http.Request) {
 	ctx := bcontext.WithTransactionID(r.Context())
 	vars := mux.Vars(r)

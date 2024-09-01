@@ -7,7 +7,7 @@ import (
 	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 )
-
+// Login for authenticating the user by checking db
 func Login(ctx context.Context, userPayload models.User) (*models.User, error) {
 	dbConnection, err := bcontext.GetDBConnection(ctx)
 	if err != nil {

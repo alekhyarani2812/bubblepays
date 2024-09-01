@@ -7,7 +7,7 @@ import (
 	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 )
-
+// SaveJobInfo for inserting job records into table
 func SaveJobInfo(ctx context.Context, jobData *models.Jobs) error {
 	//get dbconnection from contex
 	dbConnection, err := bcontext.GetDBConnection(ctx)
@@ -24,7 +24,7 @@ func SaveJobInfo(ctx context.Context, jobData *models.Jobs) error {
 	log.Infof("job inserted successfully  ormDB : %v ", ormDB)
 	return nil
 }
-
+// UpdateJobInfo function is used to update the data in the job table
 func UpdateJobInfo(ctx context.Context, jobData *models.Jobs, filename string) error {
 	//get dbconnection from contex
 	dbConnection, err := bcontext.GetDBConnection(ctx)
@@ -37,9 +37,8 @@ func UpdateJobInfo(ctx context.Context, jobData *models.Jobs, filename string) e
 	ormDB := dbConnection.Model(jobRecord).Where("file_name = ?", filename).Updates(&jobData)
 	if ormDB.Error != nil {
 		log.Errorft(ctx, "Error Update job info: %v\n ", ormDB.Error)
-		return ormDB.Error
 	} else {
 		log.Info("job Updated successfully")
-		return nil
 	}
+	return nil
 }
