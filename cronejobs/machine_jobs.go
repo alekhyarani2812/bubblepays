@@ -5,12 +5,13 @@ import (
 	"time"
 
 	bcontext "github.com/bubblepays/context"
-	"github.com/bubblepays/repository/consumption"
 	"github.com/bubblepays/log"
+	"github.com/bubblepays/repository/consumption"
 	"gorm.io/gorm"
 )
-// RunMachineJob for running jobs 
-func RunMachineJob(dbConnection *gorm.DB) {
+
+// RunMachineJob for running jobs
+func RunMachineJob(dbConnection *gorm.DB) error {
 	// Create a background context
 	bctx := context.Background()
 	ctx := bcontext.WithTransactionID(bctx)
@@ -23,19 +24,22 @@ func RunMachineJob(dbConnection *gorm.DB) {
 		select {
 		case <-ticker.C:
 			log.Infot(ctx, "this fuction is executing in every 30 seconds")
-			// consuming device data 
+			// consuming device data
 			err := consumption.PickDeviceData(ctx)
 			if err != nil {
-				log.Errorft(ctx, "getting error while getting device data %v", err)
+				log.Errorft(ctx, "The error is %v", err)
+				return err
 			}
 			//Start consuming data, then save it into the Job and Consumption tables.
 			err1 := consumption.SaveJobConsumptionData(ctx)
-			if err != nil {
-				log.Errorft(ctx, "getting error while getting device data %v", err1)
+			if err1 != nil {
+				log.Errorft(ctx, "The error is %v", err1)
+				return err1
 			}
 			usageDataError := UsageData(ctx, dbConnection)
 			if usageDataError != nil {
-				log.Errorft(ctx, "Failed to get usageData %v",usageDataError)
+				log.Errorft(ctx, "Failed to get usageData %v", usageDataError)
+				return usageDataError
 			}
 			log.Infot(ctx, "saved Job and consumtion data successfully")
 		}

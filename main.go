@@ -16,13 +16,14 @@ import (
 	serviceApi "github.com/bubblepays/api/handler/service"
 	serviceenrollmentApi "github.com/bubblepays/api/handler/service_enrollment"
 	bcontext "github.com/bubblepays/context"
+	"github.com/bubblepays/cronejobs"
 	"github.com/bubblepays/database"
 	_ "github.com/bubblepays/docs" // This is where Swagger comments are located
 	"github.com/bubblepays/log"
-	"github.com/bubblepays/cronejobs"
-	"github.com/gorilla/mux" 
+	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
+
 // middleware acts as a gateway through which each HTTP request passes
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -42,13 +43,13 @@ func middleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
-// type Emp struct{
-// 	Name string
-// }
-// func UpdateEmp(e Emp) Emp{
-// 	e.Name = "Alekhya"
-// 	return e
-// }
+//	type Emp struct{
+//		Name string
+//	}
+//	func UpdateEmp(e Emp) Emp{
+//		e.Name = "Alekhya"
+//		return e
+//	}
 // @title Bubblepays API
 // @version 1.0
 // @description This is a sample API
@@ -81,8 +82,8 @@ func main() {
 		log.Errorf(" ERROR ListenAndServe err: %v", err)
 	}
 }
-//loadAllRoutes function for routing all routes
-func loadAllRoutes(router *mux.Router){
+// loadAllRoutes function for routing all routes
+func loadAllRoutes(router *mux.Router) {
 	authzApi.LoadRoutes(router)
 	consumptionApi.LoadRoutes(router)
 	monthlyinvoiceApi.LoadRoutes(router)

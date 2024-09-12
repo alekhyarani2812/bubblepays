@@ -2,12 +2,14 @@ package consumption
 
 import (
 	"context"
-	"fmt"
 	"errors"
+	"fmt"
+
 	bcontext "github.com/bubblepays/context"
 	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 )
+
 // JobValidation for validating the job data
 func JobValidation(ctx context.Context, consumptionData models.Consumption) (bool, error) {
 	dbConnection, err := bcontext.GetDBConnection(ctx)
@@ -22,11 +24,11 @@ func JobValidation(ctx context.Context, consumptionData models.Consumption) (boo
 		Where("service_id=?", consumptionData.ServiceID).
 		Find(&serviceenrolref)
 	if gorm != nil && gorm.Error != nil {
-		log.Errorft(ctx, "error while getting user data %v",gorm.Error)
+		log.Errorft(ctx, "error while getting user data %v", gorm.Error)
 		return false, gorm.Error
 	}
 	if serviceenrolref.CardID == "" || serviceenrolref.ServiceID == "" {
-		message := fmt.Sprintf("There is no service enrollment for this cardId : %v and Service Id : %v ", consumptionData.CardID, consumptionData.ServiceID) 
+		message := fmt.Sprintf("There is no service enrollment for this cardId : %v and Service Id : %v ", consumptionData.CardID, consumptionData.ServiceID)
 		errMessage := errors.New(message)
 		//log.Errorft(ctx, "There is no service enrollment for this cardId : %v and Service Id : %v ", consumptionData.CardID, consumptionData.ServiceID)
 		return false, errMessage
@@ -43,7 +45,7 @@ func JobValidation(ctx context.Context, consumptionData models.Consumption) (boo
 	}
 	if deviceserviceref.DeviceID == "" || deviceserviceref.ServiceID == "" {
 		msg := fmt.Sprintf("There is no device services mapping for this deviceId :%v and ServiceId :%v ",
-		consumptionData.DeviceID, consumptionData.ServiceID)
+			consumptionData.DeviceID, consumptionData.ServiceID)
 		log.Errorft(ctx, msg)
 		errMsg := errors.New(msg)
 		return false, errMsg

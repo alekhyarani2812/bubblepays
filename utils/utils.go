@@ -5,13 +5,15 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strconv"
 	"time"
 
 	"github.com/bubblepays/log"
 	"github.com/bubblepays/models"
 )
-// Render for reading and giving json response 
+
+// Render for reading and giving json response
 func Render(w http.ResponseWriter, response models.Response) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(response.Status)
@@ -49,4 +51,18 @@ func StringToTime(str string) (*time.Time, error) {
 	}
 	log.Infof("Parsed time: %v", parsedTime)
 	return &parsedTime, nil
+}
+
+func IsAlphanumeric(s string) bool {
+	// Regular expression to check for alphanumeric characters
+	regex := regexp.MustCompile(`^[a-zA-Z0-9]+$`)
+	return regex.MatchString(s)
+}
+
+func IsValidCSVFilename(filename string) bool {
+	// Regular expression to match alphanumeric characters, underscores, and end with .csv
+	// regex := regexp.MustCompile(`^[a-zA-Z0-9_]+\.csv$`)
+	// m100_11092024_183054
+	regex := regexp.MustCompile(`^[a-zA-Z0-9]+_[0-9]{8}_[0-9]{6}\.csv$`)
+	return regex.MatchString(filename)
 }
