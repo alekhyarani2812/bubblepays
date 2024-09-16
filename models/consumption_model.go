@@ -16,9 +16,9 @@ type Consumption struct {
 	// Mention the table name explicitly  because gorm takes plural table name by default
 }
 // Tabler interface has TableName() method
-type Tabler interface {
-	TableName() string
-}
+// type Tabler interface {
+// 	TableName() string
+// }
 
 // TableName overrides the table name used by User to `profiles`
 func (Consumption) TableName() string {
